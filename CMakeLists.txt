@@ -25,6 +25,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(flight-rising-breeding-tracker
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+        information.h information.cpp
+        rarity.h
+        raritystring.h raritystring.cpp
 
     )
 # Define target properties for Android with Qt 6 as:
