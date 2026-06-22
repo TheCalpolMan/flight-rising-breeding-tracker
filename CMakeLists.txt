@@ -27,7 +27,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ${PROJECT_SOURCES}
         information.h information.cpp
         rarity.h
-        raritystring.h raritystring.cpp
+        allele.h allele.cpp
+        colour.h colour.cpp
+
 
     )
 # Define target properties for Android with Qt 6 as:

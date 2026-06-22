@@ -1,10 +1,10 @@
 #ifndef INFORMATION_H
 #define INFORMATION_H
 
-#include <unordered_map>
-#include <unordered_set>
+#include <vector>
 
-#include "raritystring.h"
+#include "allele.h"
+#include "colour.h"
 
 class Information
 {
@@ -19,23 +19,23 @@ public:
     Information(Information const&) = delete;
     void operator=(Information const&) = delete;
 
-    std::unordered_set<RarityString> getBreeds() const;
+    std::vector<Allele> getBreeds() const;
 
-    std::unordered_set<RarityString> getPrimaryGenes() const;
+    std::vector<Allele> getPrimaryGenes() const;
 
-    std::unordered_set<RarityString> getSecondaryGenes() const;
+    std::vector<Allele> getSecondaryGenes() const;
 
-    std::unordered_set<RarityString> getTertiaryGenes() const;
+    std::vector<Allele> getTertiaryGenes() const;
 
-    std::unordered_map<std::string, std::string> getColours() const;
+    std::vector<Colour> getColours() const;
 private:
     Information();
 
-    std::unordered_set<RarityString, RarityString::HashFunction> breeds = decltype(breeds)();
-    std::unordered_set<RarityString, RarityString::HashFunction> primaryGenes = decltype(primaryGenes)();
-    std::unordered_set<RarityString, RarityString::HashFunction> secondaryGenes = decltype(secondaryGenes)();
-    std::unordered_set<RarityString, RarityString::HashFunction> tertiaryGenes = decltype(tertiaryGenes)();
-    std::unordered_map<std::string, std::string> colours = decltype(colours)();
+    std::vector<Allele> breeds = decltype(breeds)();
+    std::vector<Allele> primaryGenes = decltype(primaryGenes)();
+    std::vector<Allele> secondaryGenes = decltype(secondaryGenes)();
+    std::vector<Allele> tertiaryGenes = decltype(tertiaryGenes)();
+    std::vector<Colour> colours = decltype(colours)();
 };
 
 #endif // INFORMATION_H

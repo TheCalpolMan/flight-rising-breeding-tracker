@@ -1,19 +1,21 @@
-#ifndef RARITYSTRING_H
-#define RARITYSTRING_H
+#ifndef ALLELE_H
+#define ALLELE_H
 
 #include <string>
 
 #include "rarity.h"
 
-struct RarityString
+struct Allele
 {
 public:
     Rarity rarity;
     std::string string;
+    bool ancient;
+    std::string species;
 
-    RarityString(Rarity rarity,std::string string);
+    Allele(Rarity rarity,std::string string, std::string ancientSpecies = "");
 
-    bool operator==(const RarityString& otherString) const
+    bool operator==(const Allele& otherString) const
     {
         if (this->string == otherString.string)
         {
@@ -25,11 +27,11 @@ public:
 
     struct HashFunction
     {
-        size_t operator()(const RarityString& rarityString) const
+        size_t operator()(const Allele& rarityString) const
         {
             return std::hash<std::string>()(rarityString.string);
         }
     };
 };
 
-#endif // RARITYSTRING_H
+#endif // ALLELE_H
