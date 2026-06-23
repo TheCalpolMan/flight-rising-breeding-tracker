@@ -1162,9 +1162,12 @@
        <rect>
         <x>170</x>
         <y>120</y>
-        <width>361</width>
+        <width>171</width>
         <height>26</height>
        </rect>
+      </property>
+      <property name="editable">
+       <bool>true</bool>
       </property>
      </widget>
      <widget class="QGraphicsView" name="breedgraphicsview">
@@ -1175,6 +1178,19 @@
         <width>361</width>
         <height>361</height>
        </rect>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="eyecombobox">
+      <property name="geometry">
+       <rect>
+        <x>360</x>
+        <y>120</y>
+        <width>171</width>
+        <height>26</height>
+       </rect>
+      </property>
+      <property name="editable">
+       <bool>true</bool>
       </property>
      </widget>
     </widget>
