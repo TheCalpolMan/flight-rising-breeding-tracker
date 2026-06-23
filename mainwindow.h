@@ -4,6 +4,7 @@
 #include <QMainWindow>
 
 #include <memory>
+#include <QLabel>
 #include <QPainter>
 #include <QGraphicsView>
 #include <QGraphicsScene>
@@ -40,6 +41,7 @@ private:
 
     int geneSelected = 0;
     QPainter painter = QPainter();
+    std::vector<QLabel*> colourLabels = decltype(colourLabels)();
     std::vector<QGraphicsView*> colourViews = decltype(colourViews)();
     std::vector<std::unique_ptr<QGraphicsScene>> colourScenes = decltype(colourScenes)();
 

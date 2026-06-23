@@ -28,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent)
             continue;
         }
 
+        colourLabels.push_back(frames.at(i)->findChild<QLabel *>());
         colourViews.push_back(frames.at(i)->findChild<QGraphicsView *>());
 
         colourScenes.push_back(std::make_unique<QGraphicsScene>());
@@ -125,14 +126,16 @@ void MainWindow::updateColoursBasedOnGene(bool showDialogOnNoColour)
 
 void MainWindow::updateColours(int middleValue)
 {
-    int offset = (colourScenes.size() / 2 + 1 + middleValue) % colourScenes.size();
+    int offset = middleValue - colourScenes.size() / 2;
 
     for (int i=0; i < colourScenes.size(); i++)
     {
-        auto brush = QBrush(QColor(
-            QString(Information::getInstance().getColours(true).at(
-                (i + offset) % Information::getInstance().getColours(true).size()).hexCode.c_str())));
+        Colour colour = Information::getInstance().getColours(true).at(
+            (i + offset) % Information::getInstance().getColours(true).size());
 
+        colourLabels.at(i)->setText(QString(colour.name.c_str()));
+
+        auto brush = QBrush(QColor(QString(colour.hexCode.c_str())));
         colourScenes.at(i)->setBackgroundBrush(brush);
         colourViews.at(i)->setScene(&*colourScenes.at(i));
         colourViews.at(i)->show();
