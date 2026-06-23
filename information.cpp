@@ -6,7 +6,25 @@ Information::Information()
 {
     // eyes
     {
-        eyes.push_back(Allele(Rarity::Plentiful, "Common"));
+        // weightings pulled from https://www1.flightrising.com/forums/gde/3327165 on 24/06/2026
+
+        eyes.push_back(EyeAllele(4734, "Common"));
+        eyes.push_back(EyeAllele(2945, "Uncommon"));
+        eyes.push_back(EyeAllele(1679, "Unusual"));
+        eyes.push_back(EyeAllele(1028, "Rare"));
+        eyes.push_back(EyeAllele(114, "Faceted"));
+        eyes.push_back(EyeAllele(53, "Multi-Gaze"));
+        eyes.push_back(EyeAllele(51, "Primal"));
+        eyes.push_back(EyeAllele(0, "Glowing"));
+        eyes.push_back(EyeAllele(0, "Dark Sclera"));
+        eyes.push_back(EyeAllele(121, "Goat"));
+        eyes.push_back(EyeAllele(0, "Swirl"));
+        eyes.push_back(EyeAllele(0, "Innocent"));
+        eyes.push_back(EyeAllele(222, "Pastel"));
+        eyes.push_back(EyeAllele(197, "Bright"));
+        eyes.push_back(EyeAllele(0, "Button"));
+        eyes.push_back(EyeAllele(230, "Faded"));
+        eyes.push_back(EyeAllele(246, "Dark"));
     }
 
     // breeds
@@ -402,7 +420,7 @@ Information::Information()
     }
 }
 
-const std::vector<Allele>& Information::getEyes() const
+const std::vector<EyeAllele>& Information::getEyes() const
 {
     return eyes;
 }

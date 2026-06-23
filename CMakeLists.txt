@@ -29,6 +29,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         rarity.h
         allele.h allele.cpp
         colour.h colour.cpp
+        eyeallele.h eyeallele.cpp
 
 
     )

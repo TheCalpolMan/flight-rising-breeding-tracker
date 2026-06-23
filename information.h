@@ -5,6 +5,7 @@
 
 #include "allele.h"
 #include "colour.h"
+#include "eyeallele.h"
 
 class Information
 {
@@ -19,7 +20,7 @@ public:
     Information(Information const&) = delete;
     void operator=(Information const&) = delete;
 
-    const std::vector<Allele>& getEyes() const;
+    const std::vector<EyeAllele>& getEyes() const;
 
     const std::vector<Allele>& getBreeds() const;
 
@@ -33,7 +34,7 @@ public:
 private:
     Information();
 
-    std::vector<Allele> eyes = decltype(eyes)();
+    std::vector<EyeAllele> eyes = decltype(eyes)();
     std::vector<Allele> breeds = decltype(breeds)();
     std::vector<Allele> primaryGenes = decltype(primaryGenes)();
     std::vector<Allele> secondaryGenes = decltype(secondaryGenes)();

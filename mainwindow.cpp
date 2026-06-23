@@ -11,6 +11,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+
     // getting relevant ui elements
 
     auto tab = ui->tabWidget->widget(0);
