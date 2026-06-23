@@ -1219,8 +1219,8 @@
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionLoad"/>
     <addaction name="actionSave"/>
+    <addaction name="actionLoad"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
@@ -1233,6 +1233,9 @@
   <action name="actionSave">
    <property name="text">
     <string>Save</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
    </property>
   </action>
  </widget>

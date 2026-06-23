@@ -1,7 +1,14 @@
 #include "information.h"
 
+#include <algorithm>
+
 Information::Information()
 {
+    // eyes
+    {
+        eyes.push_back(Allele(Rarity::Plentiful, "Common"));
+    }
+
     // breeds
     {
         breeds.push_back(Allele(Rarity::Plentiful, "Fae"));
@@ -204,4 +211,56 @@ Information::Information()
         tertiaryGenes.push_back(Allele(Rarity::Rare, "Stained"));
         tertiaryGenes.push_back(Allele(Rarity::Rare, "Wish"));
     }
+
+    // Colours
+    {
+        colours.push_back(Colour("Antique", "#D8D6CD", 2));
+        colours.push_back(Colour("White", "#FFFFFF", 3));
+        colours.push_back(Colour("Moon", "#D8D7D8", 4));
+        colours.push_back(Colour("Maize", "#FFFDEA", 0));
+        colours.push_back(Colour("Cream", "#FFEFDC", 1));
+
+        coloursByWheel = colours;
+        std::sort(coloursByWheel.begin(), coloursByWheel.end(),
+            [](const Colour& a, const Colour& b)
+            {
+                return a.wheelIndex < b.wheelIndex;
+            }
+        );
+    }
+}
+
+const std::vector<Allele>& Information::getEyes() const
+{
+    return eyes;
+}
+
+const std::vector<Allele>& Information::getBreeds() const
+{
+    return breeds;
+}
+
+const std::vector<Allele>& Information::getPrimaryGenes() const
+{
+    return primaryGenes;
+}
+
+const std::vector<Allele>& Information::getSecondaryGenes() const
+{
+    return secondaryGenes;
+}
+
+const std::vector<Allele>& Information::getTertiaryGenes() const
+{
+    return tertiaryGenes;
+}
+
+const std::vector<Colour>& Information::getColours(bool sortByWheel) const
+{
+    if (!sortByWheel)
+    {
+        return colours;
+    }
+
+    return coloursByWheel;
 }

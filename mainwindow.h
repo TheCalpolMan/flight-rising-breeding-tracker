@@ -3,6 +3,11 @@
 
 #include <QMainWindow>
 
+#include <memory>
+#include <QPainter>
+#include <QGraphicsView>
+#include <QGraphicsScene>
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -17,7 +22,30 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private slots:
+    void on_primaryradiobutton_toggled(bool checked);
+
+    void on_secondaryradiobutton_toggled(bool checked);
+
+    void on_tertiaryradiobutton_toggled(bool checked);
+
+    void on_primarycolourcombobox_currentTextChanged(const QString &text);
+
+    void on_secondarycolourcombobox_currentTextChanged(const QString &text);
+
+    void on_tertiarycolourcombobox_currentTextChanged(const QString &text);
+
 private:
     Ui::MainWindow *ui;
+
+    int geneSelected = 0;
+    QPainter painter = QPainter();
+    std::vector<QGraphicsView*> colourViews = decltype(colourViews)();
+    std::vector<std::unique_ptr<QGraphicsScene>> colourScenes = decltype(colourScenes)();
+
+    void updateColoursBasedOnGene(bool showDialogOnNoColour);
+
+    void updateColours(int middleValue);
+
 };
 #endif // MAINWINDOW_H
