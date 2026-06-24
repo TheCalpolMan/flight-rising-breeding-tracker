@@ -6,6 +6,7 @@
 #include <memory>
 #include <QLabel>
 #include <QString>
+#include <QSlider>
 #include <QPainter>
 #include <QGraphicsView>
 #include <QGraphicsScene>
@@ -39,11 +40,19 @@ private slots:
 
     void on_breedgraphicsview_mousePressEvent(QMouseEvent *);
 
-    void on_colouroffsetslider_valueChanged(int value);
-
-    void on_colourrangeslider_valueChanged(int value);
-
     void on_pushButton_clicked();
+
+    void on_primarycolouroffsetslider_valueChanged(int value);
+
+    void on_primarycolourrangeslider_valueChanged(int value);
+
+    void on_secondarycolourrangeslider_valueChanged(int value);
+
+    void on_secondarycolouroffsetslider_valueChanged(int value);
+
+    void on_tertiarycolourrangeslider_valueChanged(int value);
+
+    void on_tertiarycolouroffsetslider_valueChanged(int value);
 
 private:
     Ui::MainWindow *ui;
@@ -54,18 +63,17 @@ private:
     QPainter painter = QPainter();
     std::vector<QLabel*> colourLabels = decltype(colourLabels)();
     std::vector<QGraphicsView*> colourViews = decltype(colourViews)();
-    std::vector<std::unique_ptr<QGraphicsScene>> colourScenes = decltype(colourScenes)();
+    std::vector<std::shared_ptr<QGraphicsScene>> colourScenes = decltype(colourScenes)();
 
     QGraphicsScene dragonScene = decltype(dragonScene)();
 
     // search
 
-    QString colourRange = "<html><head/><body><p><span style=\" font-weight:700;\">Colour Range:</span> 5</p></body></html>";
-    QString colourOffset = "<html><head/><body><p><span style=\" font-weight:700;\">Colour Offset:</span> 0</p></body></html>";;
-
     void updateColoursBasedOnGene(bool showDialogOnNoColour);
 
     void updateColours(int middleValue);
+
+    void updateSearchColourLabel(QLabel* label, QSlider* range, QSlider* offset);
 
 };
 #endif // MAINWINDOW_H

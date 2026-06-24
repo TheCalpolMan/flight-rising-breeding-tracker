@@ -3,6 +3,7 @@
 
 #include <vector>
 
+#include "rarity.h"
 #include "allele.h"
 #include "colour.h"
 #include "eyeallele.h"
@@ -31,6 +32,8 @@ public:
     const std::vector<Allele>& getTertiaryGenes() const;
 
     const std::vector<Colour>& getColours(bool sortByWheel) const;
+
+    static int rarityToRank(Rarity rarity);
 private:
     Information();
 

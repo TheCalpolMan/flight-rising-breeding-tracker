@@ -1512,3 +1512,17 @@ const std::vector<Colour>& Information::getColours(bool sortByWheel) const
 
     return coloursByWheel;
 }
+
+int Information::rarityToRank(Rarity rarity)
+{
+    switch (rarity)
+    {
+    case(Rarity::Spacer): return 0;
+    case(Rarity::Plentiful): return 1;
+    case(Rarity::Common): return 2;
+    case(Rarity::Uncommon): return 3;
+    case(Rarity::Limited): return 4;
+    case(Rarity::Rare): return 5;
+    default:return -1;
+    }
+}

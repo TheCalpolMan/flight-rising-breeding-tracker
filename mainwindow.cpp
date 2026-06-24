@@ -2,11 +2,12 @@
 #include "./ui_mainwindow.h"
 #include "information.h"
 
-#include <iostream>
 #include <QMessageBox>
 #include <QFileDialog>
 
+#include "dragon.h"
 #include "urlopener.h"
+#include "searchbuilder.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -22,8 +23,6 @@ MainWindow::MainWindow(QWidget *parent)
     pixmap.size().scale(ui->breedgraphicsview->size(), Qt::KeepAspectRatio);
 
     ui->breedgraphicsview->scene()->addPixmap(pixmap);
-
-    ui->colouroffsetlabel->setText(colourOffset);
 
     // getting relevant ui elements
 
@@ -45,7 +44,7 @@ MainWindow::MainWindow(QWidget *parent)
         colourLabels.push_back(frames.at(i)->findChild<QLabel *>());
         colourViews.push_back(frames.at(i)->findChild<QGraphicsView *>());
 
-        colourScenes.push_back(std::make_unique<QGraphicsScene>());
+        colourScenes.push_back(std::make_shared<QGraphicsScene>());
     }
 
     // assigning possible values to elements
@@ -156,6 +155,15 @@ void MainWindow::updateColours(int middleValue)
     }
 }
 
+void MainWindow::updateSearchColourLabel(QLabel* label, QSlider* range, QSlider* offset)
+{
+    QString primaryColourStats = std::string("<html><head/><body><p><span style=\" font-weight:700;\">Primary colour range, offset:</span> " +
+                                     std::to_string(range->value()) + ", " +
+                                     std::to_string(offset->value() - offset->maximum() / 2) + "</p></body></html>").c_str();
+
+    label->setText(primaryColourStats);
+}
+
 void MainWindow::on_primaryradiobutton_toggled(bool checked)
 {
     if (checked)
@@ -226,21 +234,74 @@ void MainWindow::on_breedgraphicsview_mousePressEvent(QMouseEvent *)
             QMargins(1, 1, 1, 1)), Qt::KeepAspectRatio));
 }
 
-void MainWindow::on_colouroffsetslider_valueChanged(int value)
-{
-    value -= 25;
-    colourOffset = std::string("<html><head/><body><p><span style=\" font-weight:700;\">Colour Offset:</span> " + std::to_string(value) + "</p></body></html>").c_str();
-    ui->colouroffsetlabel->setText(colourOffset);
-}
-
-void MainWindow::on_colourrangeslider_valueChanged(int value)
-{
-    colourRange = std::string("<html><head/><body><p><span style=\" font-weight:700;\">Colour Range:</span> " + std::to_string(value) + "</p></body></html>").c_str();
-    ui->colourrangelabel->setText(colourRange);
-}
-
 void MainWindow::on_pushButton_clicked()
 {
-    UrlOpener::openUrl("https://www1.flightrising.com/auction-house/buy/realm/dragons?");
+    const auto& information = Information::getInstance();
+
+    Dragon dragon = Dragon(
+        information.getEyes().at(ui->eyecombobox->currentIndex()),
+        information.getBreeds().at(ui->breedcombobox->currentIndex()),
+        information.getColours(true).at(ui->primarycolourcombobox->currentIndex()),
+        information.getColours(true).at(ui->secondarycolourcombobox->currentIndex()),
+        information.getColours(true).at(ui->tertiarycolourcombobox->currentIndex()),
+        information.getPrimaryGenes().at(ui->primarygenecombobox->currentIndex()),
+        information.getSecondaryGenes().at(ui->secondarygenecombobox->currentIndex()),
+        information.getTertiaryGenes().at(ui->tertiarygenecombobox->currentIndex())
+    );
+
+    std::vector<int> ranges = decltype(ranges)();
+    std::vector<int> offsets = decltype(ranges)();
+
+    ranges.push_back(ui->primarycolourrangeslider->value());
+    ranges.push_back(ui->secondarycolourrangeslider->value());
+    ranges.push_back(ui->tertiarycolourrangeslider->value());
+
+    offsets.push_back(ui->primarycolouroffsetslider->value() - ui->primarycolouroffsetslider->maximum() / 2);
+    offsets.push_back(ui->secondarycolouroffsetslider->value() - ui->secondarycolouroffsetslider->maximum() / 2);
+    offsets.push_back(ui->tertiarycolouroffsetslider->value() - ui->tertiarycolouroffsetslider->maximum() / 2);
+
+    UrlOpener::openUrl(SearchBuilder::fromDragon(
+        dragon,
+        ranges,
+        offsets,
+        ui->primarygenecheckbox->isChecked(),
+        ui->secondarygenecheckbox->isChecked(),
+        ui->tertiarygenecheckbox->isChecked(),
+        ui->breedcheckbox->isChecked()
+    ));
+}
+
+void MainWindow::on_primarycolouroffsetslider_valueChanged(int value)
+{
+    updateSearchColourLabel(ui->primarycoloursearchlabel, ui->primarycolourrangeslider, ui->primarycolouroffsetslider);
+}
+
+void MainWindow::on_primarycolourrangeslider_valueChanged(int value)
+{
+    updateSearchColourLabel(ui->primarycoloursearchlabel, ui->primarycolourrangeslider, ui->primarycolouroffsetslider);
+}
+
+
+void MainWindow::on_secondarycolourrangeslider_valueChanged(int value)
+{
+    updateSearchColourLabel(ui->secondarycoloursearchlabel, ui->secondarycolourrangeslider, ui->secondarycolouroffsetslider);
+}
+
+
+void MainWindow::on_secondarycolouroffsetslider_valueChanged(int value)
+{
+    updateSearchColourLabel(ui->secondarycoloursearchlabel, ui->secondarycolourrangeslider, ui->secondarycolouroffsetslider);
+}
+
+
+void MainWindow::on_tertiarycolourrangeslider_valueChanged(int value)
+{
+    updateSearchColourLabel(ui->tertiarycoloursearchlabel, ui->tertiarycolourrangeslider, ui->tertiarycolouroffsetslider);
+}
+
+
+void MainWindow::on_tertiarycolouroffsetslider_valueChanged(int value)
+{
+    updateSearchColourLabel(ui->tertiarycoloursearchlabel, ui->tertiarycolourrangeslider, ui->tertiarycolouroffsetslider);
 }
 

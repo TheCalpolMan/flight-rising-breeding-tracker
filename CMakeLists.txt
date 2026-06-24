@@ -34,6 +34,7 @@ find_package(Qt6 REQUIRED COMPONENTS Core)
         clickableqgraphicsview.h clickableqgraphicsview.cpp
         urlopener.h urlopener.cpp
         dragon.h dragon.cpp
+        searchbuilder.h searchbuilder.cpp
 
 
     )

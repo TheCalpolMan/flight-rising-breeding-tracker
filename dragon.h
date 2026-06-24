@@ -3,14 +3,15 @@
 
 #include "colour.h"
 #include "allele.h"
+#include "eyeallele.h"
 
 struct Dragon
 {
 public:
     int family = -1;
 
-    Allele eye;
     Allele breed;
+    EyeAllele eye;
 
     Colour primaryColour;
     Colour secondaryColour;
@@ -20,9 +21,9 @@ public:
     Allele secondaryGene;
     Allele tertiaryGene;
 
-    Dragon(Allele eye, Allele breed,
-       Colour primaryColour, Colour secondaryColour, Colour tertiaryColour,
-       Allele primaryGene, Allele secondaryGene, Allele tertiaryGene);
+    Dragon(const EyeAllele& eye, const Allele& breed,
+       const Colour& primaryColour, const Colour& secondaryColour, const Colour& tertiaryColour,
+       const Allele& primaryGene, const Allele& secondaryGene, const Allele& tertiaryGene);
 };
 
 #endif // DRAGON_H

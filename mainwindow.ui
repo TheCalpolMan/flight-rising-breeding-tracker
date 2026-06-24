@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <property name="tabBarAutoHide">
      <bool>true</bool>
@@ -1233,13 +1233,13 @@
      <attribute name="title">
       <string>Search</string>
      </attribute>
-     <widget class="QFrame" name="colourrangeframe">
+     <widget class="QFrame" name="primarycoloursearchframe">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>10</y>
+        <y>150</y>
         <width>511</width>
-        <height>81</height>
+        <height>91</height>
        </rect>
       </property>
       <property name="frameShape">
@@ -1248,24 +1248,24 @@
       <property name="frameShadow">
        <enum>QFrame::Shadow::Raised</enum>
       </property>
-      <widget class="QLabel" name="colourrangelabel">
+      <widget class="QLabel" name="primarycoloursearchlabel">
        <property name="geometry">
         <rect>
          <x>10</x>
          <y>10</y>
-         <width>221</width>
+         <width>491</width>
          <height>20</height>
         </rect>
        </property>
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Colour Range:&lt;/span&gt; 5&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Primary colour range, offset:&lt;/span&gt; 4, 0&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
-      <widget class="QSlider" name="colourrangeslider">
+      <widget class="QSlider" name="primarycolourrangeslider">
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>40</y>
+         <y>30</y>
          <width>491</width>
          <height>22</height>
         </rect>
@@ -1283,40 +1283,11 @@
         <enum>QSlider::TickPosition::NoTicks</enum>
        </property>
       </widget>
-     </widget>
-     <widget class="QFrame" name="colouroffsetframe">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>100</y>
-        <width>511</width>
-        <height>81</height>
-       </rect>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::Shape::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Shadow::Raised</enum>
-      </property>
-      <widget class="QLabel" name="colouroffsetlabel">
+      <widget class="QSlider" name="primarycolouroffsetslider">
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>10</y>
-         <width>221</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Colour Offset:&lt;/span&gt; 0&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-      </widget>
-      <widget class="QSlider" name="colouroffsetslider">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>40</y>
+         <y>60</y>
          <width>491</width>
          <height>22</height>
         </rect>
@@ -1345,9 +1316,9 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>190</y>
+        <y>10</y>
         <width>511</width>
-        <height>141</height>
+        <height>131</height>
        </rect>
       </property>
       <property name="frameShape">
@@ -1423,14 +1394,14 @@
       <widget class="QLabel" name="label_7">
        <property name="geometry">
         <rect>
-         <x>260</x>
+         <x>160</x>
          <y>10</y>
-         <width>241</width>
-         <height>121</height>
+         <width>341</width>
+         <height>51</height>
         </rect>
        </property>
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;Tick to allow all genes of the same rarity or above&lt;br/&gt;Untick to only allow selected gene (in morphology)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;Tick to allow all genes of the same rarity or above&lt;/p&gt;&lt;p align=&quot;right&quot;&gt;Untick to only allow gene selected in morphology&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="wordWrap">
         <bool>true</bool>
@@ -1441,14 +1412,172 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>340</y>
+        <y>450</y>
         <width>511</width>
-        <height>171</height>
+        <height>61</height>
        </rect>
       </property>
       <property name="text">
        <string>Search</string>
       </property>
+     </widget>
+     <widget class="QFrame" name="secondarycoloursearchframe">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>250</y>
+        <width>511</width>
+        <height>91</height>
+       </rect>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::Shape::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Shadow::Raised</enum>
+      </property>
+      <widget class="QLabel" name="secondarycoloursearchlabel">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>10</y>
+         <width>491</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Secondary colour range, offset:&lt;/span&gt; 4, 0&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+      <widget class="QSlider" name="secondarycolourrangeslider">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>30</y>
+         <width>491</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="maximum">
+        <number>44</number>
+       </property>
+       <property name="value">
+        <number>4</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="tickPosition">
+        <enum>QSlider::TickPosition::NoTicks</enum>
+       </property>
+      </widget>
+      <widget class="QSlider" name="secondarycolouroffsetslider">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>60</y>
+         <width>491</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="minimum">
+        <number>0</number>
+       </property>
+       <property name="maximum">
+        <number>50</number>
+       </property>
+       <property name="value">
+        <number>25</number>
+       </property>
+       <property name="sliderPosition">
+        <number>25</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="tickPosition">
+        <enum>QSlider::TickPosition::NoTicks</enum>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QFrame" name="tertiarycoloursearchframe">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>350</y>
+        <width>511</width>
+        <height>91</height>
+       </rect>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::Shape::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Shadow::Raised</enum>
+      </property>
+      <widget class="QLabel" name="tertiarycoloursearchlabel">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>10</y>
+         <width>491</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Tertiary colour range, offset:&lt;/span&gt; 4, 0&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+      <widget class="QSlider" name="tertiarycolourrangeslider">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>30</y>
+         <width>491</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="maximum">
+        <number>44</number>
+       </property>
+       <property name="value">
+        <number>4</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="tickPosition">
+        <enum>QSlider::TickPosition::NoTicks</enum>
+       </property>
+      </widget>
+      <widget class="QSlider" name="tertiarycolouroffsetslider">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>60</y>
+         <width>491</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="minimum">
+        <number>0</number>
+       </property>
+       <property name="maximum">
+        <number>50</number>
+       </property>
+       <property name="value">
+        <number>25</number>
+       </property>
+       <property name="sliderPosition">
+        <number>25</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="tickPosition">
+        <enum>QSlider::TickPosition::NoTicks</enum>
+       </property>
+      </widget>
      </widget>
     </widget>
     <widget class="QWidget" name="pairings">

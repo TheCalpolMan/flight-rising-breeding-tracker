@@ -1,8 +1,8 @@
 #include "dragon.h"
 
-Dragon::Dragon(Allele eye, Allele breed,
-   Colour primaryColour, Colour secondaryColour, Colour tertiaryColour,
-   Allele primaryGene, Allele secondaryGene, Allele tertiaryGene) :
+Dragon::Dragon(const EyeAllele& eye, const Allele& breed,
+    const Colour& primaryColour, const Colour& secondaryColour, const Colour& tertiaryColour,
+    const Allele& primaryGene, const Allele& secondaryGene, const Allele& tertiaryGene) :
     eye(eye),
     breed(breed),
     primaryColour(primaryColour),
