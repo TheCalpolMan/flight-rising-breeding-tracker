@@ -6,6 +6,8 @@
 #include <QMessageBox>
 #include <QFileDialog>
 
+#include "urlopener.h"
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -20,6 +22,8 @@ MainWindow::MainWindow(QWidget *parent)
     pixmap.size().scale(ui->breedgraphicsview->size(), Qt::KeepAspectRatio);
 
     ui->breedgraphicsview->scene()->addPixmap(pixmap);
+
+    ui->colouroffsetlabel->setText(colourOffset);
 
     // getting relevant ui elements
 
@@ -220,5 +224,23 @@ void MainWindow::on_breedgraphicsview_mousePressEvent(QMouseEvent *)
     ui->breedgraphicsview->scene()->addPixmap(
         pixmap.scaled(ui->breedgraphicsview->size().shrunkBy(
             QMargins(1, 1, 1, 1)), Qt::KeepAspectRatio));
+}
+
+void MainWindow::on_colouroffsetslider_valueChanged(int value)
+{
+    value -= 25;
+    colourOffset = std::string("<html><head/><body><p><span style=\" font-weight:700;\">Colour Offset:</span> " + std::to_string(value) + "</p></body></html>").c_str();
+    ui->colouroffsetlabel->setText(colourOffset);
+}
+
+void MainWindow::on_colourrangeslider_valueChanged(int value)
+{
+    colourRange = std::string("<html><head/><body><p><span style=\" font-weight:700;\">Colour Range:</span> " + std::to_string(value) + "</p></body></html>").c_str();
+    ui->colourrangelabel->setText(colourRange);
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    UrlOpener::openUrl("https://www1.flightrising.com/auction-house/buy/realm/dragons?");
 }
 

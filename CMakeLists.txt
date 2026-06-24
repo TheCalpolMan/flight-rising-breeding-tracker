@@ -32,8 +32,8 @@ find_package(Qt6 REQUIRED COMPONENTS Core)
         colour.h colour.cpp
         eyeallele.h eyeallele.cpp
         clickableqgraphicsview.h clickableqgraphicsview.cpp
-        images/dragon-image-select.png
-        images/dragon-image-select.png
+        urlopener.h urlopener.cpp
+        dragon.h dragon.cpp
 
 
     )
