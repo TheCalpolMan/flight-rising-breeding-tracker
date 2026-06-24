@@ -1013,7 +1013,7 @@
        <rect>
         <x>260</x>
         <y>20</y>
-        <width>131</width>
+        <width>101</width>
         <height>26</height>
        </rect>
       </property>
@@ -1097,7 +1097,7 @@
        <rect>
         <x>260</x>
         <y>50</y>
-        <width>131</width>
+        <width>101</width>
         <height>26</height>
        </rect>
       </property>
@@ -1110,7 +1110,7 @@
        <rect>
         <x>260</x>
         <y>80</y>
-        <width>131</width>
+        <width>101</width>
         <height>26</height>
        </rect>
       </property>
@@ -1121,9 +1121,9 @@
      <widget class="QComboBox" name="tertiarygenecombobox">
       <property name="geometry">
        <rect>
-        <x>400</x>
+        <x>370</x>
         <y>80</y>
-        <width>131</width>
+        <width>161</width>
         <height>26</height>
        </rect>
       </property>
@@ -1134,9 +1134,9 @@
      <widget class="QComboBox" name="secondarygenecombobox">
       <property name="geometry">
        <rect>
-        <x>400</x>
+        <x>370</x>
         <y>50</y>
-        <width>131</width>
+        <width>161</width>
         <height>26</height>
        </rect>
       </property>
@@ -1147,9 +1147,9 @@
      <widget class="QComboBox" name="primarygenecombobox">
       <property name="geometry">
        <rect>
-        <x>400</x>
+        <x>370</x>
         <y>20</y>
-        <width>131</width>
+        <width>161</width>
         <height>26</height>
        </rect>
       </property>
@@ -1207,7 +1207,7 @@
        <rect>
         <x>260</x>
         <y>0</y>
-        <width>131</width>
+        <width>101</width>
         <height>20</height>
        </rect>
       </property>
@@ -1218,9 +1218,9 @@
      <widget class="QLabel" name="label_6">
       <property name="geometry">
        <rect>
-        <x>400</x>
+        <x>370</x>
         <y>0</y>
-        <width>131</width>
+        <width>161</width>
         <height>20</height>
        </rect>
       </property>

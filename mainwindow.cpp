@@ -137,11 +137,11 @@ void MainWindow::updateColoursBasedOnGene(bool showDialogOnNoColour)
 void MainWindow::updateColours(int middleValue)
 {
     int offset = middleValue - colourScenes.size() / 2;
+    auto colours = Information::getInstance().getColours(true);
 
     for (int i=0; i < colourScenes.size(); i++)
     {
-        Colour colour = Information::getInstance().getColours(true).at(
-            (i + offset) % Information::getInstance().getColours(true).size());
+        Colour colour = colours.at((i + offset + colours.size()) % colours.size());
 
         colourLabels.at(i)->setText(QString(colour.name.c_str()));
 
@@ -208,15 +208,17 @@ void MainWindow::on_breedgraphicsview_mousePressEvent(QMouseEvent *)
                                                     ".",
                                                     tr("Images (*.png *.jpg)"));
 
-    if (filename.isEmpty())  {
+    if (filename.isEmpty())
+    {
         return;
     }
 
     ui->breedgraphicsview->scene()->clear();
 
     QPixmap pixmap(filename);
-    pixmap.size().scale(ui->breedgraphicsview->size(), Qt::KeepAspectRatio);
 
-    ui->breedgraphicsview->scene()->addPixmap(pixmap);
+    ui->breedgraphicsview->scene()->addPixmap(
+        pixmap.scaled(ui->breedgraphicsview->size().shrunkBy(
+            QMargins(1, 1, 1, 1)), Qt::KeepAspectRatio));
 }
 

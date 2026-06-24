@@ -8,7 +8,8 @@ enum class Rarity
     Uncommon,
     Limited,
     Rare,
-    Ancient
+    Ancient,
+    Spacer
 };
 
 #endif // RARITY_H
