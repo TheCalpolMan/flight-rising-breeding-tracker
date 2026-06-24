@@ -1170,7 +1170,7 @@
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QGraphicsView" name="breedgraphicsview">
+     <widget class="ClickableQGraphicsView" name="breedgraphicsview">
       <property name="geometry">
        <rect>
         <x>170</x>
@@ -1178,6 +1178,15 @@
         <width>361</width>
         <height>361</height>
        </rect>
+      </property>
+      <property name="mouseTracking">
+       <bool>false</bool>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
       </property>
      </widget>
      <widget class="QComboBox" name="eyecombobox">
@@ -1265,6 +1274,16 @@
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ClickableQGraphicsView</class>
+   <extends>QGraphicsView</extends>
+   <header>clickableqgraphicsview.h</header>
+   <slots>
+    <signal>mousePressEvent(QMouseEvent*)</signal>
+   </slots>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

@@ -36,6 +36,8 @@ private slots:
 
     void on_tertiarycolourcombobox_currentTextChanged(const QString &text);
 
+    void on_breedgraphicsview_mousePressEvent(QMouseEvent *);
+
 private:
     Ui::MainWindow *ui;
 
@@ -44,6 +46,8 @@ private:
     std::vector<QLabel*> colourLabels = decltype(colourLabels)();
     std::vector<QGraphicsView*> colourViews = decltype(colourViews)();
     std::vector<std::unique_ptr<QGraphicsScene>> colourScenes = decltype(colourScenes)();
+
+    QGraphicsScene dragonScene = decltype(dragonScene)();
 
     void updateColoursBasedOnGene(bool showDialogOnNoColour);
 

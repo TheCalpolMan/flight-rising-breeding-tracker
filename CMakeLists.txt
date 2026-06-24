@@ -21,6 +21,7 @@ set(PROJECT_SOURCES
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     find_package(Qt6 REQUIRED COMPONENTS Widgets)
+find_package(Qt6 REQUIRED COMPONENTS Core)
 
     qt_add_executable(flight-rising-breeding-tracker
         MANUAL_FINALIZATION
@@ -30,6 +31,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         allele.h allele.cpp
         colour.h colour.cpp
         eyeallele.h eyeallele.cpp
+        clickableqgraphicsview.h clickableqgraphicsview.cpp
+        images/dragon-image-select.png
+        images/dragon-image-select.png
 
 
     )
@@ -51,8 +55,12 @@ else()
     endif()
 endif()
 
+target_include_directories(flight-rising-breeding-tracker PRIVATE .)
+configure_file(images/dragon-image-select.jpg images/dragon-image-select.jpg COPYONLY)
+
 target_link_libraries(flight-rising-breeding-tracker PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(flight-rising-breeding-tracker PRIVATE Qt6::Widgets)
+target_link_libraries(flight-rising-breeding-tracker PRIVATE Qt6::Core)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an

@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <QMessageBox>
+#include <QFileDialog>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -11,6 +12,14 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    // inital setup
+
+    ui->breedgraphicsview->setScene(&dragonScene);
+
+    QPixmap pixmap("images/dragon-image-select.jpg");
+    pixmap.size().scale(ui->breedgraphicsview->size(), Qt::KeepAspectRatio);
+
+    ui->breedgraphicsview->scene()->addPixmap(pixmap);
 
     // getting relevant ui elements
 
@@ -187,5 +196,27 @@ void MainWindow::on_secondarycolourcombobox_currentTextChanged(const QString &te
 void MainWindow::on_tertiarycolourcombobox_currentTextChanged(const QString &text)
 {
     updateColoursBasedOnGene(false);
+}
+
+
+void MainWindow::on_breedgraphicsview_mousePressEvent(QMouseEvent *)
+{
+    // thanks to https://svenssonjoel.github.io/pages/qt_game_loadimage/index.html
+
+    QString filename = QFileDialog::getOpenFileName(this,
+                                                    tr("Load Image"),
+                                                    ".",
+                                                    tr("Images (*.png *.jpg)"));
+
+    if (filename.isEmpty())  {
+        return;
+    }
+
+    ui->breedgraphicsview->scene()->clear();
+
+    QPixmap pixmap(filename);
+    pixmap.size().scale(ui->breedgraphicsview->size(), Qt::KeepAspectRatio);
+
+    ui->breedgraphicsview->scene()->addPixmap(pixmap);
 }
 
