@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <property name="tabBarAutoHide">
      <bool>true</bool>
@@ -1411,9 +1411,9 @@
      <widget class="QPushButton" name="pushButton">
       <property name="geometry">
        <rect>
-        <x>10</x>
+        <x>270</x>
         <y>450</y>
-        <width>511</width>
+        <width>251</width>
         <height>61</height>
        </rect>
       </property>
@@ -1576,6 +1576,57 @@
        </property>
        <property name="tickPosition">
         <enum>QSlider::TickPosition::NoTicks</enum>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QFrame" name="frame">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>450</y>
+        <width>251</width>
+        <height>61</height>
+       </rect>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::Shape::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Shadow::Raised</enum>
+      </property>
+      <widget class="QCheckBox" name="currencycheckbox">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>30</y>
+         <width>211</width>
+         <height>24</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Currency: Treasure</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+       <property name="tristate">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="gendercheckbox">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>5</y>
+         <width>211</width>
+         <height>24</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Gender: Any</string>
+       </property>
+       <property name="tristate">
+        <bool>true</bool>
        </property>
       </widget>
      </widget>

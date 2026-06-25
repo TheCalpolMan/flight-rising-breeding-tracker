@@ -155,9 +155,9 @@ void MainWindow::updateColours(int middleValue)
     }
 }
 
-void MainWindow::updateSearchColourLabel(QLabel* label, QSlider* range, QSlider* offset)
+void MainWindow::updateSearchColourLabel(QLabel* label, const std::string& name, QSlider* range, QSlider* offset)
 {
-    QString primaryColourStats = std::string("<html><head/><body><p><span style=\" font-weight:700;\">Primary colour range, offset:</span> " +
+    QString primaryColourStats = std::string("<html><head/><body><p><span style=\" font-weight:700;\">" + name + " colour range, offset:</span> " +
                                      std::to_string(range->value()) + ", " +
                                      std::to_string(offset->value() - offset->maximum() / 2) + "</p></body></html>").c_str();
 
@@ -273,35 +273,47 @@ void MainWindow::on_pushButton_clicked()
 
 void MainWindow::on_primarycolouroffsetslider_valueChanged(int value)
 {
-    updateSearchColourLabel(ui->primarycoloursearchlabel, ui->primarycolourrangeslider, ui->primarycolouroffsetslider);
+    updateSearchColourLabel(ui->primarycoloursearchlabel, "Primary", ui->primarycolourrangeslider, ui->primarycolouroffsetslider);
 }
 
 void MainWindow::on_primarycolourrangeslider_valueChanged(int value)
 {
-    updateSearchColourLabel(ui->primarycoloursearchlabel, ui->primarycolourrangeslider, ui->primarycolouroffsetslider);
+    updateSearchColourLabel(ui->primarycoloursearchlabel, "Primary", ui->primarycolourrangeslider, ui->primarycolouroffsetslider);
 }
 
 
 void MainWindow::on_secondarycolourrangeslider_valueChanged(int value)
 {
-    updateSearchColourLabel(ui->secondarycoloursearchlabel, ui->secondarycolourrangeslider, ui->secondarycolouroffsetslider);
+    updateSearchColourLabel(ui->secondarycoloursearchlabel, "Secondary", ui->secondarycolourrangeslider, ui->secondarycolouroffsetslider);
 }
 
 
 void MainWindow::on_secondarycolouroffsetslider_valueChanged(int value)
 {
-    updateSearchColourLabel(ui->secondarycoloursearchlabel, ui->secondarycolourrangeslider, ui->secondarycolouroffsetslider);
+    updateSearchColourLabel(ui->secondarycoloursearchlabel, "Secondary", ui->secondarycolourrangeslider, ui->secondarycolouroffsetslider);
 }
 
 
 void MainWindow::on_tertiarycolourrangeslider_valueChanged(int value)
 {
-    updateSearchColourLabel(ui->tertiarycoloursearchlabel, ui->tertiarycolourrangeslider, ui->tertiarycolouroffsetslider);
+    updateSearchColourLabel(ui->tertiarycoloursearchlabel, "Tertiary", ui->tertiarycolourrangeslider, ui->tertiarycolouroffsetslider);
 }
 
 
 void MainWindow::on_tertiarycolouroffsetslider_valueChanged(int value)
 {
-    updateSearchColourLabel(ui->tertiarycoloursearchlabel, ui->tertiarycolourrangeslider, ui->tertiarycolouroffsetslider);
+    updateSearchColourLabel(ui->tertiarycoloursearchlabel, "Tertiary", ui->tertiarycolourrangeslider, ui->tertiarycolouroffsetslider);
+}
+
+
+void MainWindow::on_gendercheckbox_stateChanged(int arg1)
+{
+    ui->gendercheckbox->setText(QString(genderButtonStrings.at(arg1).c_str()));
+}
+
+
+void MainWindow::on_currencycheckbox_stateChanged(int arg1)
+{
+    ui->currencycheckbox->setText(QString(currencyButtonStrings.at(arg1).c_str()));
 }
 

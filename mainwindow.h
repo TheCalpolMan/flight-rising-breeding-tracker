@@ -54,6 +54,10 @@ private slots:
 
     void on_tertiarycolouroffsetslider_valueChanged(int value);
 
+    void on_gendercheckbox_stateChanged(int arg1);
+
+    void on_currencycheckbox_stateChanged(int arg1);
+
 private:
     Ui::MainWindow *ui;
 
@@ -69,11 +73,23 @@ private:
 
     // search
 
+    std::vector<std::string> genderButtonStrings = decltype(genderButtonStrings)({
+        "Gender: Any",
+        "Gender: Female",
+        "Gender: Male"
+    });
+
+    std::vector<std::string> currencyButtonStrings = decltype(genderButtonStrings)({
+        "Currency: Any",
+        "Currency: Gems",
+        "Currency: Treasure"
+    });
+
     void updateColoursBasedOnGene(bool showDialogOnNoColour);
 
     void updateColours(int middleValue);
 
-    void updateSearchColourLabel(QLabel* label, QSlider* range, QSlider* offset);
+    void updateSearchColourLabel(QLabel* label, const std::string& name, QSlider* range, QSlider* offset);
 
 };
 #endif // MAINWINDOW_H
