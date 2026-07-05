@@ -2,6 +2,8 @@
 #define SEARCHBUILDER_H
 
 #include "dragon.h"
+#include "gender.h"
+#include "currency.h"
 
 #include <vector>
 
@@ -9,7 +11,8 @@ class SearchBuilder
 {
 public:
     static std::string fromDragon(const Dragon& dragon, std::vector<int> colourRanges,
-        std::vector<int> colourOffsets, bool primaryGene, bool secondaryGene, bool tertiaryGene, bool breed);
+        std::vector<int> colourOffsets, bool primaryGene, bool secondaryGene, bool tertiaryGene, bool breed,
+        Gender gender, Currency currency);
 
 private:
     static const std::string delimiter;

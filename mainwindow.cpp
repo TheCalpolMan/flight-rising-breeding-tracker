@@ -260,6 +260,24 @@ void MainWindow::on_pushButton_clicked()
     offsets.push_back(ui->secondarycolouroffsetslider->value() - ui->secondarycolouroffsetslider->maximum() / 2);
     offsets.push_back(ui->tertiarycolouroffsetslider->value() - ui->tertiarycolouroffsetslider->maximum() / 2);
 
+    Gender gender;
+
+    switch(ui->gendercheckbox->checkState())
+    {
+    case Qt::PartiallyChecked: gender = Gender::Female;break;
+    case Qt::Checked: gender = Gender::Male;break;
+    default: gender = Gender::Any;break;
+    }
+
+    Currency currency;
+
+    switch(ui->currencycheckbox->checkState())
+    {
+    case Qt::Checked: currency = Currency::Treasure;break;
+    case Qt::PartiallyChecked: currency = Currency::Gems;break;
+    default: currency = Currency::Any;break;
+    }
+
     UrlOpener::openUrl(SearchBuilder::fromDragon(
         dragon,
         ranges,
@@ -267,7 +285,9 @@ void MainWindow::on_pushButton_clicked()
         ui->primarygenecheckbox->isChecked(),
         ui->secondarygenecheckbox->isChecked(),
         ui->tertiarygenecheckbox->isChecked(),
-        ui->breedcheckbox->isChecked()
+        ui->breedcheckbox->isChecked(),
+        gender,
+        currency
     ));
 }
 

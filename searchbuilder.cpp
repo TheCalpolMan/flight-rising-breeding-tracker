@@ -8,12 +8,41 @@
 const std::string SearchBuilder::delimiter = "%2C";
 
 std::string SearchBuilder::fromDragon(const Dragon& dragon, std::vector<int> colourRanges,
-    std::vector<int> colourOffsets, bool primaryGene, bool secondaryGene, bool tertiaryGene, bool breed)
+    std::vector<int> colourOffsets, bool primaryGene, bool secondaryGene, bool tertiaryGene, bool breed,
+    Gender gender, Currency currency)
 {
     auto& information = Information::getInstance();
 
     std::stringstream search;
     search << "https://www1.flightrising.com/auction-house/buy/realm/dragons?";
+
+    if (currency != Currency::Any)
+    {
+        search << "currency=";
+
+        if (currency == Currency::Treasure)
+        {
+            search << "0&";
+        }
+        else
+        {
+            search << "1&";
+        }
+    }
+
+    if (gender != Gender::Any)
+    {
+        search << "d_gender=";
+
+        if (gender == Gender::Male)
+        {
+            search << "0&";
+        }
+        else
+        {
+            search << "1&";
+        }
+    }
 
     search << "d_breed=";
 

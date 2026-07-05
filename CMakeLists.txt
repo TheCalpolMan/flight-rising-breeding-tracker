@@ -35,8 +35,8 @@ find_package(Qt6 REQUIRED COMPONENTS Core)
         urlopener.h urlopener.cpp
         dragon.h dragon.cpp
         searchbuilder.h searchbuilder.cpp
-
-
+        gender.h
+        currency.h
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET flight-rising-breeding-tracker APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
