@@ -244,10 +244,7 @@ Dragon MainWindow::constructMorphologyDragon()
         information.getTertiaryGenes().at(ui->tertiarygenecombobox->currentIndex())
     );
 
-    if (imageLocation.toStdString() != "./assets/dragon-image-select.jpg")
-    {
-        dragon.imageLocation = imageLocation.toStdString();
-    }
+    dragon.imageLocation = imageLocation.toStdString();
 
     return dragon;
 }
