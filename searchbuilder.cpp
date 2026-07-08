@@ -1,9 +1,9 @@
 #include "searchbuilder.h"
 
 #include <sstream>
-#include <stdexcept>
 
 #include "information.h"
+#include "vectorhelpers.h"
 
 const std::string SearchBuilder::delimiter = "%2C";
 
@@ -12,13 +12,13 @@ std::string SearchBuilder::fromSaveFormat(const SaveFormat& save, Gender gender,
     std::vector<int> colourRanges;
     std::vector<int> colourOffsets;
 
-    colourRanges.push_back(save.primaryColourOffset);
-    colourRanges.push_back(save.secondaryColourOffset);
-    colourRanges.push_back(save.secondaryColourOffset);
+    colourRanges.push_back(save.primaryColourRange);
+    colourRanges.push_back(save.secondaryColourRange);
+    colourRanges.push_back(save.secondaryColourRange);
 
-    colourOffsets.push_back(save.primaryColourRange);
-    colourOffsets.push_back(save.secondaryColourRange);
-    colourOffsets.push_back(save.secondaryColourRange);
+    colourOffsets.push_back(save.primaryColourOffset);
+    colourOffsets.push_back(save.secondaryColourOffset);
+    colourOffsets.push_back(save.secondaryColourOffset);
 
     return fromDragon(
         save.dragon,
@@ -74,7 +74,7 @@ std::string SearchBuilder::fromDragon(const Dragon& dragon, std::vector<int> col
 
     if (!breed || dragon.breed.ancient)
     {
-        search << getIndex(information.getBreeds(), dragon.breed) + 1;
+        search << VectorHelpers::getIndex(information.getBreeds(), dragon.breed) + 1;
     }
     else
     {
@@ -97,7 +97,7 @@ std::string SearchBuilder::fromDragon(const Dragon& dragon, std::vector<int> col
 
     if (!primaryGene)
     {
-        search << getIndex(information.getPrimaryGenes(), dragon.primaryGene);
+        search << VectorHelpers::getIndex(information.getPrimaryGenes(), dragon.primaryGene);
     }
     else if (dragon.primaryGene.string != "Basic")
     {
@@ -108,7 +108,7 @@ std::string SearchBuilder::fromDragon(const Dragon& dragon, std::vector<int> col
 
     if (!secondaryGene)
     {
-        search << getIndex(information.getSecondaryGenes(), dragon.secondaryGene);
+        search << VectorHelpers::getIndex(information.getSecondaryGenes(), dragon.secondaryGene);
     }
     else if (dragon.secondaryGene.string != "Basic")
     {
@@ -121,7 +121,7 @@ std::string SearchBuilder::fromDragon(const Dragon& dragon, std::vector<int> col
 
         if (!tertiaryGene)
         {
-            search << getIndex(information.getTertiaryGenes(), dragon.tertiaryGene);
+            search << VectorHelpers::getIndex(information.getTertiaryGenes(), dragon.tertiaryGene);
         }
         else
         {
@@ -131,32 +131,6 @@ std::string SearchBuilder::fromDragon(const Dragon& dragon, std::vector<int> col
 
     // std::string search = "https://www1.flightrising.com/auction-house/buy/realm/dragons?d_breed=502&d_body=502&d_eye=502&d_bodygene=502&d_winggene=502&d_tertgene=502&sort=expiration_desc&collapse=0";
     return search.str();
-}
-
-int SearchBuilder::getIndex(const std::vector<Colour>& target, const Colour& value)
-{
-    for (int i=0;i<target.size();i++)
-    {
-        if (value.name == target[i].name)
-        {
-            return i;
-        }
-    }
-
-    throw std::invalid_argument("value does not exist");
-}
-
-int SearchBuilder::getIndex(const std::vector<Allele>& target, const Allele& value)
-{
-    for (int i=0;i<target.size();i++)
-    {
-        if (value.string == target[i].string)
-        {
-            return i;
-        }
-    }
-
-    throw std::invalid_argument("value does not exist");
 }
 
 void SearchBuilder::addColourRange(const Colour& colour, int range, int offset, std::stringstream& stream)
@@ -169,9 +143,9 @@ void SearchBuilder::addColourRange(const Colour& colour, int range, int offset, 
     Colour endColour = information.getColours(true).at((
         colour.wheelIndex - 1 + range + offset + information.getColours(true).size()) % information.getColours(true).size());
 
-    stream << getIndex(information.getColours(false), startColour) + 1;
+    stream << VectorHelpers::getIndex(information.getColours(false), startColour) + 1;
     stream << "-";
-    stream << getIndex(information.getColours(false), endColour) + 1;
+    stream << VectorHelpers::getIndex(information.getColours(false), endColour) + 1;
 }
 
 void SearchBuilder::addEqualOrRarerAlleles(const Allele& allele, const std::vector<Allele>& allAllelesOfType, std::stringstream& stream, int indexShift)

@@ -4,50 +4,50 @@
 		"dragon":
 		{
 			"family":-1,
-			"breed": "Wildclaw",
-			"eye": "Primal",
+			"breed": 1,
+			"eye": 4,
 			"primary":
 			{
 				"colour": 65,
-				"gene": "Mosaic",
+				"gene": 12,
 			},
 			"secondary":
 			{
 				"colour": 98,
-				"gene": "Toxin",
+				"gene": 34,
 			},
 			"tertiary":
 			{
 				"colour": 34,
-				"gene": "Contour",
-			}
-		},
-		"image": "./dragon.png"
+				"gene": 67,
+			},
+			"image": "./dragon.png"
+		}
 	},
 	"search",
 	{
-		"primary":false,
-		"secondary":false,
-		"tertiary":true,
-		"breed":false,
-		
-		"colours":
+		"toggles":
 		{
-			"primary":
-			{
-				"range": 4,
-				"offset": 0
-			},
-			"secondary":
-			{
-				"range": 12,
-				"offset": 3
-			},
-			"tertiary":
-			{
-				"range": 6,
-				"offset": -2
-			}
+			"primary":false,
+			"secondary":false,
+			"tertiary":true,
+			"breed":false
+		},
+		
+		"primary":
+		{
+			"range": 4,
+			"offset": 0
+		},
+		"secondary":
+		{
+			"range": 12,
+			"offset": 3
+		},
+		"tertiary":
+		{
+			"range": 6,
+			"offset": -2
 		}
 	}
 }

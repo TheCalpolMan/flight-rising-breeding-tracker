@@ -19,8 +19,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->breedgraphicsview->setScene(&dragonScene);
 
-    QPixmap pixmap("images/dragon-image-select.jpg");
-    ui->breedgraphicsview->scene()->addPixmap(pixmap);
+    loadImage();
 
     // getting relevant ui elements
 
@@ -162,6 +161,17 @@ void MainWindow::updateSearchColourLabel(QLabel* label, const std::string& name,
     label->setText(primaryColourStats);
 }
 
+void MainWindow::loadImage()
+{
+    ui->breedgraphicsview->scene()->clear();
+
+    QPixmap pixmap(imageLocation);
+
+    ui->breedgraphicsview->scene()->addPixmap(
+        pixmap.scaled(ui->breedgraphicsview->size().shrunkBy(
+            QMargins(1, 1, 1, 1)), Qt::KeepAspectRatio));
+}
+
 SaveFormat MainWindow::constructSave()
 {
     SaveFormat format = SaveFormat(
@@ -195,6 +205,11 @@ Dragon MainWindow::constructMorphologyDragon()
         information.getSecondaryGenes().at(ui->secondarygenecombobox->currentIndex()),
         information.getTertiaryGenes().at(ui->tertiarygenecombobox->currentIndex())
     );
+
+    if (imageLocation.toStdString() != "./images/dragon-image-select.jpg")
+    {
+        dragon.imageLocation = imageLocation.toStdString();
+    }
 
     return dragon;
 }
@@ -250,23 +265,17 @@ void MainWindow::on_breedgraphicsview_mousePressEvent(QMouseEvent *)
 {
     // thanks to https://svenssonjoel.github.io/pages/qt_game_loadimage/index.html
 
-    QString filename = QFileDialog::getOpenFileName(this,
+    imageLocation = QFileDialog::getOpenFileName(this,
                                                     tr("Load Image"),
                                                     ".",
                                                     tr("Images (*.png *.jpg)"));
 
-    if (filename.isEmpty())
+    if (imageLocation.isEmpty())
     {
         return;
     }
 
-    ui->breedgraphicsview->scene()->clear();
-
-    QPixmap pixmap(filename);
-
-    ui->breedgraphicsview->scene()->addPixmap(
-        pixmap.scaled(ui->breedgraphicsview->size().shrunkBy(
-            QMargins(1, 1, 1, 1)), Qt::KeepAspectRatio));
+    loadImage();
 }
 
 void MainWindow::on_pushButton_clicked()
@@ -290,8 +299,6 @@ void MainWindow::on_pushButton_clicked()
     case Qt::PartiallyChecked: currency = Currency::Gems;break;
     default: currency = Currency::Any;break;
     }
-
-    save.write("./test");
 
     UrlOpener::openUrl(SearchBuilder::fromSaveFormat(
         save,
@@ -344,5 +351,23 @@ void MainWindow::on_gendercheckbox_stateChanged(int arg1)
 void MainWindow::on_currencycheckbox_stateChanged(int arg1)
 {
     ui->currencycheckbox->setText(QString(currencyButtonStrings.at(arg1).c_str()));
+}
+
+
+void MainWindow::on_actionSave_triggered()
+{
+
+}
+
+
+void MainWindow::on_actionOpen_triggered()
+{
+
+}
+
+
+void MainWindow::on_actionSave_As_triggered()
+{
+
 }
 

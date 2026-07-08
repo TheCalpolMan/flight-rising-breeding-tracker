@@ -60,6 +60,12 @@ private slots:
 
     void on_currencycheckbox_stateChanged(int arg1);
 
+    void on_actionSave_triggered();
+
+    void on_actionOpen_triggered();
+
+    void on_actionSave_As_triggered();
+
 private:
     Ui::MainWindow *ui;
 
@@ -69,6 +75,7 @@ private:
     QPainter painter = QPainter();
     std::vector<QLabel*> colourLabels = decltype(colourLabels)();
     std::vector<QGraphicsView*> colourViews = decltype(colourViews)();
+    QString imageLocation = QString("./images/dragon-image-select.jpg");
     std::vector<std::shared_ptr<QGraphicsScene>> colourScenes = decltype(colourScenes)();
 
     QGraphicsScene dragonScene = decltype(dragonScene)();
@@ -92,6 +99,8 @@ private:
     void updateColours(int middleValue);
 
     void updateSearchColourLabel(QLabel* label, const std::string& name, QSlider* range, QSlider* offset);
+
+    void loadImage();
 
     SaveFormat constructSave();
 

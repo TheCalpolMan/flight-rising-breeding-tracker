@@ -38,6 +38,7 @@ find_package(Qt6 REQUIRED COMPONENTS Core)
         gender.h
         currency.h
         saveformat.h saveformat.cpp
+        vectorhelpers.h
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET flight-rising-breeding-tracker APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

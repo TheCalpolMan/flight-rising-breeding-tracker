@@ -21,6 +21,8 @@ public:
     Allele secondaryGene;
     Allele tertiaryGene;
 
+    std::string imageLocation = "";
+
     Dragon() = default;
 
     Dragon(const EyeAllele& eye, const Allele& breed,

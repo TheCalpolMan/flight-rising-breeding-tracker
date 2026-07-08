@@ -14,6 +14,16 @@ public:
     Colour() = default;
 
     Colour(std::string name, std::string hexCode, int wheelIndex);
+
+    bool operator==(const Colour& otherString) const
+    {
+        if (this->name == otherString.name)
+        {
+            return true;
+        }
+
+        return false;
+    }
 };
 
 #endif // COLOUR_H
