@@ -61,7 +61,8 @@ endif()
 target_include_directories(flight-rising-breeding-tracker PRIVATE .)
 target_include_directories(flight-rising-breeding-tracker PRIVATE rapidjson)
 
-configure_file(images/dragon-image-select.jpg images/dragon-image-select.jpg COPYONLY)
+configure_file(assets/save-schema.json assets/save-schema.json COPYONLY)
+configure_file(assets/dragon-image-select.jpg assets/dragon-image-select.jpg COPYONLY)
 
 target_link_libraries(flight-rising-breeding-tracker PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(flight-rising-breeding-tracker PRIVATE Qt6::Widgets)

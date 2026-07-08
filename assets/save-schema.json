@@ -1,0 +1,171 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "generated at https://jsonlint.com/json-schema-generator",
+  "title": "Flight Rising Breeding Tracker Save Schema",
+  "description": "Some save state for the flight rising breeding tracker",
+  "type": "object",
+  "properties": {
+    "morphology": {
+      "type": "object",
+      "properties": {
+        "dragon": {
+          "type": "object",
+          "properties": {
+            "family": {
+              "type": "integer"
+            },
+            "breed": {
+              "type": "integer"
+            },
+            "eye": {
+              "type": "integer"
+            },
+            "primary": {
+              "type": "object",
+              "properties": {
+                "colour": {
+                  "type": "integer"
+                },
+                "gene": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "colour",
+                "gene"
+              ]
+            },
+            "secondary": {
+              "type": "object",
+              "properties": {
+                "colour": {
+                  "type": "integer"
+                },
+                "gene": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "colour",
+                "gene"
+              ]
+            },
+            "tertiary": {
+              "type": "object",
+              "properties": {
+                "colour": {
+                  "type": "integer"
+                },
+                "gene": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "colour",
+                "gene"
+              ]
+            },
+            "image": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "family",
+            "breed",
+            "eye",
+            "primary",
+            "secondary",
+            "tertiary",
+            "image"
+          ]
+        }
+      },
+      "required": [
+        "dragon"
+      ]
+    },
+    "search": {
+      "type": "object",
+      "properties": {
+        "toggles": {
+          "type": "object",
+          "properties": {
+            "primary": {
+              "type": "boolean"
+            },
+            "secondary": {
+              "type": "boolean"
+            },
+            "tertiary": {
+              "type": "boolean"
+            },
+            "breed": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "primary",
+            "secondary",
+            "tertiary",
+            "breed"
+          ]
+        },
+        "primary": {
+          "type": "object",
+          "properties": {
+            "range": {
+              "type": "integer"
+            },
+            "offset": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "range",
+            "offset"
+          ]
+        },
+        "secondary": {
+          "type": "object",
+          "properties": {
+            "range": {
+              "type": "integer"
+            },
+            "offset": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "range",
+            "offset"
+          ]
+        },
+        "tertiary": {
+          "type": "object",
+          "properties": {
+            "range": {
+              "type": "integer"
+            },
+            "offset": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "range",
+            "offset"
+          ]
+        }
+      },
+      "required": [
+        "toggles",
+        "primary",
+        "secondary",
+        "tertiary"
+      ]
+    }
+  },
+  "required": [
+    "morphology",
+    "search"
+  ]
+}

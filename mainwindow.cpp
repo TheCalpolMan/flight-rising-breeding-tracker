@@ -8,6 +8,7 @@
 #include "dragon.h"
 #include "urlopener.h"
 #include "searchbuilder.h"
+#include "vectorhelpers.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -172,6 +173,43 @@ void MainWindow::loadImage()
             QMargins(1, 1, 1, 1)), Qt::KeepAspectRatio));
 }
 
+void MainWindow::loadDragon(const Dragon& dragon)
+{
+    auto& information = Information::getInstance();
+
+    ui->breedcombobox->setCurrentIndex(VectorHelpers::getIndex(information.getBreeds(), dragon.breed));
+    ui->eyecombobox->setCurrentIndex(VectorHelpers::getIndex(information.getEyes(), dragon.eye));
+
+    ui->primarycolourcombobox->setCurrentIndex(dragon.primaryColour.wheelIndex - 1);
+    ui->secondarycolourcombobox->setCurrentIndex(dragon.secondaryColour.wheelIndex - 1);
+    ui->tertiarycolourcombobox->setCurrentIndex(dragon.tertiaryColour.wheelIndex - 1);
+
+    ui->primarygenecombobox->setCurrentIndex(VectorHelpers::getIndex(information.getPrimaryGenes(), dragon.primaryGene));
+    ui->secondarygenecombobox->setCurrentIndex(VectorHelpers::getIndex(information.getSecondaryGenes(), dragon.secondaryGene));
+    ui->tertiarygenecombobox->setCurrentIndex(VectorHelpers::getIndex(information.getTertiaryGenes(), dragon.tertiaryGene));
+
+    imageLocation = QString(dragon.imageLocation.c_str());
+
+    loadImage();
+    updateColoursBasedOnGene(true);
+}
+
+void MainWindow::loadSearch(const SaveFormat& save)
+{
+    ui->primarygenecheckbox->setCheckState(save.primaryToggle ? Qt::CheckState::Checked : Qt::CheckState::Unchecked);
+    ui->secondarygenecheckbox->setCheckState(save.secondaryToggle ? Qt::CheckState::Checked : Qt::CheckState::Unchecked);
+    ui->tertiarygenecheckbox->setCheckState(save.tertiaryToggle ? Qt::CheckState::Checked : Qt::CheckState::Unchecked);
+    ui->breedcheckbox->setCheckState(save.breedToggle ? Qt::CheckState::Checked : Qt::CheckState::Unchecked);
+
+    ui->primarycolourrangeslider->setValue(save.primaryColourRange);
+    ui->secondarycolourrangeslider->setValue(save.secondaryColourRange);
+    ui->tertiarycolourrangeslider->setValue(save.tertiaryColourRange);
+
+    ui->primarycolouroffsetslider->setValue(save.primaryColourOffset + ui->primarycolouroffsetslider->maximum() / 2);
+    ui->secondarycolouroffsetslider->setValue(save.secondaryColourOffset + ui->secondarycolouroffsetslider->maximum() / 2);
+    ui->tertiarycolouroffsetslider->setValue(save.tertiaryColourOffset + ui->tertiarycolouroffsetslider->maximum() / 2);
+}
+
 SaveFormat MainWindow::constructSave()
 {
     SaveFormat format = SaveFormat(
@@ -206,7 +244,7 @@ Dragon MainWindow::constructMorphologyDragon()
         information.getTertiaryGenes().at(ui->tertiarygenecombobox->currentIndex())
     );
 
-    if (imageLocation.toStdString() != "./images/dragon-image-select.jpg")
+    if (imageLocation.toStdString() != "./assets/dragon-image-select.jpg")
     {
         dragon.imageLocation = imageLocation.toStdString();
     }
@@ -368,7 +406,21 @@ void MainWindow::on_actionSave_triggered()
 
 void MainWindow::on_actionOpen_triggered()
 {
+    QString targetFile = QFileDialog::getOpenFileName(this,
+                                                      tr("Open File"),
+                                                      ".",
+                                                      tr("JSON Files (*.json)"));
 
+    if (targetFile.isEmpty())
+    {
+        return;
+    }
+
+    loadedFile = targetFile.toStdString();
+    SaveFormat save = SaveFormat(loadedFile);
+
+    loadDragon(save.dragon);
+    loadSearch(save);
 }
 
 

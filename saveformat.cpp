@@ -2,10 +2,13 @@
 
 #include <fstream>
 #include <stdexcept>
+#include <filesystem>
 
+#include <schema.h>
 #include <document.h>
 #include <stringbuffer.h>
 #include <prettywriter.h>
+#include <istreamwrapper.h>
 
 #include "information.h"
 #include "vectorhelpers.h"
@@ -29,7 +32,67 @@ SaveFormat::SaveFormat(const Dragon& dragon, bool primaryToggle, bool secondaryT
 }
 SaveFormat::SaveFormat(const std::string& fileLocation)
 {
+    if (!std::filesystem::exists(fileLocation))
+    {
+        throw std::invalid_argument("File does not exist");
+    }
 
+    rapidjson::Document schema;
+
+    {
+        std::ifstream fStream("./assets/save-schema.json");
+        rapidjson::IStreamWrapper iStreamWrapper(fStream);
+
+        schema.ParseStream(iStreamWrapper);
+    }
+
+    rapidjson::SchemaDocument schemaDocument(schema);
+    rapidjson::SchemaValidator validator(schemaDocument);
+
+    rapidjson::Document document;
+    {
+        std::ifstream fStream(fileLocation);
+        rapidjson::IStreamWrapper iStreamWrapper(fStream);
+
+        document.ParseStream(iStreamWrapper);
+    }
+
+    if (!document.Accept(validator))
+    {
+        throw std::invalid_argument("File specified is not compatible with schema");
+    }
+
+    // document validated, down to (dragon) business
+
+    const auto& information = Information::getInstance();
+
+    dragon.family = document["morphology"]["dragon"]["family"].GetInt64();
+    dragon.breed = information.getBreeds().at(document["morphology"]["dragon"]["breed"].GetInt());
+    dragon.eye = information.getEyes().at(document["morphology"]["dragon"]["eye"].GetInt());
+
+    dragon.primaryGene = information.getPrimaryGenes().at(document["morphology"]["dragon"]["primary"]["gene"].GetInt());
+    dragon.secondaryGene = information.getSecondaryGenes().at(document["morphology"]["dragon"]["secondary"]["gene"].GetInt());
+    dragon.tertiaryGene = information.getTertiaryGenes().at(document["morphology"]["dragon"]["tertiary"]["gene"].GetInt());
+
+    dragon.primaryColour = information.getColours(false).at(document["morphology"]["dragon"]["primary"]["colour"].GetInt());
+    dragon.secondaryColour = information.getColours(false).at(document["morphology"]["dragon"]["secondary"]["colour"].GetInt());
+    dragon.tertiaryColour = information.getColours(false).at(document["morphology"]["dragon"]["tertiary"]["colour"].GetInt());
+
+    dragon.imageLocation = document["morphology"]["dragon"]["image"].GetString();
+
+    primaryToggle = document["search"]["toggles"]["primary"].GetBool();
+    secondaryToggle = document["search"]["toggles"]["secondary"].GetBool();
+    tertiaryToggle = document["search"]["toggles"]["tertiary"].GetBool();
+    breedToggle = document["search"]["toggles"]["breed"].GetBool();
+
+    primaryColourRange = document["search"]["primary"]["range"].GetInt();
+    primaryColourOffset = document["search"]["primary"]["offset"].GetInt();
+
+    secondaryColourRange = document["search"]["secondary"]["range"].GetInt();
+    secondaryColourOffset = document["search"]["secondary"]["offset"].GetInt();
+
+    tertiaryColourRange = document["search"]["tertiary"]["range"].GetInt();
+    tertiaryColourOffset = document["search"]["tertiary"]["offset"].GetInt();
 }
 
 void SaveFormat::write(const std::string& fileLocation)
@@ -84,11 +147,11 @@ void SaveFormat::write(const std::string& fileLocation)
                 dragon.AddMember("tertiary", tertiary, allocator);
             }
 
+            jsonString.SetString(this->dragon.imageLocation.c_str(), allocator);
+            dragon.AddMember("image", jsonString, allocator);
+
             morphology.AddMember("dragon", dragon, allocator);
         }
-
-        jsonString.SetString(dragon.imageLocation.c_str(), allocator);
-        morphology.AddMember("image", jsonString, allocator);
 
         document.AddMember("morphology", morphology, allocator);
     }
