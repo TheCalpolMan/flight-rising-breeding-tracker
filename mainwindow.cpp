@@ -391,13 +391,31 @@ void MainWindow::on_currencycheckbox_stateChanged(int arg1)
 
 void MainWindow::on_actionSave_triggered()
 {
-    if (loadedFile != "")
+    if (loadedFile == "")
     {
-        constructSave().write(loadedFile);
+        on_actionSave_As_triggered();
         return;
     }
 
-    on_actionSave_As_triggered();
+    auto save = SaveFormat(loadedFile);
+
+    if (save.dragon.imageLocation != imageLocation)
+    {
+        QMessageBox msgBox(this);
+        msgBox.setText("This search's image has been modified, you've likely created a search for another dragon");
+        msgBox.setInformativeText("Do you want to save your changes?");
+        msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Cancel);
+        msgBox.setDefaultButton(QMessageBox::Save);
+        int ret = msgBox.exec();
+
+        if (ret == QMessageBox::Cancel)
+        {
+            return;
+        }
+    }
+
+    constructSave().write(loadedFile);
+    return;
 }
 
 
