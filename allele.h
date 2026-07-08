@@ -17,9 +17,9 @@ public:
 
     Allele(Rarity rarity,std::string string, std::string ancientSpecies = "");
 
-    bool operator==(const Allele& otherString) const
+    bool operator==(const Allele& other) const
     {
-        if (this->string == otherString.string)
+        if (this->string == other.string)
         {
             return true;
         }

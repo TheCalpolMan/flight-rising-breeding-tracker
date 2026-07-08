@@ -8,8 +8,6 @@
 class SaveFormat
 {
 public:
-    static const std::string ending;
-
     SaveFormat(const Dragon& dragon, bool primaryToggle, bool secondaryToggle, bool tertiaryToggle,
                bool breedToggle, int primaryColourRange, int primaryColourOffset, int secondaryColourRange,
                int secondaryColourOffset, int tertiaryColourRange, int tertiaryColourOffset);

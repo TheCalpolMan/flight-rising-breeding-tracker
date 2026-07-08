@@ -10,8 +10,6 @@
 #include "information.h"
 #include "vectorhelpers.h"
 
-const std::string SaveFormat::ending = ".json";
-
 SaveFormat::SaveFormat(const Dragon& dragon, bool primaryToggle, bool secondaryToggle, bool tertiaryToggle,
            bool breedToggle, int primaryColourRange, int primaryColourOffset, int secondaryColourRange,
            int secondaryColourOffset, int tertiaryColourRange, int tertiaryColourOffset) :
@@ -36,14 +34,10 @@ SaveFormat::SaveFormat(const std::string& fileLocation)
 
 void SaveFormat::write(const std::string& fileLocation)
 {
-    if (fileLocation.size() < 5 || fileLocation.substr(fileLocation.size() - 5, 5) != ending)
-    {
-        throw std::runtime_error("File specified has incorrect ending");
-    }
-
     // Source - https://stackoverflow.com/a/22855935
     // Posted by ArtemGr, modified by community. See post 'Timeline' for change history
     // Retrieved 2026-07-08, License - CC BY-SA 3.0
+    //
     // modified heavily in line with https://gist.github.com/fclairamb/0d03cf713985100ccd51
 
     rapidjson::Document document;
@@ -60,12 +54,8 @@ void SaveFormat::write(const std::string& fileLocation)
             rapidjson::Value dragon(rapidjson::kObjectType);
 
             dragon.AddMember("family", -1, allocator);
-
-            jsonString.SetString(this->dragon.breed.string.c_str(), allocator);
-            dragon.AddMember("breed", jsonString, allocator);
-
-            jsonString.SetString(this->dragon.eye.string.c_str(), allocator);
-            dragon.AddMember("eye", jsonString, allocator);
+            dragon.AddMember("breed", VectorHelpers::getIndex(information.getBreeds(), this->dragon.breed), allocator);
+            dragon.AddMember("eye", VectorHelpers::getIndex(information.getEyes(), this->dragon.eye), allocator);
 
             {
                 rapidjson::Value primary(rapidjson::kObjectType);

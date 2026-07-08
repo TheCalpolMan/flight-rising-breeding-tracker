@@ -15,9 +15,9 @@ public:
 
     Colour(std::string name, std::string hexCode, int wheelIndex);
 
-    bool operator==(const Colour& otherString) const
+    bool operator==(const Colour& other) const
     {
-        if (this->name == otherString.name)
+        if (this->name == other.name)
         {
             return true;
         }
