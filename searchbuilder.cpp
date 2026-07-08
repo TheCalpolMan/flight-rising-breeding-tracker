@@ -7,6 +7,32 @@
 
 const std::string SearchBuilder::delimiter = "%2C";
 
+std::string SearchBuilder::fromSaveFormat(const SaveFormat& save, Gender gender, Currency currency)
+{
+    std::vector<int> colourRanges;
+    std::vector<int> colourOffsets;
+
+    colourRanges.push_back(save.primaryColourOffset);
+    colourRanges.push_back(save.secondaryColourOffset);
+    colourRanges.push_back(save.secondaryColourOffset);
+
+    colourOffsets.push_back(save.primaryColourRange);
+    colourOffsets.push_back(save.secondaryColourRange);
+    colourOffsets.push_back(save.secondaryColourRange);
+
+    return fromDragon(
+        save.dragon,
+        colourRanges,
+        colourOffsets,
+        save.primaryToggle,
+        save.secondaryToggle,
+        save.tertiaryToggle,
+        save.breedToggle,
+        gender,
+        currency
+    );
+}
+
 std::string SearchBuilder::fromDragon(const Dragon& dragon, std::vector<int> colourRanges,
     std::vector<int> colourOffsets, bool primaryGene, bool secondaryGene, bool tertiaryGene, bool breed,
     Gender gender, Currency currency)

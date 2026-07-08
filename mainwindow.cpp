@@ -20,8 +20,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->breedgraphicsview->setScene(&dragonScene);
 
     QPixmap pixmap("images/dragon-image-select.jpg");
-    pixmap.size().scale(ui->breedgraphicsview->size(), Qt::KeepAspectRatio);
-
     ui->breedgraphicsview->scene()->addPixmap(pixmap);
 
     // getting relevant ui elements
@@ -164,6 +162,43 @@ void MainWindow::updateSearchColourLabel(QLabel* label, const std::string& name,
     label->setText(primaryColourStats);
 }
 
+SaveFormat MainWindow::constructSave()
+{
+    SaveFormat format = SaveFormat(
+        constructMorphologyDragon(),
+        ui->primarygenecheckbox->isChecked(),
+        ui->secondarygenecheckbox->isChecked(),
+        ui->tertiarygenecheckbox->isChecked(),
+        ui->breedcheckbox->isChecked(),
+        ui->primarycolourrangeslider->value(),
+        ui->primarycolouroffsetslider->value() - ui->primarycolouroffsetslider->maximum() / 2,
+        ui->secondarycolourrangeslider->value(),
+        ui->secondarycolouroffsetslider->value() - ui->secondarycolouroffsetslider->maximum() / 2,
+        ui->tertiarycolourrangeslider->value(),
+        ui->tertiarycolouroffsetslider->value() - ui->tertiarycolouroffsetslider->maximum() / 2
+    );
+
+    return format;
+}
+
+Dragon MainWindow::constructMorphologyDragon()
+{
+    const auto& information = Information::getInstance();
+
+    Dragon dragon = Dragon(
+        information.getEyes().at(ui->eyecombobox->currentIndex()),
+        information.getBreeds().at(ui->breedcombobox->currentIndex()),
+        information.getColours(true).at(ui->primarycolourcombobox->currentIndex()),
+        information.getColours(true).at(ui->secondarycolourcombobox->currentIndex()),
+        information.getColours(true).at(ui->tertiarycolourcombobox->currentIndex()),
+        information.getPrimaryGenes().at(ui->primarygenecombobox->currentIndex()),
+        information.getSecondaryGenes().at(ui->secondarygenecombobox->currentIndex()),
+        information.getTertiaryGenes().at(ui->tertiarygenecombobox->currentIndex())
+    );
+
+    return dragon;
+}
+
 void MainWindow::on_primaryradiobutton_toggled(bool checked)
 {
     if (checked)
@@ -236,29 +271,7 @@ void MainWindow::on_breedgraphicsview_mousePressEvent(QMouseEvent *)
 
 void MainWindow::on_pushButton_clicked()
 {
-    const auto& information = Information::getInstance();
-
-    Dragon dragon = Dragon(
-        information.getEyes().at(ui->eyecombobox->currentIndex()),
-        information.getBreeds().at(ui->breedcombobox->currentIndex()),
-        information.getColours(true).at(ui->primarycolourcombobox->currentIndex()),
-        information.getColours(true).at(ui->secondarycolourcombobox->currentIndex()),
-        information.getColours(true).at(ui->tertiarycolourcombobox->currentIndex()),
-        information.getPrimaryGenes().at(ui->primarygenecombobox->currentIndex()),
-        information.getSecondaryGenes().at(ui->secondarygenecombobox->currentIndex()),
-        information.getTertiaryGenes().at(ui->tertiarygenecombobox->currentIndex())
-    );
-
-    std::vector<int> ranges = decltype(ranges)();
-    std::vector<int> offsets = decltype(ranges)();
-
-    ranges.push_back(ui->primarycolourrangeslider->value());
-    ranges.push_back(ui->secondarycolourrangeslider->value());
-    ranges.push_back(ui->tertiarycolourrangeslider->value());
-
-    offsets.push_back(ui->primarycolouroffsetslider->value() - ui->primarycolouroffsetslider->maximum() / 2);
-    offsets.push_back(ui->secondarycolouroffsetslider->value() - ui->secondarycolouroffsetslider->maximum() / 2);
-    offsets.push_back(ui->tertiarycolouroffsetslider->value() - ui->tertiarycolouroffsetslider->maximum() / 2);
+    auto save = constructSave();
 
     Gender gender;
 
@@ -278,14 +291,10 @@ void MainWindow::on_pushButton_clicked()
     default: currency = Currency::Any;break;
     }
 
-    UrlOpener::openUrl(SearchBuilder::fromDragon(
-        dragon,
-        ranges,
-        offsets,
-        ui->primarygenecheckbox->isChecked(),
-        ui->secondarygenecheckbox->isChecked(),
-        ui->tertiarygenecheckbox->isChecked(),
-        ui->breedcheckbox->isChecked(),
+    save.write("./test");
+
+    UrlOpener::openUrl(SearchBuilder::fromSaveFormat(
+        save,
         gender,
         currency
     ));

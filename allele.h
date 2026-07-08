@@ -13,6 +13,8 @@ public:
     bool ancient;
     std::string species;
 
+    Allele() = default;
+
     Allele(Rarity rarity,std::string string, std::string ancientSpecies = "");
 
     bool operator==(const Allele& otherString) const

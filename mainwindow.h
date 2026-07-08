@@ -11,6 +11,8 @@
 #include <QGraphicsView>
 #include <QGraphicsScene>
 
+#include "saveformat.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -90,6 +92,10 @@ private:
     void updateColours(int middleValue);
 
     void updateSearchColourLabel(QLabel* label, const std::string& name, QSlider* range, QSlider* offset);
+
+    SaveFormat constructSave();
+
+    Dragon constructMorphologyDragon();
 
 };
 #endif // MAINWINDOW_H

@@ -37,6 +37,7 @@ find_package(Qt6 REQUIRED COMPONENTS Core)
         searchbuilder.h searchbuilder.cpp
         gender.h
         currency.h
+        saveformat.h saveformat.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET flight-rising-breeding-tracker APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -57,6 +58,8 @@ else()
 endif()
 
 target_include_directories(flight-rising-breeding-tracker PRIVATE .)
+target_include_directories(flight-rising-breeding-tracker PRIVATE rapidjson)
+
 configure_file(images/dragon-image-select.jpg images/dragon-image-select.jpg COPYONLY)
 
 target_link_libraries(flight-rising-breeding-tracker PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)

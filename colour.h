@@ -11,6 +11,8 @@ public:
     std::string name;
     std::string hexCode;
 
+    Colour() = default;
+
     Colour(std::string name, std::string hexCode, int wheelIndex);
 };
 

@@ -8,7 +8,7 @@
 struct Dragon
 {
 public:
-    int family = -1;
+    unsigned long family = 0b0;
 
     Allele breed;
     EyeAllele eye;
@@ -20,6 +20,8 @@ public:
     Allele primaryGene;
     Allele secondaryGene;
     Allele tertiaryGene;
+
+    Dragon() = default;
 
     Dragon(const EyeAllele& eye, const Allele& breed,
        const Colour& primaryColour, const Colour& secondaryColour, const Colour& tertiaryColour,

@@ -9,6 +9,8 @@ public:
     int weighting;
     std::string string;
 
+    EyeAllele() = default;
+
     EyeAllele(int weighting, std::string string);
 };
 

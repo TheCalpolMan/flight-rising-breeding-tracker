@@ -1,0 +1,53 @@
+{
+	"morphology":
+	{
+		"dragon":
+		{
+			"family":-1,
+			"breed": "Wildclaw",
+			"eye": "Primal",
+			"primary":
+			{
+				"colour": 65,
+				"gene": "Mosaic",
+			},
+			"secondary":
+			{
+				"colour": 98,
+				"gene": "Toxin",
+			},
+			"tertiary":
+			{
+				"colour": 34,
+				"gene": "Contour",
+			}
+		},
+		"image": "./dragon.png"
+	},
+	"search",
+	{
+		"primary":false,
+		"secondary":false,
+		"tertiary":true,
+		"breed":false,
+		
+		"colours":
+		{
+			"primary":
+			{
+				"range": 4,
+				"offset": 0
+			},
+			"secondary":
+			{
+				"range": 12,
+				"offset": 3
+			},
+			"tertiary":
+			{
+				"range": 6,
+				"offset": -2
+			}
+		}
+	}
+}

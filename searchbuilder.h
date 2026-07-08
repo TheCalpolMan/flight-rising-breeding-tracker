@@ -4,12 +4,15 @@
 #include "dragon.h"
 #include "gender.h"
 #include "currency.h"
+#include "saveformat.h"
 
 #include <vector>
 
 class SearchBuilder
 {
 public:
+    static std::string fromSaveFormat(const SaveFormat& save, Gender gender, Currency currency);
+
     static std::string fromDragon(const Dragon& dragon, std::vector<int> colourRanges,
         std::vector<int> colourOffsets, bool primaryGene, bool secondaryGene, bool tertiaryGene, bool breed,
         Gender gender, Currency currency);
