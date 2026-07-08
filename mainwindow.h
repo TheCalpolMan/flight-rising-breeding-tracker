@@ -68,6 +68,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    std::string loadedFile = "";
 
     // morphology
 

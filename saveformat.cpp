@@ -1,6 +1,7 @@
 #include "saveformat.h"
 
 #include <fstream>
+#include <stdexcept>
 
 #include <document.h>
 #include <stringbuffer.h>
@@ -35,6 +36,11 @@ SaveFormat::SaveFormat(const std::string& fileLocation)
 
 void SaveFormat::write(const std::string& fileLocation)
 {
+    if (fileLocation.size() < 5 || fileLocation.substr(fileLocation.size() - 5, 5) != ending)
+    {
+        throw std::runtime_error("File specified has incorrect ending");
+    }
+
     // Source - https://stackoverflow.com/a/22855935
     // Posted by ArtemGr, modified by community. See post 'Timeline' for change history
     // Retrieved 2026-07-08, License - CC BY-SA 3.0
@@ -146,7 +152,7 @@ void SaveFormat::write(const std::string& fileLocation)
     document.Accept (writer);
     std::string json (buf.GetString(), buf.GetSize());
 
-    std::ofstream of (fileLocation + ending);
+    std::ofstream of (fileLocation);
     of << json;
     if (!of.good()) throw std::runtime_error ("Can't write the JSON string to the file!");
 }

@@ -356,7 +356,13 @@ void MainWindow::on_currencycheckbox_stateChanged(int arg1)
 
 void MainWindow::on_actionSave_triggered()
 {
+    if (loadedFile != "")
+    {
+        constructSave().write(loadedFile);
+        return;
+    }
 
+    on_actionSave_As_triggered();
 }
 
 
@@ -368,6 +374,16 @@ void MainWindow::on_actionOpen_triggered()
 
 void MainWindow::on_actionSave_As_triggered()
 {
+    loadedFile = QFileDialog::getSaveFileName(this,
+                                                 tr("Save File"),
+                                                 ".",
+                                                 tr("JSON Files (*.json)")).toStdString();
 
+    if (imageLocation.isEmpty())
+    {
+        return;
+    }
+
+    constructSave().write(loadedFile);
 }
 
