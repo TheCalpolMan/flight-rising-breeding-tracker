@@ -2,6 +2,7 @@
 #define INFORMATION_H
 
 #include <vector>
+#include <utility>
 
 #include "rarity.h"
 #include "allele.h"
@@ -33,6 +34,8 @@ public:
 
     const std::vector<Colour>& getColours(bool sortByWheel) const;
 
+    std::pair<int, int> getRarityChances(Rarity a, Rarity b);
+
     static int rarityToRank(Rarity rarity);
 private:
     Information();
@@ -45,6 +48,8 @@ private:
 
     std::vector<Colour> colours = decltype(colours)();
     std::vector<Colour> coloursByWheel = decltype(coloursByWheel)();
+
+    std::vector<std::vector<std::pair<int, int>>> rarityChances = decltype(rarityChances)();
 };
 
 #endif // INFORMATION_H
