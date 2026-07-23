@@ -14,11 +14,11 @@ std::string SearchBuilder::fromSaveFormat(const SaveFormat& save, Gender gender,
 
     colourRanges.push_back(save.primaryColourRange);
     colourRanges.push_back(save.secondaryColourRange);
-    colourRanges.push_back(save.secondaryColourRange);
+    colourRanges.push_back(save.tertiaryColourRange);
 
     colourOffsets.push_back(save.primaryColourOffset);
     colourOffsets.push_back(save.secondaryColourOffset);
-    colourOffsets.push_back(save.secondaryColourOffset);
+    colourOffsets.push_back(save.tertiaryColourOffset);
 
     return fromDragon(
         save.dragon,
@@ -138,11 +138,12 @@ void SearchBuilder::addColourRange(const Colour& colour, int range, int offset, 
     auto& information = Information::getInstance();
 
     Colour startColour = information.getColours(true).at((
-        colour.wheelIndex - 1 - range + offset + information.getColours(true).size()) % information.getColours(true).size());
+        colour.wheelIndex - range + offset + information.getColours(true).size()) % information.getColours(true).size());
 
     Colour endColour = information.getColours(true).at((
-        colour.wheelIndex - 1 + range + offset + information.getColours(true).size()) % information.getColours(true).size());
+        colour.wheelIndex + range + offset + information.getColours(true).size()) % information.getColours(true).size());
 
+    // adding one to each of these because colours are apparently 1-indexed
     stream << VectorHelpers::getIndex(information.getColours(false), startColour) + 1;
     stream << "-";
     stream << VectorHelpers::getIndex(information.getColours(false), endColour) + 1;
