@@ -2,6 +2,7 @@
 #define DRAGONPOSSIBILITY_H
 
 #include <vector>
+#include <functional>
 #include <unordered_map>
 
 #include "dragon.h"
@@ -27,17 +28,18 @@ public:
     std::unordered_map<int, long double> secondaryGene;
     std::unordered_map<int, long double> tertiaryGene;
 private:
-    void addGeneChances(std::unordered_map<int, long double>& targetGene,
+    void setGeneWeights(std::unordered_map<int, long double>& targetGene,
                         const std::vector<Allele>& possibleGenes,
                         const std::unordered_map<int, long double>& parent1,
                         const std::unordered_map<int, long double>& parent2);
 
-    void addColourChances(std::unordered_map<int, long double>& targetColour,
-                        const std::vector<Colour>& possibleColours,
+    void setColourWeights(std::unordered_map<int, long double>& targetColour,
                         const std::unordered_map<int, long double>& parent1,
                         const std::unordered_map<int, long double>& parent2);
 
-    static void addChance(std::unordered_map<int, long double>& possibilities, int key, long double value);
+    static void modifyAllWeights(std::unordered_map<int, long double>& targetWeights, std::function<long double(long double)> modification);
+
+    static void addWeight(std::unordered_map<int, long double>& possibilities, int key, long double value);
 };
 
 #endif // DRAGONPOSSIBILITY_H

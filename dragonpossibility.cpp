@@ -1,5 +1,6 @@
 #include "dragonpossibility.h"
 
+#include <cmath>
 #include <cassert>
 
 #include "information.h"
@@ -30,14 +31,35 @@ DragonPossibility::DragonPossibility(const DragonPossibility& parent1, const Dra
 {
     Information& information = Information::getInstance();
 
-    addGeneChances(breed, information.getBreeds(), parent1.breed, parent2.breed);
+    setGeneWeights(breed, information.getBreeds(), parent1.breed, parent2.breed);
 
-    addGeneChances(primaryGene, information.getPrimaryGenes(), parent1.primaryGene, parent2.primaryGene);
-    addGeneChances(secondaryGene, information.getSecondaryGenes(), parent1.secondaryGene, parent2.secondaryGene);
-    addGeneChances(tertiaryGene, information.getTertiaryGenes(), parent1.tertiaryGene, parent2.tertiaryGene);
+    setGeneWeights(primaryGene, information.getPrimaryGenes(), parent1.primaryGene, parent2.primaryGene);
+    setGeneWeights(secondaryGene, information.getSecondaryGenes(), parent1.secondaryGene, parent2.secondaryGene);
+    setGeneWeights(tertiaryGene, information.getTertiaryGenes(), parent1.tertiaryGene, parent2.tertiaryGene);
+
+    setColourWeights(primaryColour, parent1.primaryColour, parent2.primaryColour);
+    setColourWeights(secondaryColour, parent1.secondaryColour, parent2.secondaryColour);
+    setColourWeights(tertiaryColour, parent1.tertiaryColour, parent2.tertiaryColour);
+
+    // all weights propogated, now to raise them to ^ 1.5, as an average of 3 children are born
+    // but genders don't match up 50% of the time (so there are averagely 1.5 usable kids per pairing)
+
+    auto raiseToPower = [](long double value){
+        return value * std::sqrt(value);
+    };
+
+    modifyAllWeights(breed, raiseToPower);
+
+    modifyAllWeights(primaryGene, raiseToPower);
+    modifyAllWeights(secondaryGene, raiseToPower);
+    modifyAllWeights(tertiaryGene, raiseToPower);
+
+    modifyAllWeights(primaryColour, raiseToPower);
+    modifyAllWeights(secondaryColour, raiseToPower);
+    modifyAllWeights(tertiaryColour, raiseToPower);
 }
 
-void DragonPossibility::addGeneChances(std::unordered_map<int, long double>& targetGene,
+void DragonPossibility::setGeneWeights(std::unordered_map<int, long double>& targetGene,
                                        const std::vector<Allele>& possibleGenes,
                                        const std::unordered_map<int, long double>& parent1,
                                        const std::unordered_map<int, long double>& parent2)
@@ -51,14 +73,13 @@ void DragonPossibility::addGeneChances(std::unordered_map<int, long double>& tar
             auto chances = information.getRarityChances(possibleGenes.at(breedWeightPair1.first).rarity,
                                                         possibleGenes.at(breedWeightPair2.first).rarity);
 
-            addChance(targetGene, breedWeightPair1.first, chances.first * breedWeightPair1.second * breedWeightPair2.second);
-            addChance(targetGene, breedWeightPair2.first, chances.second * breedWeightPair1.second * breedWeightPair2.second);
+            addWeight(targetGene, breedWeightPair1.first, chances.first * breedWeightPair1.second * breedWeightPair2.second);
+            addWeight(targetGene, breedWeightPair2.first, chances.second * breedWeightPair1.second * breedWeightPair2.second);
         }
     }
 }
 
-void DragonPossibility::addColourChances(std::unordered_map<int, long double>& targetColour,
-                                          const std::vector<Colour>& possibleColours,
+void DragonPossibility::setColourWeights(std::unordered_map<int, long double>& targetColour,
                                           const std::unordered_map<int, long double>& parent1,
                                           const std::unordered_map<int, long double>& parent2)
 {
@@ -77,18 +98,31 @@ void DragonPossibility::addColourChances(std::unordered_map<int, long double>& t
 
             if (distance > (information.getColours(true).size() / 2))
             {
-                distance = std::abs(breedWeightPair1.first - breedWeightPair2.first);
-
-                int startIndex = breedWeightPair2.first;
-                int endIndex = breedWeightPair1.first;
+                startIndex = breedWeightPair2.first;
+                endIndex = breedWeightPair1.first;
             }
 
-
+            for (int i = startIndex; i != endIndex; i = (i + 1) % information.getColours(false).size())
+            {
+                addWeight(targetColour, i, chance);
+            }
         }
     }
 }
 
-void DragonPossibility::addChance(std::unordered_map<int, long double>& possibilities, int key, long double value)
+void DragonPossibility::modifyAllWeights(std::unordered_map<int, long double>& targetWeights, std::function<long double(long double)> modification)
+{
+    std::unordered_map<int, long double> newWeights = decltype(newWeights)();
+
+    for (const auto& kvPair : targetWeights)
+    {
+        newWeights.emplace(kvPair.first, modification(kvPair.second));
+    }
+
+    targetWeights = newWeights;
+}
+
+void DragonPossibility::addWeight(std::unordered_map<int, long double>& possibilities, int key, long double value)
 {
     auto it = possibilities.find(key);
 
