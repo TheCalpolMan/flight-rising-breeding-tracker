@@ -89,35 +89,28 @@ MainWindow::~MainWindow()
 
 void MainWindow::updateColoursBasedOnGene(bool showDialogOnNoColour)
 {
+    int colourIndex = -1;
     std::string colourString;
 
     switch (geneSelected)
     {
     case 0:
+        colourIndex = ui->primarycolourcombobox->currentIndex();
         colourString = ui->primarycolourcombobox->currentText().toStdString();
         break;
     case 1:
+        colourIndex = ui->secondarycolourcombobox->currentIndex();
         colourString = ui->secondarycolourcombobox->currentText().toStdString();
         break;
     case 2:
+        colourIndex = ui->tertiarycolourcombobox->currentIndex();
         colourString = ui->tertiarycolourcombobox->currentText().toStdString();
         break;
     }
 
     auto colours = Information::getInstance().getColours(true);
 
-    int colourIndex = -1;
-
-    for (int i = 0; i < colours.size(); i++)
-    {
-        if (colours.at(i).name == colourString)
-        {
-            colourIndex = i;
-            break;
-        }
-    }
-
-    if (colourIndex == -1)
+    if (colourString != colours.at(colourIndex).name)
     {
         if (!showDialogOnNoColour)
         {
