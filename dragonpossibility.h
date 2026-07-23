@@ -17,22 +17,27 @@ public:
 
     DragonPossibility(const DragonPossibility& parent1, const DragonPossibility& parent2);
 
-    std::unordered_map<int, int> breed;
+    std::unordered_map<int, long double> breed;
 
-    std::unordered_map<int, int> primaryColour;
-    std::unordered_map<int, int> secondaryColour;
-    std::unordered_map<int, int> tertiaryColour;
+    std::unordered_map<int, long double> primaryColour;
+    std::unordered_map<int, long double> secondaryColour;
+    std::unordered_map<int, long double> tertiaryColour;
 
-    std::unordered_map<int, int> primaryGene;
-    std::unordered_map<int, int> secondaryGene;
-    std::unordered_map<int, int> tertiaryGene;
+    std::unordered_map<int, long double> primaryGene;
+    std::unordered_map<int, long double> secondaryGene;
+    std::unordered_map<int, long double> tertiaryGene;
 private:
-    void addGeneChances(std::unordered_map<int, int>& targetGene,
+    void addGeneChances(std::unordered_map<int, long double>& targetGene,
                         const std::vector<Allele>& possibleGenes,
-                        const std::unordered_map<int, int>& parent1,
-                        const std::unordered_map<int, int>& parent2);
+                        const std::unordered_map<int, long double>& parent1,
+                        const std::unordered_map<int, long double>& parent2);
 
-    static void addChance(std::unordered_map<int, int>& possibilities, int key, int value);
+    void addColourChances(std::unordered_map<int, long double>& targetColour,
+                        const std::vector<Colour>& possibleColours,
+                        const std::unordered_map<int, long double>& parent1,
+                        const std::unordered_map<int, long double>& parent2);
+
+    static void addChance(std::unordered_map<int, long double>& possibilities, int key, long double value);
 };
 
 #endif // DRAGONPOSSIBILITY_H

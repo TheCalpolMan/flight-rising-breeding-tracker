@@ -1,5 +1,7 @@
 #include "dragonpossibility.h"
 
+#include <cassert>
+
 #include "information.h"
 #include "vectorhelpers.h"
 
@@ -35,10 +37,10 @@ DragonPossibility::DragonPossibility(const DragonPossibility& parent1, const Dra
     addGeneChances(tertiaryGene, information.getTertiaryGenes(), parent1.tertiaryGene, parent2.tertiaryGene);
 }
 
-void DragonPossibility::addGeneChances(std::unordered_map<int, int>& targetGene,
+void DragonPossibility::addGeneChances(std::unordered_map<int, long double>& targetGene,
                                        const std::vector<Allele>& possibleGenes,
-                                       const std::unordered_map<int, int>& parent1,
-                                       const std::unordered_map<int, int>& parent2)
+                                       const std::unordered_map<int, long double>& parent1,
+                                       const std::unordered_map<int, long double>& parent2)
 {
     Information& information = Information::getInstance();
 
@@ -55,7 +57,38 @@ void DragonPossibility::addGeneChances(std::unordered_map<int, int>& targetGene,
     }
 }
 
-static void addChance(std::unordered_map<int, int>& possibilities, int key, int value)
+void DragonPossibility::addColourChances(std::unordered_map<int, long double>& targetColour,
+                                          const std::vector<Colour>& possibleColours,
+                                          const std::unordered_map<int, long double>& parent1,
+                                          const std::unordered_map<int, long double>& parent2)
+{
+    Information& information = Information::getInstance();
+
+    for (const auto& breedWeightPair1 : parent1)
+    {
+        for (const auto& breedWeightPair2 : parent2)
+        {
+            long double chance = breedWeightPair1.second * breedWeightPair2.second;
+
+            int distance = breedWeightPair2.first - breedWeightPair1.first;
+
+            int startIndex = breedWeightPair1.first;
+            int endIndex = breedWeightPair2.first;
+
+            if (distance > (information.getColours(true).size() / 2))
+            {
+                distance = std::abs(breedWeightPair1.first - breedWeightPair2.first);
+
+                int startIndex = breedWeightPair2.first;
+                int endIndex = breedWeightPair1.first;
+            }
+
+
+        }
+    }
+}
+
+void DragonPossibility::addChance(std::unordered_map<int, long double>& possibilities, int key, long double value)
 {
     auto it = possibilities.find(key);
 
@@ -65,5 +98,5 @@ static void addChance(std::unordered_map<int, int>& possibilities, int key, int 
         possibilities.erase(it);
     }
 
-    possibilities.insert(key, value);
+    possibilities.emplace(key, value);
 }
