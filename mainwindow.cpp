@@ -5,6 +5,7 @@
 #include <QMessageBox>
 #include <QFileDialog>
 
+#include "binarytreegenerator.h"
 #include "dragon.h"
 #include "urlopener.h"
 #include "searchbuilder.h"
@@ -308,6 +309,17 @@ void MainWindow::on_breedgraphicsview_mousePressEvent(QMouseEvent *)
 
 void MainWindow::on_pushButton_clicked()
 {
+    BinaryTreeGenerator& binaryTreeGenerator = BinaryTreeGenerator::getInstance();
+
+    auto& fives = binaryTreeGenerator.getCombinations(6);
+
+    for (const auto& tree : fives)
+    {
+        tree->print();
+    }
+
+    return;
+
     auto save = constructSave();
 
     Gender gender;

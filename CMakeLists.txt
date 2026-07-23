@@ -41,6 +41,9 @@ find_package(Qt6 REQUIRED COMPONENTS Core)
         vectorhelpers.h
         dragonpossibility.h dragonpossibility.cpp
         csvreader.h csvreader.cpp
+        binarytreenode.h binarytreenode.cpp
+        binarytreegenerator.h binarytreegenerator.cpp
+
 
     )
 # Define target properties for Android with Qt 6 as:
