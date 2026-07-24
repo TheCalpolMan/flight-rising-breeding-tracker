@@ -3,6 +3,7 @@
 #include <cmath>
 #include <cassert>
 
+#include "modutils.h"
 #include "information.h"
 #include "vectorhelpers.h"
 
@@ -89,18 +90,20 @@ void DragonPossibility::setColourWeights(std::unordered_map<int, long double>& t
     {
         for (const auto& breedWeightPair2 : parent2)
         {
-            long double chance = breedWeightPair1.second * breedWeightPair2.second;
-
-            int distance = breedWeightPair2.first - breedWeightPair1.first;
+            int distance = ModUtils::getDisplacement(breedWeightPair2.first, breedWeightPair1.first, information.getColours(true).size());
 
             int startIndex = breedWeightPair1.first;
             int endIndex = breedWeightPair2.first;
 
             if (distance > (information.getColours(true).size() / 2))
             {
+                distance = ModUtils::getDisplacement(breedWeightPair1.first, breedWeightPair2.first, information.getColours(true).size());
+
                 startIndex = breedWeightPair2.first;
                 endIndex = breedWeightPair1.first;
             }
+
+            long double chance = breedWeightPair1.second * breedWeightPair2.second / distance;
 
             for (int i = startIndex; i != endIndex; i = (i + 1) % information.getColours(false).size())
             {

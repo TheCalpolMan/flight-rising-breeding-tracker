@@ -43,6 +43,7 @@ find_package(Qt6 REQUIRED COMPONENTS Core)
         csvreader.h csvreader.cpp
         binarytreenode.h binarytreenode.cpp
         binarytreegenerator.h binarytreegenerator.cpp
+        modutils.h modutils.cpp
 
 
     )
