@@ -8,8 +8,10 @@
 #include <QString>
 #include <QSlider>
 #include <QPainter>
+#include <QComboBox>
 #include <QGraphicsView>
 #include <QGraphicsScene>
+#include <QListWidgetItem>
 
 #include "saveformat.h"
 
@@ -66,6 +68,8 @@ private slots:
 
     void on_actionSave_As_triggered();
 
+    void on_possibleparentlistwidget_itemDoubleClicked(QListWidgetItem *item);
+
 private:
     Ui::MainWindow *ui;
     std::string loadedFile = "";
@@ -95,6 +99,10 @@ private:
         "Currency: Treasure"
     });
 
+    // pairings
+
+    std::vector<Dragon> possibleParentDragons = decltype(possibleParentDragons)();
+
     void updateColoursBasedOnGene(bool showDialogOnNoColour);
 
     void updateColours(int middleValue);
@@ -106,6 +114,12 @@ private:
     void loadDragon(const Dragon& dragon);
 
     void loadSearch(const SaveFormat& save);
+
+    bool checkEditableComboBox(const QComboBox* targetBox, bool createDialog, const std::string& dialogText = "");
+
+    bool checkAllMorphologyComboBoxes(bool createDialog);
+
+    void updatePossibleParentDragons();
 
     SaveFormat constructSave();
 

@@ -2,6 +2,8 @@
 #include "./ui_mainwindow.h"
 #include "information.h"
 
+#include <QIcon>
+#include <iostream>
 #include <QMessageBox>
 #include <QFileDialog>
 
@@ -18,8 +20,14 @@ MainWindow::MainWindow(QWidget *parent)
 
     // inital setup
 
-    ui->breedgraphicsview->setScene(&dragonScene);
+    for (int i = 0; i < 15; i ++)
+    {
+        possibleParentDragons.push_back(Dragon("testDragon" + std::to_string(i), false, EyeAllele(), Allele(), Colour(), Colour(), Colour(), Allele(), Allele(), Allele()));
+    }
 
+    updatePossibleParentDragons();
+
+    ui->breedgraphicsview->setScene(&dragonScene);
     loadImage();
 
     // getting relevant ui elements
@@ -52,26 +60,34 @@ MainWindow::MainWindow(QWidget *parent)
         ui->primarycolourcombobox->addItem(QString(colour.name.c_str()));
         ui->secondarycolourcombobox->addItem(QString(colour.name.c_str()));
         ui->tertiarycolourcombobox->addItem(QString(colour.name.c_str()));
+
+        ui->primarycolourcombobox_pairings->addItem(QString(colour.name.c_str()));
+        ui->secondarycolourcombobox_pairings->addItem(QString(colour.name.c_str()));
+        ui->tertiarycolourcombobox_pairings->addItem(QString(colour.name.c_str()));
     }
 
     for (const auto& gene : Information::getInstance().getBreeds())
     {
         ui->breedcombobox->addItem(QString(gene.string.c_str()));
+        ui->breedcombobox_pairings->addItem(QString(gene.string.c_str()));
     }
 
     for (const auto& gene : Information::getInstance().getPrimaryGenes())
     {
         ui->primarygenecombobox->addItem(QString(gene.string.c_str()));
+        ui->primarygenecombobox_pairings->addItem(QString(gene.string.c_str()));
     }
 
     for (const auto& gene : Information::getInstance().getSecondaryGenes())
     {
         ui->secondarygenecombobox->addItem(QString(gene.string.c_str()));
+        ui->secondarygenecombobox_pairings->addItem(QString(gene.string.c_str()));
     }
 
     for (const auto& gene : Information::getInstance().getTertiaryGenes())
     {
         ui->tertiarygenecombobox->addItem(QString(gene.string.c_str()));
+        ui->tertiarygenecombobox_pairings->addItem(QString(gene.string.c_str()));
     }
 
     for (const auto& gene : Information::getInstance().getEyes())
@@ -89,41 +105,29 @@ MainWindow::~MainWindow()
 
 void MainWindow::updateColoursBasedOnGene(bool showDialogOnNoColour)
 {
-    int colourIndex = -1;
-    std::string colourString;
+    std::string boxLabel;
+    QComboBox* targetBox;
 
     switch (geneSelected)
     {
     case 0:
-        colourIndex = ui->primarycolourcombobox->currentIndex();
-        colourString = ui->primarycolourcombobox->currentText().toStdString();
+        boxLabel = "Primary";
+        targetBox = ui->primarycolourcombobox;
         break;
     case 1:
-        colourIndex = ui->secondarycolourcombobox->currentIndex();
-        colourString = ui->secondarycolourcombobox->currentText().toStdString();
+        boxLabel = "Secondary";
+        targetBox = ui->secondarycolourcombobox;
         break;
     case 2:
-        colourIndex = ui->tertiarycolourcombobox->currentIndex();
-        colourString = ui->tertiarycolourcombobox->currentText().toStdString();
+        boxLabel = "Tertiary";
+        targetBox = ui->tertiarycolourcombobox;
         break;
     }
 
-    auto colours = Information::getInstance().getColours(true);
+    int colourIndex = targetBox->currentIndex();
+    std::string colourString = targetBox->currentText().toStdString();
 
-    if (colourString != colours.at(colourIndex).name)
-    {
-        if (!showDialogOnNoColour)
-        {
-            return;
-        }
-
-        QMessageBox msgBox;
-        msgBox.setText("Invalid colour in selected message box");
-        msgBox.setDefaultButton(QMessageBox::Close);
-        msgBox.exec();
-
-        return;
-    }
+    checkEditableComboBox(targetBox, showDialogOnNoColour, boxLabel + " colour is invalid");
 
     updateColours(colourIndex);
 }
@@ -203,6 +207,99 @@ void MainWindow::loadSearch(const SaveFormat& save)
     ui->tertiarycolouroffsetslider->setValue(save.tertiaryColourOffset + ui->tertiarycolouroffsetslider->maximum() / 2);
 }
 
+bool MainWindow::checkEditableComboBox(const QComboBox* targetBox, bool createDialog, const std::string& dialogText)
+{
+    int index = targetBox->currentIndex();
+    std::string text = targetBox->currentText().toStdString();
+
+    if (text == targetBox->itemText(index))
+    {
+        return true;
+    }
+
+    if (!createDialog)
+    {
+        return false;
+    }
+
+    QMessageBox msgBox(this);
+    msgBox.setText(dialogText.c_str());
+    msgBox.setStandardButtons(QMessageBox::Close);
+    msgBox.exec();
+
+    return false;
+}
+
+bool MainWindow::checkAllMorphologyComboBoxes(bool createDialog)
+{
+    if (!checkEditableComboBox(ui->breedcombobox, createDialog, "Breed is invalid"))
+    {
+        return false;
+    }
+
+    if (!checkEditableComboBox(ui->eyecombobox, createDialog, "Eye type is invalid"))
+    {
+        return false;
+    }
+
+    if (!checkEditableComboBox(ui->primarycolourcombobox, createDialog, "Primary colour is invalid"))
+    {
+        return false;
+    }
+
+    if (!checkEditableComboBox(ui->secondarycolourcombobox, createDialog, "Secondary colour is invalid"))
+    {
+        return false;
+    }
+
+    if (!checkEditableComboBox(ui->tertiarycolourcombobox, createDialog, "Tertiary colour is invalid"))
+    {
+        return false;
+    }
+
+    if (!checkEditableComboBox(ui->primarygenecombobox, createDialog, "Primary gene is invalid"))
+    {
+        return false;
+    }
+
+    if (!checkEditableComboBox(ui->secondarygenecombobox, createDialog, "Secondary gene is invalid"))
+    {
+        return false;
+    }
+
+    if (!checkEditableComboBox(ui->tertiarygenecombobox, createDialog, "Tertiary gene is invalid"))
+    {
+        return false;
+    }
+
+    return true;
+}
+
+void MainWindow::updatePossibleParentDragons()
+{
+    ui->possibleparentlistwidget->clear();
+
+    std::stringstream tooltip;
+
+    for (int i = 0; i < possibleParentDragons.size(); i++)
+    {
+        const auto& dragon = possibleParentDragons.at(i);
+
+        ui->possibleparentlistwidget->addItem(dragon.name.c_str());
+        ui->possibleparentlistwidget->item(i)->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::EditDelete));
+
+        tooltip << dragon.breed.string << " " << (dragon.male ? "Male" : "Female") << std::endl;
+        tooltip << "Primary Gene: " << dragon.primaryColour.name << " " << dragon.primaryGene.string << std::endl;
+        tooltip << "Secondary Gene: " << dragon.secondaryColour.name << " " << dragon.secondaryGene.string << std::endl;
+        tooltip << "Tertiary Gene: " << dragon.tertiaryColour.name << " " << dragon.tertiaryGene.string;
+
+        ui->possibleparentlistwidget->item(i)->setToolTip(tooltip.str().c_str());
+        tooltip.str("");
+    }
+
+    ui->possibleparentlistwidget->update();
+}
+
 SaveFormat MainWindow::constructSave()
 {
     SaveFormat format = SaveFormat(
@@ -227,6 +324,8 @@ Dragon MainWindow::constructMorphologyDragon()
     const auto& information = Information::getInstance();
 
     Dragon dragon = Dragon(
+        "",
+        false,
         information.getEyes().at(ui->eyecombobox->currentIndex()),
         information.getBreeds().at(ui->breedcombobox->currentIndex()),
         information.getColours(true).at(ui->primarycolourcombobox->currentIndex()),
@@ -308,6 +407,11 @@ void MainWindow::on_breedgraphicsview_mousePressEvent(QMouseEvent *)
 
 void MainWindow::on_pushButton_clicked()
 {
+    if (!checkAllMorphologyComboBoxes(true))
+    {
+        return;
+    }
+
     auto save = constructSave();
 
     Gender gender;
@@ -384,6 +488,11 @@ void MainWindow::on_currencycheckbox_stateChanged(int arg1)
 
 void MainWindow::on_actionSave_triggered()
 {
+    if (!checkAllMorphologyComboBoxes(true))
+    {
+        return;
+    }
+
     if (loadedFile == "")
     {
         on_actionSave_As_triggered();
@@ -434,6 +543,11 @@ void MainWindow::on_actionOpen_triggered()
 
 void MainWindow::on_actionSave_As_triggered()
 {
+    if (!checkAllMorphologyComboBoxes(true))
+    {
+        return;
+    }
+
     loadedFile = QFileDialog::getSaveFileName(this,
                                                  tr("Save File"),
                                                  ".",
@@ -445,5 +559,12 @@ void MainWindow::on_actionSave_As_triggered()
     }
 
     constructSave().write(loadedFile);
+}
+
+
+void MainWindow::on_possibleparentlistwidget_itemDoubleClicked(QListWidgetItem *item)
+{
+    possibleParentDragons.erase(possibleParentDragons.cbegin() + ui->possibleparentlistwidget->row(item));
+    updatePossibleParentDragons();
 }
 
