@@ -70,6 +70,8 @@ private slots:
 
     void on_possibleparentlistwidget_itemDoubleClicked(QListWidgetItem *item);
 
+    void on_addpairingpushbutton_clicked();
+
 private:
     Ui::MainWindow *ui;
     std::string loadedFile = "";
@@ -119,11 +121,15 @@ private:
 
     bool checkAllMorphologyComboBoxes(bool createDialog);
 
+    bool checkAllPairingComboBoxes(bool createDialog);
+
     void updatePossibleParentDragons();
 
     SaveFormat constructSave();
 
     Dragon constructMorphologyDragon();
+
+    Dragon constructPairingDragon();
 
 };
 #endif // MAINWINDOW_H

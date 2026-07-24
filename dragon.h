@@ -8,7 +8,7 @@
 struct Dragon
 {
 public:
-    long long family = 0b0;
+    unsigned long long family = 0b0;
 
     bool male = false;
     Allele breed;

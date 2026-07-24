@@ -41,23 +41,6 @@ DragonPossibility::DragonPossibility(const DragonPossibility& parent1, const Dra
     setColourWeights(primaryColour, parent1.primaryColour, parent2.primaryColour);
     setColourWeights(secondaryColour, parent1.secondaryColour, parent2.secondaryColour);
     setColourWeights(tertiaryColour, parent1.tertiaryColour, parent2.tertiaryColour);
-
-    // all weights propogated, now to raise them to ^ 1.5, as an average of 3 children are born
-    // but genders don't match up 50% of the time (so there are averagely 1.5 usable kids per pairing)
-
-    auto raiseToPower = [](long double value){
-        return value * std::sqrt(value);
-    };
-
-    modifyAllWeights(breed, raiseToPower);
-
-    modifyAllWeights(primaryGene, raiseToPower);
-    modifyAllWeights(secondaryGene, raiseToPower);
-    modifyAllWeights(tertiaryGene, raiseToPower);
-
-    modifyAllWeights(primaryColour, raiseToPower);
-    modifyAllWeights(secondaryColour, raiseToPower);
-    modifyAllWeights(tertiaryColour, raiseToPower);
 }
 
 void DragonPossibility::setGeneWeights(std::unordered_map<int, long double>& targetGene,
@@ -90,14 +73,14 @@ void DragonPossibility::setColourWeights(std::unordered_map<int, long double>& t
     {
         for (const auto& breedWeightPair2 : parent2)
         {
-            int distance = ModUtils::getDisplacement(breedWeightPair2.first, breedWeightPair1.first, information.getColours(true).size());
+            int distance = ModUtils::getDisplacement(breedWeightPair1.first, breedWeightPair2.first, information.getColours(true).size());
 
             int startIndex = breedWeightPair1.first;
             int endIndex = breedWeightPair2.first;
 
             if (distance > (information.getColours(true).size() / 2))
             {
-                distance = ModUtils::getDisplacement(breedWeightPair1.first, breedWeightPair2.first, information.getColours(true).size());
+                distance = ModUtils::getDisplacement(breedWeightPair2.first, breedWeightPair1.first, information.getColours(true).size());
 
                 startIndex = breedWeightPair2.first;
                 endIndex = breedWeightPair1.first;

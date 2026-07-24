@@ -20,13 +20,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     // inital setup
 
-    for (int i = 0; i < 15; i ++)
-    {
-        possibleParentDragons.push_back(Dragon("testDragon" + std::to_string(i), false, EyeAllele(), Allele(), Colour(), Colour(), Colour(), Allele(), Allele(), Allele()));
-    }
-
-    updatePossibleParentDragons();
-
     ui->breedgraphicsview->setScene(&dragonScene);
     loadImage();
 
@@ -275,6 +268,46 @@ bool MainWindow::checkAllMorphologyComboBoxes(bool createDialog)
     return true;
 }
 
+bool MainWindow::checkAllPairingComboBoxes(bool createDialog)
+{
+    if (!checkEditableComboBox(ui->breedcombobox_pairings, createDialog, "Breed is invalid"))
+    {
+        return false;
+    }
+
+    if (!checkEditableComboBox(ui->primarycolourcombobox_pairings, createDialog, "Primary colour is invalid"))
+    {
+        return false;
+    }
+
+    if (!checkEditableComboBox(ui->secondarycolourcombobox_pairings, createDialog, "Secondary colour is invalid"))
+    {
+        return false;
+    }
+
+    if (!checkEditableComboBox(ui->tertiarycolourcombobox_pairings, createDialog, "Tertiary colour is invalid"))
+    {
+        return false;
+    }
+
+    if (!checkEditableComboBox(ui->primarygenecombobox_pairings, createDialog, "Primary gene is invalid"))
+    {
+        return false;
+    }
+
+    if (!checkEditableComboBox(ui->secondarygenecombobox_pairings, createDialog, "Secondary gene is invalid"))
+    {
+        return false;
+    }
+
+    if (!checkEditableComboBox(ui->tertiarygenecombobox_pairings, createDialog, "Tertiary gene is invalid"))
+    {
+        return false;
+    }
+
+    return true;
+}
+
 void MainWindow::updatePossibleParentDragons()
 {
     ui->possibleparentlistwidget->clear();
@@ -313,7 +346,8 @@ SaveFormat MainWindow::constructSave()
         ui->secondarycolourrangeslider->value(),
         ui->secondarycolouroffsetslider->value() - ui->secondarycolouroffsetslider->maximum() / 2,
         ui->tertiarycolourrangeslider->value(),
-        ui->tertiarycolouroffsetslider->value() - ui->tertiarycolouroffsetslider->maximum() / 2
+        ui->tertiarycolouroffsetslider->value() - ui->tertiarycolouroffsetslider->maximum() / 2,
+        possibleParentDragons
     );
 
     return format;
@@ -337,6 +371,28 @@ Dragon MainWindow::constructMorphologyDragon()
     );
 
     dragon.imageLocation = imageLocation.toStdString();
+
+    return dragon;
+}
+
+Dragon MainWindow::constructPairingDragon()
+{
+    const auto& information = Information::getInstance();
+
+    Dragon dragon = Dragon(
+        ui->namelineedit->text().toStdString(),
+        ui->maleradiopairings->isChecked(),
+        information.getEyes().at(0),
+        information.getBreeds().at(ui->breedcombobox_pairings->currentIndex()),
+        information.getColours(true).at(ui->primarycolourcombobox_pairings->currentIndex()),
+        information.getColours(true).at(ui->secondarycolourcombobox_pairings->currentIndex()),
+        information.getColours(true).at(ui->tertiarycolourcombobox_pairings->currentIndex()),
+        information.getPrimaryGenes().at(ui->primarygenecombobox_pairings->currentIndex()),
+        information.getSecondaryGenes().at(ui->secondarygenecombobox_pairings->currentIndex()),
+        information.getTertiaryGenes().at(ui->tertiarygenecombobox_pairings->currentIndex())
+    );
+
+    dragon.family = ui->familyspinBox->value();
 
     return dragon;
 }
@@ -533,11 +589,28 @@ void MainWindow::on_actionOpen_triggered()
         return;
     }
 
-    loadedFile = targetFile.toStdString();
-    SaveFormat save = SaveFormat(loadedFile);
+    std::unique_ptr<SaveFormat> save;
 
-    loadDragon(save.dragon);
-    loadSearch(save);
+    try
+    {
+        save = std::make_unique<SaveFormat>(targetFile.toStdString());
+    }
+    catch (std::invalid_argument e)
+    {
+        QMessageBox msgBox(this);
+        msgBox.setText(e.what());
+        msgBox.setStandardButtons(QMessageBox::Close);
+        msgBox.exec();
+
+        return;
+    }
+
+    loadedFile = targetFile.toStdString();
+    loadDragon(save->dragon);
+    loadSearch(*save);
+    possibleParentDragons = save->pairingDragons;
+
+    updatePossibleParentDragons();
 }
 
 
@@ -568,3 +641,16 @@ void MainWindow::on_possibleparentlistwidget_itemDoubleClicked(QListWidgetItem *
     updatePossibleParentDragons();
 }
 
+void MainWindow::on_addpairingpushbutton_clicked()
+{
+    if (!checkAllPairingComboBoxes(true))
+    {
+        return;
+    }
+
+    Dragon dragon = constructPairingDragon();
+
+    possibleParentDragons.push_back(dragon);
+    updatePossibleParentDragons();
+    ui->familyspinBox->setValue(ui->familyspinBox->value() + 1);
+}

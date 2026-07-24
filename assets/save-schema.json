@@ -11,11 +11,17 @@
         "dragon": {
           "type": "object",
           "properties": {
+            "name": {
+              "type": "string"
+            },
             "family": {
               "type": "integer"
             },
             "breed": {
               "type": "integer"
+            },
+            "male": {
+              "type": "boolean"
             },
             "eye": {
               "type": "integer"
@@ -70,8 +76,10 @@
             }
           },
           "required": [
+            "name",
             "family",
             "breed",
+            "male",
             "eye",
             "primary",
             "secondary",
@@ -162,10 +170,101 @@
         "secondary",
         "tertiary"
       ]
+    },
+    "pairings": {
+      "type": "object",
+      "properties": {
+        "dragons": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "family": {
+                "type": "integer"
+              },
+              "breed": {
+                "type": "integer"
+              },
+              "male": {
+                "type": "boolean"
+              },
+              "eye": {
+                "type": "integer"
+              },
+              "primary": {
+                "type": "object",
+                "properties": {
+                  "colour": {
+                    "type": "integer"
+                  },
+                  "gene": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "colour",
+                  "gene"
+                ]
+              },
+              "secondary": {
+                "type": "object",
+                "properties": {
+                  "colour": {
+                    "type": "integer"
+                  },
+                  "gene": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "colour",
+                  "gene"
+                ]
+              },
+              "tertiary": {
+                "type": "object",
+                "properties": {
+                  "colour": {
+                    "type": "integer"
+                  },
+                  "gene": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "colour",
+                  "gene"
+                ]
+              },
+              "image": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "family",
+              "breed",
+              "male",
+              "eye",
+              "primary",
+              "secondary",
+              "tertiary",
+              "image"
+            ]
+          }
+        }
+      },
+      "required": [
+        "dragons"
+      ]
     }
   },
   "required": [
     "morphology",
-    "search"
+    "search",
+    "pairings"
   ]
 }

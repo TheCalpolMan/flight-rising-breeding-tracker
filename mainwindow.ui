@@ -1812,7 +1812,7 @@
         <string>Name</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="pushButton_2">
+      <widget class="QPushButton" name="addpairingpushbutton">
        <property name="geometry">
         <rect>
          <x>120</x>
@@ -1838,7 +1838,7 @@
         <string>Family:</string>
        </property>
       </widget>
-      <widget class="QSpinBox" name="spinBox">
+      <widget class="QSpinBox" name="familyspinBox">
        <property name="geometry">
         <rect>
          <x>51</x>

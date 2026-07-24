@@ -15,7 +15,8 @@
 
 SaveFormat::SaveFormat(const Dragon& dragon, bool primaryToggle, bool secondaryToggle, bool tertiaryToggle,
            bool breedToggle, int primaryColourRange, int primaryColourOffset, int secondaryColourRange,
-           int secondaryColourOffset, int tertiaryColourRange, int tertiaryColourOffset) :
+           int secondaryColourOffset, int tertiaryColourRange, int tertiaryColourOffset,
+           const std::vector<Dragon>& pairingDragons) :
     dragon(dragon),
     primaryToggle(primaryToggle),
     secondaryToggle(secondaryToggle),
@@ -26,10 +27,12 @@ SaveFormat::SaveFormat(const Dragon& dragon, bool primaryToggle, bool secondaryT
     secondaryColourRange(secondaryColourRange),
     secondaryColourOffset(secondaryColourOffset),
     tertiaryColourRange(tertiaryColourRange),
-    tertiaryColourOffset(tertiaryColourOffset)
+    tertiaryColourOffset(tertiaryColourOffset),
+    pairingDragons(pairingDragons)
 {
 
 }
+
 SaveFormat::SaveFormat(const std::string& fileLocation)
 {
     if (!std::filesystem::exists(fileLocation))
@@ -66,19 +69,7 @@ SaveFormat::SaveFormat(const std::string& fileLocation)
 
     const auto& information = Information::getInstance();
 
-    dragon.family = document["morphology"]["dragon"]["family"].GetInt64();
-    dragon.breed = information.getBreeds().at(document["morphology"]["dragon"]["breed"].GetInt());
-    dragon.eye = information.getEyes().at(document["morphology"]["dragon"]["eye"].GetInt());
-
-    dragon.primaryGene = information.getPrimaryGenes().at(document["morphology"]["dragon"]["primary"]["gene"].GetInt());
-    dragon.secondaryGene = information.getSecondaryGenes().at(document["morphology"]["dragon"]["secondary"]["gene"].GetInt());
-    dragon.tertiaryGene = information.getTertiaryGenes().at(document["morphology"]["dragon"]["tertiary"]["gene"].GetInt());
-
-    dragon.primaryColour = information.getColours(false).at(document["morphology"]["dragon"]["primary"]["colour"].GetInt());
-    dragon.secondaryColour = information.getColours(false).at(document["morphology"]["dragon"]["secondary"]["colour"].GetInt());
-    dragon.tertiaryColour = information.getColours(false).at(document["morphology"]["dragon"]["tertiary"]["colour"].GetInt());
-
-    dragon.imageLocation = document["morphology"]["dragon"]["image"].GetString();
+    dragon = readDragon(document["morphology"]["dragon"]);
 
     primaryToggle = document["search"]["toggles"]["primary"].GetBool();
     secondaryToggle = document["search"]["toggles"]["secondary"].GetBool();
@@ -93,6 +84,11 @@ SaveFormat::SaveFormat(const std::string& fileLocation)
 
     tertiaryColourRange = document["search"]["tertiary"]["range"].GetInt();
     tertiaryColourOffset = document["search"]["tertiary"]["offset"].GetInt();
+
+    for (const auto& dragon : document["pairings"]["dragons"].GetArray())
+    {
+        pairingDragons.push_back(readDragon(dragon));
+    }
 }
 
 void SaveFormat::write(const std::string& fileLocation)
@@ -113,45 +109,7 @@ void SaveFormat::write(const std::string& fileLocation)
     {
         rapidjson::Value morphology(rapidjson::kObjectType);
 
-        {
-            rapidjson::Value dragon(rapidjson::kObjectType);
-
-            dragon.AddMember("family", -1, allocator);
-            dragon.AddMember("breed", VectorHelpers::getIndex(information.getBreeds(), this->dragon.breed), allocator);
-            dragon.AddMember("eye", VectorHelpers::getIndex(information.getEyes(), this->dragon.eye), allocator);
-
-            {
-                rapidjson::Value primary(rapidjson::kObjectType);
-
-                primary.AddMember("colour", VectorHelpers::getIndex(information.getColours(false), this->dragon.primaryColour), allocator);
-                primary.AddMember("gene", VectorHelpers::getIndex(information.getPrimaryGenes(), this->dragon.primaryGene), allocator);
-
-                dragon.AddMember("primary", primary, allocator);
-            }
-
-            {
-                rapidjson::Value secondary(rapidjson::kObjectType);
-
-                secondary.AddMember("colour", VectorHelpers::getIndex(information.getColours(false), this->dragon.secondaryColour), allocator);
-                secondary.AddMember("gene", VectorHelpers::getIndex(information.getSecondaryGenes(), this->dragon.secondaryGene), allocator);
-
-                dragon.AddMember("secondary", secondary, allocator);
-            }
-
-            {
-                rapidjson::Value tertiary(rapidjson::kObjectType);
-
-                tertiary.AddMember("colour", VectorHelpers::getIndex(information.getColours(false), this->dragon.tertiaryColour), allocator);
-                tertiary.AddMember("gene", VectorHelpers::getIndex(information.getTertiaryGenes(), this->dragon.tertiaryGene), allocator);
-
-                dragon.AddMember("tertiary", tertiary, allocator);
-            }
-
-            jsonString.SetString(this->dragon.imageLocation.c_str(), allocator);
-            dragon.AddMember("image", jsonString, allocator);
-
-            morphology.AddMember("dragon", dragon, allocator);
-        }
+        morphology.AddMember("dragon", writeDragon(this->dragon, allocator), allocator);
 
         document.AddMember("morphology", morphology, allocator);
     }
@@ -200,6 +158,21 @@ void SaveFormat::write(const std::string& fileLocation)
         document.AddMember("search", search, allocator);
     }
 
+    {
+        rapidjson::Value pairings(rapidjson::kObjectType);
+        rapidjson::Value dragonList(rapidjson::kArrayType);
+
+        for(const auto& dragon : pairingDragons)
+        {
+            auto dragonJson = writeDragon(dragon, allocator);
+
+            dragonList.PushBack(dragonJson, allocator);
+        }
+
+        pairings.AddMember("dragons", dragonList, allocator);
+        document.AddMember("pairings", pairings, allocator);
+    }
+
     rapidjson::StringBuffer buf;
     rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buf);
     document.Accept (writer);
@@ -208,4 +181,77 @@ void SaveFormat::write(const std::string& fileLocation)
     std::ofstream of (fileLocation);
     of << json;
     if (!of.good()) throw std::runtime_error ("Can't write the JSON string to the file!");
+}
+
+rapidjson::Value SaveFormat::writeDragon(const Dragon &dragon, rapidjson::MemoryPoolAllocator<>& allocator)
+{
+    const auto& information = Information::getInstance();
+    rapidjson::Value dragonValue(rapidjson::kObjectType);
+    rapidjson::Value jsonString;
+
+    jsonString.SetString(dragon.name.c_str(), allocator);
+    dragonValue.AddMember("name", jsonString, allocator);
+
+    dragonValue.AddMember("family", -1, allocator);
+    dragonValue.AddMember("breed", VectorHelpers::getIndex(information.getBreeds(), dragon.breed), allocator);
+    dragonValue.AddMember("male", dragon.male, allocator);
+    dragonValue.AddMember("eye", VectorHelpers::getIndex(information.getEyes(), dragon.eye), allocator);
+
+    {
+        rapidjson::Value primary(rapidjson::kObjectType);
+
+        primary.AddMember("colour", VectorHelpers::getIndex(information.getColours(false), dragon.primaryColour), allocator);
+        primary.AddMember("gene", VectorHelpers::getIndex(information.getPrimaryGenes(), dragon.primaryGene), allocator);
+
+        dragonValue.AddMember("primary", primary, allocator);
+    }
+
+    {
+        rapidjson::Value secondary(rapidjson::kObjectType);
+
+        secondary.AddMember("colour", VectorHelpers::getIndex(information.getColours(false), dragon.secondaryColour), allocator);
+        secondary.AddMember("gene", VectorHelpers::getIndex(information.getSecondaryGenes(), dragon.secondaryGene), allocator);
+
+        dragonValue.AddMember("secondary", secondary, allocator);
+    }
+
+    {
+        rapidjson::Value tertiary(rapidjson::kObjectType);
+
+        tertiary.AddMember("colour", VectorHelpers::getIndex(information.getColours(false), dragon.tertiaryColour), allocator);
+        tertiary.AddMember("gene", VectorHelpers::getIndex(information.getTertiaryGenes(), dragon.tertiaryGene), allocator);
+
+        dragonValue.AddMember("tertiary", tertiary, allocator);
+    }
+
+    jsonString.SetString(dragon.imageLocation.c_str(), allocator);
+    dragonValue.AddMember("image", jsonString, allocator);
+
+    return std::move(dragonValue);
+}
+
+Dragon SaveFormat::readDragon(const rapidjson::GenericValue<rapidjson::UTF8<>>& dragonRoot)
+{
+    const auto& information = Information::getInstance();
+
+    Dragon dragon;
+
+    dragon.name = dragonRoot["name"].GetString();
+
+    dragon.family = dragonRoot["family"].GetInt64();
+    dragon.breed = information.getBreeds().at(dragonRoot["breed"].GetInt());
+    dragon.male = dragonRoot["male"].GetBool();
+    dragon.eye = information.getEyes().at(dragonRoot["eye"].GetInt());
+
+    dragon.primaryGene = information.getPrimaryGenes().at(dragonRoot["primary"]["gene"].GetInt());
+    dragon.secondaryGene = information.getSecondaryGenes().at(dragonRoot["secondary"]["gene"].GetInt());
+    dragon.tertiaryGene = information.getTertiaryGenes().at(dragonRoot["tertiary"]["gene"].GetInt());
+
+    dragon.primaryColour = information.getColours(false).at(dragonRoot["primary"]["colour"].GetInt());
+    dragon.secondaryColour = information.getColours(false).at(dragonRoot["secondary"]["colour"].GetInt());
+    dragon.tertiaryColour = information.getColours(false).at(dragonRoot["tertiary"]["colour"].GetInt());
+
+    dragon.imageLocation = dragonRoot["image"].GetString();
+
+    return dragon;
 }
