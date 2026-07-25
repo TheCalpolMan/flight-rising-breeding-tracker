@@ -62,12 +62,12 @@ bool BreedingTreeCalculator::doesConfigHaveValidPairings(const BreedingTreeConfi
             return false;
         }
 
-        if (currentNode->rightChild->isLeaf())
+        if (!currentNode->rightChild->isLeaf())
         {
             nodesToCheck.push_front(currentNode->rightChild);
         }
 
-        if (currentNode->leftChild->isLeaf())
+        if (!currentNode->leftChild->isLeaf())
         {
             nodesToCheck.push_front(currentNode->leftChild);
         }

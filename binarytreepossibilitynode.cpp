@@ -1,31 +1,77 @@
 #include "binarytreepossibilitynode.h"
 
-BinaryTreePossibilityNode::BinaryTreePossibilityNode(const BinaryTreeNode &rootNode, const std::vector<Dragon>& possibleParents)
+#include <list>
+
+#include "dragonpossibilityfactory.h"
+
+BinaryTreePossibilityNode::BinaryTreePossibilityNode(std::shared_ptr<BinaryTreeNode> rootNode, const std::vector<std::shared_ptr<Dragon>>& possibleParents) :
+    BinaryTreePossibilityNode(rootNode)
 {
-    // std::list<std::shared_ptr<BinaryTreeNode>> nodesToCheck = decltype(nodesToCheck)();
-    // nodesToCheck.push_back(config.treeRoot);
+    if (isLeaf())
+    {
+        return;
+    }
 
-    // int dragonIndex = 0;
+    std::list<std::shared_ptr<BinaryTreePossibilityNode>> nodesToCheck = decltype(nodesToCheck)();
+    nodesToCheck.push_front(castRight());
+    nodesToCheck.push_front(castLeft());
 
-    // while(!nodesToCheck.empty())
-    // {
-    //     std::shared_ptr<BinaryTreeNode> currentNode = nodesToCheck.front();
-    //     nodesToCheck.pop_front();
+    int dragonIndex = 0;
 
-    //     if (currentNode->leftChild->isLeaf() && currentNode->rightChild->isLeaf() &&
-    //         config.dragons.at(dragonIndex++)->male == config.dragons.at(dragonIndex++)->male)
-    //     {
-    //         return false;
-    //     }
+    while(!nodesToCheck.empty())
+    {
+        auto currentNode = nodesToCheck.front();
+        nodesToCheck.pop_front();
 
-    //     if (currentNode->rightChild->isLeaf())
-    //     {
-    //         nodesToCheck.push_front(currentNode->rightChild);
-    //     }
+        if (currentNode->isLeaf())
+        {
+            currentNode->possibility = DragonPossibilityFactory::getInstance().constructPossiblilty(possibleParents.at(dragonIndex));
+        }
 
-    //     if (currentNode->leftChild->isLeaf())
-    //     {
-    //         nodesToCheck.push_front(currentNode->leftChild);
-    //     }
-    // }
+        nodesToCheck.push_front(currentNode->castRight());
+        nodesToCheck.push_front(currentNode->castLeft());
+    }
+}
+
+std::shared_ptr<BinaryTreePossibilityNode> BinaryTreePossibilityNode::castLeft() const
+{
+    return std::static_pointer_cast<BinaryTreePossibilityNode>(leftChild);
+}
+
+std::shared_ptr<BinaryTreePossibilityNode> BinaryTreePossibilityNode::castRight() const
+{
+    return std::static_pointer_cast<BinaryTreePossibilityNode>(rightChild);
+}
+
+void BinaryTreePossibilityNode::propogate()
+{
+    if (propogated)
+    {
+        return;
+    }
+
+    if (isLeaf())
+    {
+        propogated = true;
+        return;
+    }
+
+    castLeft()->propogate();
+    castRight()->propogate();
+
+    possibility = DragonPossibilityFactory::getInstance().constructPossiblilty(castLeft()->possibility, castRight()->possibility);
+    propogated = true;
+}
+
+BinaryTreePossibilityNode::BinaryTreePossibilityNode(std::shared_ptr<BinaryTreeNode> baseNode)
+{
+    if (!baseNode->leftChild->isLeaf())
+    {
+        leftChild = std::shared_ptr<BinaryTreePossibilityNode>(new BinaryTreePossibilityNode(baseNode->leftChild));
+    }
+
+    if (!baseNode->rightChild->isLeaf())
+    {
+        rightChild = std::shared_ptr<BinaryTreePossibilityNode>(new BinaryTreePossibilityNode(baseNode->rightChild));
+    }
 }

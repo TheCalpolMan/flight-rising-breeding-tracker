@@ -10,11 +10,21 @@
 class BinaryTreePossibilityNode : public BinaryTreeNode
 {
 public:
-    BinaryTreePossibilityNode(const BinaryTreeNode& rootNode, const std::vector<Dragon>& possibleParents);
+    BinaryTreePossibilityNode(std::shared_ptr<BinaryTreeNode> rootNode, const std::vector<std::shared_ptr<Dragon>>& possibleParents);
+
+    std::shared_ptr<BinaryTreePossibilityNode> castLeft() const;
+
+    std::shared_ptr<BinaryTreePossibilityNode> castRight() const;
+
+    void propogate();
 
     std::shared_ptr<DragonPossibility> possibility;
 private:
     BinaryTreePossibilityNode() = default;
+
+    BinaryTreePossibilityNode(std::shared_ptr<BinaryTreeNode> baseNode);
+
+    bool propogated = false;
 };
 
 #endif // BINARYTREEPOSSIBILITYNODE_H
