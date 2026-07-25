@@ -10,13 +10,7 @@
 class DragonPossibility
 {
 public:
-    DragonPossibility() = default;
-
-    DragonPossibility(const Dragon& base);
-
-    DragonPossibility(const Dragon& parent1, const Dragon& parent2);
-
-    DragonPossibility(const DragonPossibility& parent1, const DragonPossibility& parent2);
+    friend class DragonPossibilityFactory;
 
     std::unordered_map<int, long double> breed;
 
@@ -28,6 +22,12 @@ public:
     std::unordered_map<int, long double> secondaryGene;
     std::unordered_map<int, long double> tertiaryGene;
 private:
+    DragonPossibility() = default;
+
+    DragonPossibility(const Dragon& base);
+
+    DragonPossibility(const DragonPossibility& parent1, const DragonPossibility& parent2);
+
     void setGeneWeights(std::unordered_map<int, long double>& targetGene,
                         const std::vector<Allele>& possibleGenes,
                         const std::unordered_map<int, long double>& parent1,

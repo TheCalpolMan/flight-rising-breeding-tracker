@@ -44,6 +44,11 @@ find_package(Qt6 REQUIRED COMPONENTS Core)
         binarytreenode.h binarytreenode.cpp
         binarytreegenerator.h binarytreegenerator.cpp
         modutils.h modutils.cpp
+        breedingtreecalculator.h breedingtreecalculator.cpp
+        breedingtreeconfig.h
+        breedingtreeconfig.cpp
+        binarytreepossibilitynode.h binarytreepossibilitynode.cpp
+        dragonpossibilityfactory.h dragonpossibilityfactory.cpp
 
 
     )

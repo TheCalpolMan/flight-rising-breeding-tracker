@@ -1825,48 +1825,17 @@
         <string>Add</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_33">
+      <widget class="QPushButton" name="addrelationpushbutton">
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>171</y>
-         <width>63</width>
-         <height>21</height>
+         <y>170</y>
+         <width>101</width>
+         <height>29</height>
         </rect>
        </property>
        <property name="text">
-        <string>Family:</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="familyspinBox">
-       <property name="geometry">
-        <rect>
-         <x>51</x>
-         <y>170</y>
-         <width>61</width>
-         <height>26</height>
-        </rect>
-       </property>
-       <property name="mouseTracking">
-        <bool>true</bool>
-       </property>
-       <property name="toolTip">
-        <string/>
-       </property>
-       <property name="toolTipDuration">
-        <number>-1</number>
-       </property>
-       <property name="statusTip">
-        <string/>
-       </property>
-       <property name="whatsThis">
-        <string/>
-       </property>
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>64</number>
+        <string>Add Relation</string>
        </property>
       </widget>
      </widget>
@@ -1891,6 +1860,45 @@
       </property>
       <property name="text">
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;^ Double-click to remove ^&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="calculatepairingspushbutton">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>230</y>
+        <width>281</width>
+        <height>29</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Get best pairing</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_3">
+      <property name="geometry">
+       <rect>
+        <x>430</x>
+        <y>230</y>
+        <width>101</width>
+        <height>29</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Cycle down</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_4">
+      <property name="geometry">
+       <rect>
+        <x>310</x>
+        <y>230</y>
+        <width>101</width>
+        <height>29</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Cycle up</string>
       </property>
      </widget>
     </widget>

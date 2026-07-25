@@ -2,29 +2,35 @@
 
 #include <iostream>
 
-BinaryTreeNode::BinaryTreeNode() {}
-
-void BinaryTreeNode::print()
+std::string BinaryTreeNode::toString() const
 {
-    privatePrint("", this, false);
+    std::stringstream stream;
+    writeToStream("", this, false, stream);
+
+    return stream.str();
 }
 
-void BinaryTreeNode::privatePrint(const std::string &prefix, const BinaryTreeNode* node, bool isLeft)
+bool BinaryTreeNode::isLeaf()
+{
+    return (leftChild == nullptr && rightChild == nullptr);
+}
+
+void BinaryTreeNode::writeToStream(const std::string &prefix, const BinaryTreeNode* node, bool isLeft, std::stringstream& stream)
 {
     // stolen and adapted from https://stackoverflow.com/a/51730733
     // thank you!!
 
     if( node != nullptr )
     {
-        std::cout << prefix;
+        stream << prefix;
 
-        std::cout << (isLeft ? "|--" : "l--" );
+        stream << (isLeft ? "|--" : "l--" );
 
         // print the value of the node
-        std::cout << "O" << std::endl;
+        stream << "O" << std::endl;
 
         // enter the next tree level - left and right branch
-        privatePrint( prefix + (isLeft ? "|  " : "   "), &*node->leftChild, true);
-        privatePrint( prefix + (isLeft ? "|  " : "   "), &*node->rightChild, false);
+        writeToStream( prefix + (isLeft ? "|  " : "   "), &*node->leftChild, true, stream);
+        writeToStream( prefix + (isLeft ? "|  " : "   "), &*node->rightChild, false, stream);
     }
 }

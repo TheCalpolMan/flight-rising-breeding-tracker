@@ -223,7 +223,7 @@ bool MainWindow::checkEditableComboBox(const QComboBox* targetBox, bool createDi
     return false;
 }
 
-bool MainWindow::checkAllMorphologyComboBoxes(bool createDialog)
+bool MainWindow::checkAllMorphologyInputs(bool createDialog)
 {
     if (!checkEditableComboBox(ui->breedcombobox, createDialog, "Breed is invalid"))
     {
@@ -268,7 +268,7 @@ bool MainWindow::checkAllMorphologyComboBoxes(bool createDialog)
     return true;
 }
 
-bool MainWindow::checkAllPairingComboBoxes(bool createDialog)
+bool MainWindow::checkAllPairingInputs(bool createDialog)
 {
     if (!checkEditableComboBox(ui->breedcombobox_pairings, createDialog, "Breed is invalid"))
     {
@@ -302,6 +302,21 @@ bool MainWindow::checkAllPairingComboBoxes(bool createDialog)
 
     if (!checkEditableComboBox(ui->tertiarygenecombobox_pairings, createDialog, "Tertiary gene is invalid"))
     {
+        return false;
+    }
+
+    if (ui->namelineedit->text() == "")
+    {
+        if (!createDialog)
+        {
+            return false;
+        }
+
+        QMessageBox msgBox(this);
+        msgBox.setText("Dragon must have a name");
+        msgBox.setStandardButtons(QMessageBox::Close);
+        msgBox.exec();
+
         return false;
     }
 
@@ -392,8 +407,6 @@ Dragon MainWindow::constructPairingDragon()
         information.getTertiaryGenes().at(ui->tertiarygenecombobox_pairings->currentIndex())
     );
 
-    dragon.family = ui->familyspinBox->value();
-
     return dragon;
 }
 
@@ -463,7 +476,7 @@ void MainWindow::on_breedgraphicsview_mousePressEvent(QMouseEvent *)
 
 void MainWindow::on_pushButton_clicked()
 {
-    if (!checkAllMorphologyComboBoxes(true))
+    if (!checkAllMorphologyInputs(true))
     {
         return;
     }
@@ -544,7 +557,7 @@ void MainWindow::on_currencycheckbox_stateChanged(int arg1)
 
 void MainWindow::on_actionSave_triggered()
 {
-    if (!checkAllMorphologyComboBoxes(true))
+    if (!checkAllMorphologyInputs(true))
     {
         return;
     }
@@ -616,7 +629,7 @@ void MainWindow::on_actionOpen_triggered()
 
 void MainWindow::on_actionSave_As_triggered()
 {
-    if (!checkAllMorphologyComboBoxes(true))
+    if (!checkAllMorphologyInputs(true))
     {
         return;
     }
@@ -643,7 +656,7 @@ void MainWindow::on_possibleparentlistwidget_itemDoubleClicked(QListWidgetItem *
 
 void MainWindow::on_addpairingpushbutton_clicked()
 {
-    if (!checkAllPairingComboBoxes(true))
+    if (!checkAllPairingInputs(true))
     {
         return;
     }
@@ -652,5 +665,10 @@ void MainWindow::on_addpairingpushbutton_clicked()
 
     possibleParentDragons.push_back(dragon);
     updatePossibleParentDragons();
-    ui->familyspinBox->setValue(ui->familyspinBox->value() + 1);
 }
+
+void MainWindow::on_calculatepairingspushbutton_clicked()
+{
+
+}
+

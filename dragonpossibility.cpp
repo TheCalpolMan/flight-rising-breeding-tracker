@@ -23,10 +23,6 @@ DragonPossibility::DragonPossibility(const Dragon& base) :
     tertiaryGene.insert(std::make_pair(VectorHelpers::getIndex(information.getTertiaryGenes(), base.tertiaryGene), 1));
 }
 
-DragonPossibility::DragonPossibility(const Dragon& parent1, const Dragon& parent2) :
-    DragonPossibility(DragonPossibility(parent1), DragonPossibility(parent2))
-{}
-
 DragonPossibility::DragonPossibility(const DragonPossibility& parent1, const DragonPossibility& parent2) :
     DragonPossibility()
 {

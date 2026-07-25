@@ -72,6 +72,8 @@ private slots:
 
     void on_addpairingpushbutton_clicked();
 
+    void on_calculatepairingspushbutton_clicked();
+
 private:
     Ui::MainWindow *ui;
     std::string loadedFile = "";
@@ -119,9 +121,9 @@ private:
 
     bool checkEditableComboBox(const QComboBox* targetBox, bool createDialog, const std::string& dialogText = "");
 
-    bool checkAllMorphologyComboBoxes(bool createDialog);
+    bool checkAllMorphologyInputs(bool createDialog);
 
-    bool checkAllPairingComboBoxes(bool createDialog);
+    bool checkAllPairingInputs(bool createDialog);
 
     void updatePossibleParentDragons();
 

@@ -3,18 +3,21 @@
 
 #include <memory>
 #include <string>
+#include <sstream>
 
 class BinaryTreeNode
 {
 public:
-    BinaryTreeNode();
+    BinaryTreeNode() = default;
 
-    void print();
+    std::string toString() const;
+
+    bool isLeaf();
 
     std::shared_ptr<BinaryTreeNode> leftChild;
     std::shared_ptr<BinaryTreeNode> rightChild;
 private:
-    static void privatePrint(const std::string& prefix, const BinaryTreeNode* node, bool isLeft);
+    static void writeToStream(const std::string& prefix, const BinaryTreeNode* node, bool isLeft, std::stringstream& stream);
 };
 
 #endif // BINARYTREENODE_H
