@@ -49,7 +49,7 @@ private:
     std::vector<Colour> colours = decltype(colours)();
     std::vector<Colour> coloursByWheel = decltype(coloursByWheel)();
 
-    std::vector<std::vector<std::pair<int, int>>> rarityChances = decltype(rarityChances)();
+    std::vector<std::vector<std::pair<float, float>>> rarityChances = decltype(rarityChances)();
 };
 
 #endif // INFORMATION_H

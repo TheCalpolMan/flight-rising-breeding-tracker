@@ -42,6 +42,16 @@ CsvReader::CsvReader(const std::string& location, char delimiter)
 
         currentValue << character;
     }
+
+    if (currentValue.str() != "")
+    {
+        currentLine.push_back(currentValue.str());
+    }
+
+    if (currentLine.size() > 0)
+    {
+        values.push_back(currentLine);
+    }
 }
 
 const std::vector<std::vector<std::string>>& CsvReader::getValues() const

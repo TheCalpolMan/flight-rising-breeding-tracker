@@ -84,7 +84,7 @@ void DragonPossibility::setColourWeights(std::unordered_map<int, long double>& t
 
             long double chance = breedWeightPair1.second * breedWeightPair2.second / distance;
 
-            for (int i = startIndex; i != endIndex; i = (i + 1) % information.getColours(false).size())
+            for (int i = startIndex; i != endIndex; i = (i + 1) % information.getColours(true).size())
             {
                 addWeight(targetColour, i, chance);
             }

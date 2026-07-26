@@ -11,6 +11,7 @@
 #include "urlopener.h"
 #include "searchbuilder.h"
 #include "vectorhelpers.h"
+#include "breedingtreecalculator.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -171,9 +172,9 @@ void MainWindow::loadMorphologyDragon(const Dragon& dragon)
     ui->breedcombobox->setCurrentIndex(VectorHelpers::getIndex(information.getBreeds(), dragon.breed));
     ui->eyecombobox->setCurrentIndex(VectorHelpers::getIndex(information.getEyes(), dragon.eye));
 
-    ui->primarycolourcombobox->setCurrentIndex(dragon.primaryColour.wheelIndex - 1);
-    ui->secondarycolourcombobox->setCurrentIndex(dragon.secondaryColour.wheelIndex - 1);
-    ui->tertiarycolourcombobox->setCurrentIndex(dragon.tertiaryColour.wheelIndex - 1);
+    ui->primarycolourcombobox->setCurrentIndex(dragon.primaryColour.wheelIndex);
+    ui->secondarycolourcombobox->setCurrentIndex(dragon.secondaryColour.wheelIndex);
+    ui->tertiarycolourcombobox->setCurrentIndex(dragon.tertiaryColour.wheelIndex);
 
     ui->primarygenecombobox->setCurrentIndex(VectorHelpers::getIndex(information.getPrimaryGenes(), dragon.primaryGene));
     ui->secondarygenecombobox->setCurrentIndex(VectorHelpers::getIndex(information.getSecondaryGenes(), dragon.secondaryGene));
@@ -699,7 +700,10 @@ void MainWindow::on_calculatepairingspushbutton_clicked()
         pairingResultsDialog->show();
     }
 
+    auto calculator = BreedingTreeCalculator(std::make_shared<Dragon>(constructMorphologyDragon()), possibleParentDragons);
+    auto configs = calculator.getConfigs();
 
+    return;
 }
 
 

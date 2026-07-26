@@ -12,15 +12,15 @@ class DragonPossibility
 public:
     friend class DragonPossibilityFactory;
 
-    std::unordered_map<int, long double> breed;
+    std::unordered_map<int, long double> breed = decltype(breed)();
 
-    std::unordered_map<int, long double> primaryColour;
-    std::unordered_map<int, long double> secondaryColour;
-    std::unordered_map<int, long double> tertiaryColour;
+    std::unordered_map<int, long double> primaryColour = decltype(primaryColour)();
+    std::unordered_map<int, long double> secondaryColour = decltype(secondaryColour)();
+    std::unordered_map<int, long double> tertiaryColour = decltype(tertiaryColour)();
 
-    std::unordered_map<int, long double> primaryGene;
-    std::unordered_map<int, long double> secondaryGene;
-    std::unordered_map<int, long double> tertiaryGene;
+    std::unordered_map<int, long double> primaryGene = decltype(primaryGene)();
+    std::unordered_map<int, long double> secondaryGene = decltype(secondaryGene)();
+    std::unordered_map<int, long double> tertiaryGene = decltype(tertiaryGene)();
 private:
     DragonPossibility() = default;
 

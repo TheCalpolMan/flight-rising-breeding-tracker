@@ -28,8 +28,15 @@ BinaryTreePossibilityNode::BinaryTreePossibilityNode(std::shared_ptr<BinaryTreeN
             currentNode->possibility = DragonPossibilityFactory::getInstance().constructPossiblilty(possibleParents.at(dragonIndex));
         }
 
-        nodesToCheck.push_front(currentNode->castRight());
-        nodesToCheck.push_front(currentNode->castLeft());
+        if (currentNode->leftChild != nullptr)
+        {
+            nodesToCheck.push_front(currentNode->castRight());
+        }
+
+        if (currentNode->rightChild != nullptr)
+        {
+            nodesToCheck.push_front(currentNode->castLeft());
+        }
     }
 }
 
@@ -65,12 +72,12 @@ void BinaryTreePossibilityNode::propogate()
 
 BinaryTreePossibilityNode::BinaryTreePossibilityNode(std::shared_ptr<BinaryTreeNode> baseNode)
 {
-    if (!baseNode->leftChild->isLeaf())
+    if (baseNode->leftChild != nullptr)
     {
         leftChild = std::shared_ptr<BinaryTreePossibilityNode>(new BinaryTreePossibilityNode(baseNode->leftChild));
     }
 
-    if (!baseNode->rightChild->isLeaf())
+    if (baseNode->rightChild != nullptr)
     {
         rightChild = std::shared_ptr<BinaryTreePossibilityNode>(new BinaryTreePossibilityNode(baseNode->rightChild));
     }

@@ -24,6 +24,8 @@ Information::Information()
                 std::stof(workingValue.substr(0, slashPos)),
                 std::stof(workingValue.substr(slashPos + 1))));
         }
+
+        rarityChances.push_back(std::move(processedRow));
     }
 
     // eyes
