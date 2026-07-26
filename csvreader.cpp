@@ -14,6 +14,11 @@ CsvReader::CsvReader(const std::string& location, char delimiter)
     {
         char character = file.get();
 
+        if (character == '#' && currentValue.str().empty() && currentLine.empty())
+        {
+            continue;
+        }
+
         if (character == '\n')
         {
             currentLine.push_back(currentValue.str());

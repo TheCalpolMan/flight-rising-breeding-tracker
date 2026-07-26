@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>551</width>
-    <height>600</height>
+    <width>550</width>
+    <height>587</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -1845,7 +1845,7 @@
         <x>310</x>
         <y>10</y>
         <width>221</width>
-        <height>191</height>
+        <height>161</height>
        </rect>
       </property>
      </widget>
@@ -1853,7 +1853,7 @@
       <property name="geometry">
        <rect>
         <x>310</x>
-        <y>200</y>
+        <y>170</y>
         <width>221</width>
         <height>20</height>
        </rect>
@@ -1865,40 +1865,14 @@
      <widget class="QPushButton" name="calculatepairingspushbutton">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>230</y>
-        <width>281</width>
-        <height>29</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Get best pairing</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="pushButton_3">
-      <property name="geometry">
-       <rect>
-        <x>430</x>
-        <y>230</y>
-        <width>101</width>
-        <height>29</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Cycle down</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="pushButton_4">
-      <property name="geometry">
-       <rect>
         <x>310</x>
-        <y>230</y>
-        <width>101</width>
+        <y>190</y>
+        <width>221</width>
         <height>29</height>
        </rect>
       </property>
       <property name="text">
-       <string>Cycle up</string>
+       <string>Calculate</string>
       </property>
      </widget>
     </widget>
@@ -1909,7 +1883,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>551</width>
+     <width>550</width>
      <height>26</height>
     </rect>
    </property>
@@ -1923,7 +1897,6 @@
    </widget>
    <addaction name="menuFile"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
   <action name="actionSave">
    <property name="icon">
     <iconset theme="QIcon::ThemeIcon::DocumentSave"/>

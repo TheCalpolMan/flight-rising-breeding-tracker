@@ -17,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    setFixedSize(size());
 
     // inital setup
 
@@ -163,7 +164,7 @@ void MainWindow::loadImage()
             QMargins(1, 1, 1, 1)), Qt::KeepAspectRatio));
 }
 
-void MainWindow::loadDragon(const Dragon& dragon)
+void MainWindow::loadMorphologyDragon(const Dragon& dragon)
 {
     auto& information = Information::getInstance();
 
@@ -182,6 +183,24 @@ void MainWindow::loadDragon(const Dragon& dragon)
 
     loadImage();
     updateColoursBasedOnGene(true);
+}
+
+void MainWindow::loadPairingDragon(const Dragon &dragon)
+{
+    const auto& information = Information::getInstance();
+
+    ui->namelineedit->setText(dragon.name.c_str());
+
+    ui->maleradiopairings->setChecked(dragon.male);
+    ui->femaleradiopairings->setChecked(!dragon.male);
+
+    ui->breedcombobox_pairings->setCurrentIndex(VectorHelpers::getIndex(information.getBreeds(), dragon.breed));
+    ui->primarycolourcombobox_pairings->setCurrentIndex(VectorHelpers::getIndex(information.getColours(true), dragon.primaryColour));
+    ui->secondarycolourcombobox_pairings->setCurrentIndex(VectorHelpers::getIndex(information.getColours(true), dragon.secondaryColour));
+    ui->tertiarycolourcombobox_pairings->setCurrentIndex(VectorHelpers::getIndex(information.getColours(true), dragon.tertiaryColour));
+    ui->primarygenecombobox_pairings->setCurrentIndex(VectorHelpers::getIndex(information.getPrimaryGenes(), dragon.primaryGene));
+    ui->secondarygenecombobox_pairings->setCurrentIndex(VectorHelpers::getIndex(information.getSecondaryGenes(), dragon.secondaryGene));
+    ui->tertiarygenecombobox_pairings->setCurrentIndex(VectorHelpers::getIndex(information.getTertiaryGenes(), dragon.tertiaryGene));
 }
 
 void MainWindow::loadSearch(const SaveFormat& save)
@@ -619,7 +638,7 @@ void MainWindow::on_actionOpen_triggered()
     }
 
     loadedFile = targetFile.toStdString();
-    loadDragon(save->dragon);
+    loadMorphologyDragon(save->dragon);
     loadSearch(*save);
     possibleParentDragons = save->pairingDragons;
 
@@ -663,12 +682,40 @@ void MainWindow::on_addpairingpushbutton_clicked()
 
     Dragon dragon = constructPairingDragon();
 
+    ui->namelineedit->clear();
     possibleParentDragons.push_back(dragon);
     updatePossibleParentDragons();
 }
 
 void MainWindow::on_calculatepairingspushbutton_clicked()
 {
+    if (pairingResultsDialog == nullptr)
+    {
+        pairingResultsDialog = new PairingResultsDialog(this);
+    }
 
+    if (pairingResultsDialog->isHidden())
+    {
+        pairingResultsDialog->show();
+    }
+
+
+}
+
+
+void MainWindow::on_possibleparentlistwidget_currentRowChanged(int currentRow)
+{
+    if (currentRow == -1)
+    {
+        return;
+    }
+
+    loadPairingDragon(possibleParentDragons.at(currentRow));
+}
+
+
+void MainWindow::on_namelineedit_returnPressed()
+{
+    on_addpairingpushbutton_clicked();
 }
 

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>PairingResultsDialog</class>
+ <widget class="QDialog" name="PairingResultsDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1068</width>
+    <height>372</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QTreeWidget" name="treeWidget">
+     <attribute name="headerCascadingSectionResizes">
+      <bool>true</bool>
+     </attribute>
+     <attribute name="headerDefaultSectionSize">
+      <number>130</number>
+     </attribute>
+     <column>
+      <property name="text">
+       <string>Result</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Breed</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Primary Colour</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Secondary Colour</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Tertiary Colour</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Primary Gene</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Secondary Gene</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Tertiary Gene</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

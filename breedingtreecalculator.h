@@ -6,27 +6,29 @@
 #include <memory>
 
 #include "dragon.h"
+#include "binarytreenode.h"
 #include "breedingtreeconfig.h"
 
 class BreedingTreeCalculator
 {
 public:
-    BreedingTreeCalculator(const std::vector<Dragon>& possibleParents);
+    BreedingTreeCalculator(std::shared_ptr<Dragon> aim, const std::vector<Dragon>& possibleParents);
 
     const std::set<BreedingTreeConfig>& getConfigs();
 private:
     static int factorial(int n);
 
+    static int nPr(int n, int r);
+
     static std::vector<std::shared_ptr<Dragon>> convertDragonsToSharedPtr(const std::vector<Dragon>& dragons);
 
-    static bool doesConfigHaveValidPairings(const BreedingTreeConfig& config);
+    static bool doesConfigHaveValidPairings(std::shared_ptr<BinaryTreeNode> treeRoot, std::vector<std::shared_ptr<Dragon>> permutation);
 
-    std::vector<std::vector<std::shared_ptr<Dragon>>> getPossibleParentPermutations() const;
-
-    std::vector<std::shared_ptr<Dragon>> getPossibleParentPermutationFromSeed(int seed) const;
+    std::vector<std::shared_ptr<Dragon>> getPossibleParentPermutationFromSeed(int count, int seed) const;
 
     std::set<BreedingTreeConfig> validTreeConfigs = decltype(validTreeConfigs)();
     const std::vector<std::shared_ptr<Dragon>> possibleParents;
+    std::shared_ptr<Dragon> aim;
 };
 
 #endif // BREEDINGTREECALCULATOR_H

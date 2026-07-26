@@ -2,8 +2,11 @@
 
 #include <list>
 
-BreedingTreeCalculator::BreedingTreeCalculator(const std::vector<Dragon>& possibleParents) :
-    possibleParents(convertDragonsToSharedPtr(possibleParents))
+#include "binarytreegenerator.h"
+
+BreedingTreeCalculator::BreedingTreeCalculator(std::shared_ptr<Dragon> aim, const std::vector<Dragon>& possibleParents) :
+    possibleParents(convertDragonsToSharedPtr(possibleParents)),
+    aim(aim)
 {
 
 }
@@ -15,9 +18,34 @@ const std::set<BreedingTreeConfig> &BreedingTreeCalculator::getConfigs()
         return validTreeConfigs;
     }
 
-    std::vector<std::vector<std::shared_ptr<Dragon>>> parentPermutations = getPossibleParentPermutations();
+    for (int parentCount = 2; parentCount <= possibleParents.size(); parentCount++)
+    {
+        int permutationCount = nPr(possibleParents.size(), parentCount);
 
+        for (int permutationSeed = 0; permutationSeed < permutationCount; permutationSeed++)
+        {
+            auto permutation = getPossibleParentPermutationFromSeed(parentCount, permutationSeed);
 
+            for (const auto& binaryTree : BinaryTreeGenerator::getInstance().getCombinations(parentCount))
+            {
+                if (!doesConfigHaveValidPairings(binaryTree, permutation))
+                {
+                    continue;
+                }
+
+                BreedingTreeConfig config = BreedingTreeConfig(aim, permutation, std::make_shared<BinaryTreePossibilityNode>(binaryTree, possibleParents));
+
+                if (config.getChance() == 0)
+                {
+                    continue;
+                }
+
+                validTreeConfigs.insert(std::move(config));
+            }
+        }
+    }
+
+    return validTreeConfigs;
 }
 
 int BreedingTreeCalculator::factorial(int n)
@@ -32,6 +60,11 @@ int BreedingTreeCalculator::factorial(int n)
     return value;
 }
 
+int BreedingTreeCalculator::nPr(int n, int r)
+{
+    return factorial(n) / factorial(n - r);
+}
+
 std::vector<std::shared_ptr<Dragon>> BreedingTreeCalculator::convertDragonsToSharedPtr(const std::vector<Dragon> &dragons)
 {
     std::vector<std::shared_ptr<Dragon>> sharedDragons = decltype(sharedDragons)();
@@ -44,10 +77,10 @@ std::vector<std::shared_ptr<Dragon>> BreedingTreeCalculator::convertDragonsToSha
     return sharedDragons;
 }
 
-bool BreedingTreeCalculator::doesConfigHaveValidPairings(const BreedingTreeConfig &config)
+bool BreedingTreeCalculator::doesConfigHaveValidPairings(std::shared_ptr<BinaryTreeNode> treeRoot, std::vector<std::shared_ptr<Dragon> > permutation)
 {
     std::list<std::shared_ptr<BinaryTreeNode>> nodesToCheck = decltype(nodesToCheck)();
-    nodesToCheck.push_back(config.treeRoot);
+    nodesToCheck.push_back(treeRoot);
 
     int dragonIndex = 0;
 
@@ -57,7 +90,7 @@ bool BreedingTreeCalculator::doesConfigHaveValidPairings(const BreedingTreeConfi
         nodesToCheck.pop_front();
 
         if (currentNode->leftChild->isLeaf() && currentNode->rightChild->isLeaf() &&
-            config.dragons.at(dragonIndex++)->male == config.dragons.at(dragonIndex++)->male)
+            permutation.at(dragonIndex++)->male == permutation.at(dragonIndex++)->male)
         {
             return false;
         }
@@ -76,20 +109,7 @@ bool BreedingTreeCalculator::doesConfigHaveValidPairings(const BreedingTreeConfi
     return true;
 }
 
-std::vector<std::vector<std::shared_ptr<Dragon>>> BreedingTreeCalculator::getPossibleParentPermutations() const
-{
-    int permutationCount = factorial(possibleParents.size());
-    std::vector<std::vector<std::shared_ptr<Dragon>>> parentPermutations = decltype(parentPermutations)();
-
-    for (int i = 0; i < permutationCount; i++)
-    {
-        parentPermutations.push_back(getPossibleParentPermutationFromSeed(i));
-    }
-
-    return parentPermutations;
-}
-
-std::vector<std::shared_ptr<Dragon>> BreedingTreeCalculator::getPossibleParentPermutationFromSeed(int seed) const
+std::vector<std::shared_ptr<Dragon>> BreedingTreeCalculator::getPossibleParentPermutationFromSeed(int count, int seed) const
 {
     std::vector<int> availableIndexes = decltype(availableIndexes)();
     std::vector<std::shared_ptr<Dragon>> permutation = decltype(permutation)();
@@ -99,7 +119,7 @@ std::vector<std::shared_ptr<Dragon>> BreedingTreeCalculator::getPossibleParentPe
         availableIndexes.push_back(i);
     }
 
-    while(availableIndexes.size() > 0)
+    while(availableIndexes.size() > (possibleParents.size() - count))
     {
         int index = seed % availableIndexes.size();
         seed = seed / availableIndexes.size();

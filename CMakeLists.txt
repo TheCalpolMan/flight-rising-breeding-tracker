@@ -49,6 +49,7 @@ find_package(Qt6 REQUIRED COMPONENTS Core)
         breedingtreeconfig.cpp
         binarytreepossibilitynode.h binarytreepossibilitynode.cpp
         dragonpossibilityfactory.h dragonpossibilityfactory.cpp
+        pairingresultsdialog.h pairingresultsdialog.cpp pairingresultsdialog.ui
 
 
     )

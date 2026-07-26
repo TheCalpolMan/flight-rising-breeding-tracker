@@ -12,7 +12,7 @@ Information::Information()
 
     for (int row = 0; row < unprocessedRarityChances.size(); row++)
     {
-        std::vector<std::pair<int, int>> processedRow = decltype(processedRow)();
+        std::vector<std::pair<float, float>> processedRow = decltype(processedRow)();
 
         for (int column = 0; column < unprocessedRarityChances.at(row).size(); column++)
         {
@@ -21,8 +21,8 @@ Information::Information()
             int slashPos = workingValue.find('/');
 
             processedRow.push_back(std::make_pair(
-                std::stoi(workingValue.substr(0, slashPos)),
-                std::stoi(workingValue.substr(slashPos + 1))));
+                std::stof(workingValue.substr(0, slashPos)),
+                std::stof(workingValue.substr(slashPos + 1))));
         }
     }
 
@@ -2021,7 +2021,7 @@ int Information::rarityToRank(Rarity rarity)
     }
 }
 
-std::pair<int, int> Information::getRarityChances(Rarity a, Rarity b)
+std::pair<float, float> Information::getRarityChances(Rarity a, Rarity b)
 {
     return rarityChances.at(rarityToRank(a) - 1).at(rarityToRank(b) - 1);
 }

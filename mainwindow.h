@@ -8,12 +8,14 @@
 #include <QString>
 #include <QSlider>
 #include <QPainter>
+#include <QPointer>
 #include <QComboBox>
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QListWidgetItem>
 
 #include "saveformat.h"
+#include "pairingresultsdialog.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -74,6 +76,10 @@ private slots:
 
     void on_calculatepairingspushbutton_clicked();
 
+    void on_possibleparentlistwidget_currentRowChanged(int currentRow);
+
+    void on_namelineedit_returnPressed();
+
 private:
     Ui::MainWindow *ui;
     std::string loadedFile = "";
@@ -105,6 +111,8 @@ private:
 
     // pairings
 
+    QPointer<PairingResultsDialog> pairingResultsDialog;
+
     std::vector<Dragon> possibleParentDragons = decltype(possibleParentDragons)();
 
     void updateColoursBasedOnGene(bool showDialogOnNoColour);
@@ -115,7 +123,9 @@ private:
 
     void loadImage();
 
-    void loadDragon(const Dragon& dragon);
+    void loadMorphologyDragon(const Dragon& dragon);
+
+    void loadPairingDragon(const Dragon& dragon);
 
     void loadSearch(const SaveFormat& save);
 

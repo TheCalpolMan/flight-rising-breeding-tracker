@@ -34,7 +34,7 @@ public:
 
     const std::vector<Colour>& getColours(bool sortByWheel) const;
 
-    std::pair<int, int> getRarityChances(Rarity a, Rarity b);
+    std::pair<float, float> getRarityChances(Rarity a, Rarity b);
 
     static int rarityToRank(Rarity rarity);
 private:

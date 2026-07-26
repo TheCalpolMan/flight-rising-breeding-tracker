@@ -5,17 +5,17 @@
 #include <memory>
 
 #include "dragon.h"
-#include "binarytreenode.h"
+#include "binarytreepossibilitynode.h"
 
 class BreedingTreeConfig
 {
 public:
-    BreedingTreeConfig(const std::vector<std::shared_ptr<Dragon>>& dragons, std::shared_ptr<BinaryTreeNode> treeRoot);
+    BreedingTreeConfig(std::shared_ptr<Dragon> aim, const std::vector<std::shared_ptr<Dragon>>& dragons, std::shared_ptr<BinaryTreePossibilityNode> treeRoot);
+
+    long double getChance();
 
     const std::vector<std::shared_ptr<Dragon>> dragons;
-    std::shared_ptr<BinaryTreeNode> treeRoot;
-
-    float chance;
+    std::shared_ptr<BinaryTreePossibilityNode> treeRoot;
 
     bool operator<(const BreedingTreeConfig& other) const
     {
@@ -23,7 +23,10 @@ public:
     }
 
 private:
-    void calculateChance();
+    long double getIndividualChance(const std::unordered_map<int, long double>& target, int key);
+
+    std::shared_ptr<Dragon> aim;
+    long double chance = -1;
 };
 
 #endif // BREEDINGTREECONFIG_H
