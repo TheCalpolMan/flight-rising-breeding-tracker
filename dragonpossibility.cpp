@@ -8,7 +8,8 @@
 #include "vectorhelpers.h"
 
 DragonPossibility::DragonPossibility(const Dragon& base) :
-    DragonPossibility()
+    name(base.name),
+    gender(base.male ? Gender::Male : Gender::Female)
 {
     Information& information = Information::getInstance();
 
@@ -23,8 +24,7 @@ DragonPossibility::DragonPossibility(const Dragon& base) :
     tertiaryGene.insert(std::make_pair(VectorHelpers::getIndex(information.getTertiaryGenes(), base.tertiaryGene), 1));
 }
 
-DragonPossibility::DragonPossibility(const DragonPossibility& parent1, const DragonPossibility& parent2) :
-    DragonPossibility()
+DragonPossibility::DragonPossibility(const DragonPossibility& parent1, const DragonPossibility& parent2)
 {
     Information& information = Information::getInstance();
 
@@ -39,10 +39,10 @@ DragonPossibility::DragonPossibility(const DragonPossibility& parent1, const Dra
     setColourWeights(tertiaryColour, parent1.tertiaryColour, parent2.tertiaryColour);
 }
 
-void DragonPossibility::setGeneWeights(std::unordered_map<int, long double>& targetGene,
+void DragonPossibility::setGeneWeights(std::unordered_map<int, double>& targetGene,
                                        const std::vector<Allele>& possibleGenes,
-                                       const std::unordered_map<int, long double>& parent1,
-                                       const std::unordered_map<int, long double>& parent2)
+                                       const std::unordered_map<int, double>& parent1,
+                                       const std::unordered_map<int, double>& parent2)
 {
     Information& information = Information::getInstance();
 
@@ -59,9 +59,9 @@ void DragonPossibility::setGeneWeights(std::unordered_map<int, long double>& tar
     }
 }
 
-void DragonPossibility::setColourWeights(std::unordered_map<int, long double>& targetColour,
-                                          const std::unordered_map<int, long double>& parent1,
-                                          const std::unordered_map<int, long double>& parent2)
+void DragonPossibility::setColourWeights(std::unordered_map<int, double>& targetColour,
+                                          const std::unordered_map<int, double>& parent1,
+                                          const std::unordered_map<int, double>& parent2)
 {
     Information& information = Information::getInstance();
 
@@ -82,7 +82,7 @@ void DragonPossibility::setColourWeights(std::unordered_map<int, long double>& t
                 endIndex = breedWeightPair1.first;
             }
 
-            long double chance = breedWeightPair1.second * breedWeightPair2.second / distance;
+            double chance = breedWeightPair1.second * breedWeightPair2.second / distance;
 
             for (int i = startIndex; i != endIndex; i = (i + 1) % information.getColours(true).size())
             {
@@ -92,9 +92,9 @@ void DragonPossibility::setColourWeights(std::unordered_map<int, long double>& t
     }
 }
 
-void DragonPossibility::modifyAllWeights(std::unordered_map<int, long double>& targetWeights, std::function<long double(long double)> modification)
+void DragonPossibility::modifyAllWeights(std::unordered_map<int, double>& targetWeights, std::function<double(double)> modification)
 {
-    std::unordered_map<int, long double> newWeights = decltype(newWeights)();
+    std::unordered_map<int, double> newWeights = decltype(newWeights)();
 
     for (const auto& kvPair : targetWeights)
     {
@@ -104,7 +104,7 @@ void DragonPossibility::modifyAllWeights(std::unordered_map<int, long double>& t
     targetWeights = newWeights;
 }
 
-void DragonPossibility::addWeight(std::unordered_map<int, long double>& possibilities, int key, long double value)
+void DragonPossibility::addWeight(std::unordered_map<int, double>& possibilities, int key, double value)
 {
     auto it = possibilities.find(key);
 

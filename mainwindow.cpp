@@ -701,7 +701,7 @@ void MainWindow::on_calculatepairingspushbutton_clicked()
     }
 
     auto calculator = BreedingTreeCalculator(std::make_shared<Dragon>(constructMorphologyDragon()), possibleParentDragons);
-    auto configs = calculator.getConfigs();
+    pairingResultsDialog->enterResults(calculator.getConfigs());
 
     return;
 }

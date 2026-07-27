@@ -14,7 +14,7 @@ class BreedingTreeCalculator
 public:
     BreedingTreeCalculator(std::shared_ptr<Dragon> aim, const std::vector<Dragon>& possibleParents);
 
-    const std::set<BreedingTreeConfig>& getConfigs();
+    const std::multiset<BreedingTreeConfig>& getConfigs();
 private:
     static int factorial(int n);
 
@@ -26,7 +26,7 @@ private:
 
     std::vector<std::shared_ptr<Dragon>> getPossibleParentPermutationFromSeed(int count, int seed) const;
 
-    std::set<BreedingTreeConfig> validTreeConfigs = decltype(validTreeConfigs)();
+    std::multiset<BreedingTreeConfig> validTreeConfigs = decltype(validTreeConfigs)();
     const std::vector<std::shared_ptr<Dragon>> possibleParents;
     std::shared_ptr<Dragon> aim;
 };

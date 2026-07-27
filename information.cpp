@@ -16,7 +16,7 @@ Information::Information()
 
         for (int column = 0; column < unprocessedRarityChances.at(row).size(); column++)
         {
-            std::string workingValue = unprocessedRarityChances.at(row).at(column);
+            const std::string& workingValue = unprocessedRarityChances.at(row).at(column);
 
             int slashPos = workingValue.find('/');
 

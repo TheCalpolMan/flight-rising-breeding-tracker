@@ -26,7 +26,7 @@ CsvReader::CsvReader(const std::string& location, char delimiter)
             values.push_back(currentLine);
 
             currentLine.clear();
-            currentValue.clear();
+            currentValue.str(std::string());
 
             continue;
         }
@@ -35,7 +35,7 @@ CsvReader::CsvReader(const std::string& location, char delimiter)
         {
             currentLine.push_back(currentValue.str());
 
-            currentValue.clear();
+            currentValue.str(std::string());
 
             continue;
         }

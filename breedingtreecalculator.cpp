@@ -1,6 +1,8 @@
 #include "breedingtreecalculator.h"
 
 #include <list>
+#include <cassert>
+#include <iostream>
 
 #include "binarytreegenerator.h"
 
@@ -11,12 +13,14 @@ BreedingTreeCalculator::BreedingTreeCalculator(std::shared_ptr<Dragon> aim, cons
 
 }
 
-const std::set<BreedingTreeConfig> &BreedingTreeCalculator::getConfigs()
+const std::multiset<BreedingTreeConfig> &BreedingTreeCalculator::getConfigs()
 {
     if (!validTreeConfigs.empty())
     {
         return validTreeConfigs;
     }
+
+    auto& treeGenerator = BinaryTreeGenerator::getInstance();
 
     for (int parentCount = 2; parentCount <= possibleParents.size(); parentCount++)
     {
@@ -26,7 +30,15 @@ const std::set<BreedingTreeConfig> &BreedingTreeCalculator::getConfigs()
         {
             auto permutation = getPossibleParentPermutationFromSeed(parentCount, permutationSeed);
 
-            for (const auto& binaryTree : BinaryTreeGenerator::getInstance().getCombinations(parentCount))
+            // TODO remove
+            for (const auto& dragon : permutation)
+            {
+                std::cout << dragon->name << ", ";
+            }
+
+            std::cout << std::endl;
+
+            for (const auto& binaryTree : treeGenerator.getCombinations(parentCount))
             {
                 if (!doesConfigHaveValidPairings(binaryTree, permutation))
                 {
@@ -43,6 +55,11 @@ const std::set<BreedingTreeConfig> &BreedingTreeCalculator::getConfigs()
                 validTreeConfigs.insert(std::move(config));
             }
         }
+
+        // TODO remove
+
+        int x = 0;
+        x++;
     }
 
     return validTreeConfigs;
@@ -89,8 +106,10 @@ bool BreedingTreeCalculator::doesConfigHaveValidPairings(std::shared_ptr<BinaryT
         std::shared_ptr<BinaryTreeNode> currentNode = nodesToCheck.front();
         nodesToCheck.pop_front();
 
+        // forces males to always be on the left in double-leaf situations to rule out more duplicate permutations
+        // also makes sure that in double-leaf situations we have a male & female breeding
         if (currentNode->leftChild->isLeaf() && currentNode->rightChild->isLeaf() &&
-            permutation.at(dragonIndex++)->male == permutation.at(dragonIndex++)->male)
+            (permutation.at(dragonIndex++)->male || permutation.at(dragonIndex++)->male))
         {
             return false;
         }

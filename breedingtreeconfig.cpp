@@ -11,7 +11,7 @@ BreedingTreeConfig::BreedingTreeConfig(std::shared_ptr<Dragon> aim, const std::v
 
 }
 
-long double BreedingTreeConfig::getChance()
+double BreedingTreeConfig::getChance()
 {
     if (chance != -1)
     {
@@ -36,7 +36,12 @@ long double BreedingTreeConfig::getChance()
     return chance;
 }
 
-long double BreedingTreeConfig::getIndividualChance(const std::unordered_map<int, long double> &target, int key)
+double BreedingTreeConfig::getCalculatedChance() const
+{
+    return chance;
+}
+
+double BreedingTreeConfig::getIndividualChance(const std::unordered_map<int, double> &target, int key)
 {
     auto it = target.find(key);
 

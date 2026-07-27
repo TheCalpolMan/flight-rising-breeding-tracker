@@ -12,7 +12,9 @@ class BreedingTreeConfig
 public:
     BreedingTreeConfig(std::shared_ptr<Dragon> aim, const std::vector<std::shared_ptr<Dragon>>& dragons, std::shared_ptr<BinaryTreePossibilityNode> treeRoot);
 
-    long double getChance();
+    double getChance();
+
+    double getCalculatedChance() const;
 
     const std::vector<std::shared_ptr<Dragon>> dragons;
     std::shared_ptr<BinaryTreePossibilityNode> treeRoot;
@@ -23,10 +25,10 @@ public:
     }
 
 private:
-    long double getIndividualChance(const std::unordered_map<int, long double>& target, int key);
+    double getIndividualChance(const std::unordered_map<int, double>& target, int key);
 
     std::shared_ptr<Dragon> aim;
-    long double chance = -1;
+    double chance = -1;
 };
 
 #endif // BREEDINGTREECONFIG_H

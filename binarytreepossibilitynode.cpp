@@ -26,6 +26,7 @@ BinaryTreePossibilityNode::BinaryTreePossibilityNode(std::shared_ptr<BinaryTreeN
         if (currentNode->isLeaf())
         {
             currentNode->possibility = DragonPossibilityFactory::getInstance().constructPossiblilty(possibleParents.at(dragonIndex));
+            dragonIndex++;
         }
 
         if (currentNode->leftChild != nullptr)
