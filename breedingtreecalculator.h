@@ -22,7 +22,7 @@ private:
 
     static std::vector<std::shared_ptr<Dragon>> convertDragonsToSharedPtr(const std::vector<Dragon>& dragons);
 
-    static bool doesConfigHaveValidPairings(std::shared_ptr<BinaryTreeNode> treeRoot, std::vector<std::shared_ptr<Dragon>> permutation);
+    static bool doesConfigHaveValidPairings(const BreedingTreeConfig& config);
 
     std::vector<std::shared_ptr<Dragon>> getPossibleParentPermutationFromSeed(int count, int seed) const;
 

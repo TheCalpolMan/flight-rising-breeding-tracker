@@ -23,9 +23,11 @@ void PairingResultsDialog::enterResults(const std::multiset<BreedingTreeConfig> 
     ui->treeWidget->clear();
     treeItems.clear();
 
-    for (auto it = results.rbegin(); it != results.rend(); it++)
+    int i = 0;
+    for (auto it = results.rbegin(); it != results.rend() && i < 100; it++)
     {
         addResult(*it);
+        i++;
     }
 
     ui->treeWidget->insertTopLevelItems(0, treeItems);

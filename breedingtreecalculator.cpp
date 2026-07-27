@@ -30,22 +30,14 @@ const std::multiset<BreedingTreeConfig> &BreedingTreeCalculator::getConfigs()
         {
             auto permutation = getPossibleParentPermutationFromSeed(parentCount, permutationSeed);
 
-            // TODO remove
-            for (const auto& dragon : permutation)
-            {
-                std::cout << dragon->name << ", ";
-            }
-
-            std::cout << std::endl;
-
             for (const auto& binaryTree : treeGenerator.getCombinations(parentCount))
             {
-                if (!doesConfigHaveValidPairings(binaryTree, permutation))
+                BreedingTreeConfig config = BreedingTreeConfig(aim, permutation, std::make_shared<BinaryTreePossibilityNode>(binaryTree, permutation));
+
+                if (!doesConfigHaveValidPairings(config))
                 {
                     continue;
                 }
-
-                BreedingTreeConfig config = BreedingTreeConfig(aim, permutation, std::make_shared<BinaryTreePossibilityNode>(binaryTree, possibleParents));
 
                 if (config.getChance() == 0)
                 {
@@ -55,11 +47,6 @@ const std::multiset<BreedingTreeConfig> &BreedingTreeCalculator::getConfigs()
                 validTreeConfigs.insert(std::move(config));
             }
         }
-
-        // TODO remove
-
-        int x = 0;
-        x++;
     }
 
     return validTreeConfigs;
@@ -94,34 +81,32 @@ std::vector<std::shared_ptr<Dragon>> BreedingTreeCalculator::convertDragonsToSha
     return sharedDragons;
 }
 
-bool BreedingTreeCalculator::doesConfigHaveValidPairings(std::shared_ptr<BinaryTreeNode> treeRoot, std::vector<std::shared_ptr<Dragon> > permutation)
+bool BreedingTreeCalculator::doesConfigHaveValidPairings(const BreedingTreeConfig &config)
 {
-    std::list<std::shared_ptr<BinaryTreeNode>> nodesToCheck = decltype(nodesToCheck)();
-    nodesToCheck.push_back(treeRoot);
-
-    int dragonIndex = 0;
+    std::list<std::shared_ptr<BinaryTreePossibilityNode>> nodesToCheck = decltype(nodesToCheck)();
+    nodesToCheck.push_back(config.treeRoot);
 
     while(!nodesToCheck.empty())
     {
-        std::shared_ptr<BinaryTreeNode> currentNode = nodesToCheck.front();
+        std::shared_ptr<BinaryTreePossibilityNode> currentNode = nodesToCheck.front();
         nodesToCheck.pop_front();
 
         // forces males to always be on the left in double-leaf situations to rule out more duplicate permutations
         // also makes sure that in double-leaf situations we have a male & female breeding
         if (currentNode->leftChild->isLeaf() && currentNode->rightChild->isLeaf() &&
-            (permutation.at(dragonIndex++)->male || permutation.at(dragonIndex++)->male))
+            (currentNode->castLeft()->possibility->gender != Gender::Male || currentNode->castRight()->possibility->gender != Gender::Female))
         {
             return false;
         }
 
         if (!currentNode->rightChild->isLeaf())
         {
-            nodesToCheck.push_front(currentNode->rightChild);
+            nodesToCheck.push_front(currentNode->castRight());
         }
 
         if (!currentNode->leftChild->isLeaf())
         {
-            nodesToCheck.push_front(currentNode->leftChild);
+            nodesToCheck.push_front(currentNode->castLeft());
         }
     }
 
