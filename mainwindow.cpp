@@ -22,6 +22,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     // inital setup
 
+    ui->threadcountlabel->setToolTip("Make this number higher the more threads your CPU has!");
+
     ui->breedgraphicsview->setScene(&dragonScene);
     loadImage();
 
@@ -700,8 +702,10 @@ void MainWindow::on_calculatepairingspushbutton_clicked()
         pairingResultsDialog->show();
     }
 
-    auto calculator = BreedingTreeCalculator(std::make_shared<Dragon>(constructMorphologyDragon()), possibleParentDragons);
-    pairingResultsDialog->enterResults(calculator.getConfigs());
+    Dragon dragon = constructMorphologyDragon();
+
+    auto calculator = BreedingTreeCalculator(std::make_shared<Dragon>(dragon), possibleParentDragons);
+    pairingResultsDialog->enterResults(calculator.getConfigs(), dragon);
 
     return;
 }
@@ -721,5 +725,13 @@ void MainWindow::on_possibleparentlistwidget_currentRowChanged(int currentRow)
 void MainWindow::on_namelineedit_returnPressed()
 {
     on_addpairingpushbutton_clicked();
+}
+
+
+void MainWindow::on_threadcounthorizontalSlider_valueChanged(int value)
+{
+    ui->threadcountlabel->setText((
+        "<html><head/><body><p align=\"center\">Calculation Thread Count: " + std::to_string(value) +" <span style=\" font-weight:700;\">(?)</span></p></body></html>"
+    ).c_str());
 }
 

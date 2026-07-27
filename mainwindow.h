@@ -80,6 +80,8 @@ private slots:
 
     void on_namelineedit_returnPressed();
 
+    void on_threadcounthorizontalSlider_valueChanged(int value);
+
 private:
     Ui::MainWindow *ui;
     std::string loadedFile = "";
