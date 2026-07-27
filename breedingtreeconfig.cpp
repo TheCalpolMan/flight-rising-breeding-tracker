@@ -45,7 +45,7 @@ double BreedingTreeConfig::getIndividualChance(const std::unordered_map<int, dou
 {
     auto it = target.find(key);
 
-    if (it == treeRoot->possibility->breed.cend())
+    if (it == target.cend())
     {
         return 0;
     }

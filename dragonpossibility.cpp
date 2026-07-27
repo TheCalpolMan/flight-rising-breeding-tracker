@@ -69,17 +69,17 @@ void DragonPossibility::setColourWeights(std::unordered_map<int, double>& target
     {
         for (const auto& breedWeightPair2 : parent2)
         {
-            int distance = ModUtils::getDisplacement(breedWeightPair1.first, breedWeightPair2.first, information.getColours(true).size());
-
             int startIndex = breedWeightPair1.first;
-            int endIndex = breedWeightPair2.first;
+            int endIndex = breedWeightPair2.first + 1;
 
-            if (distance > (information.getColours(true).size() / 2))
+            int distance = ModUtils::getDisplacement(startIndex, endIndex, information.getColours(true).size());
+
+            if (distance <= 0)
             {
-                distance = ModUtils::getDisplacement(breedWeightPair2.first, breedWeightPair1.first, information.getColours(true).size());
-
                 startIndex = breedWeightPair2.first;
-                endIndex = breedWeightPair1.first;
+                endIndex = breedWeightPair1.first + 1;
+
+                distance = ModUtils::getDisplacement(startIndex, endIndex, information.getColours(true).size());
             }
 
             double chance = breedWeightPair1.second * breedWeightPair2.second / distance;
