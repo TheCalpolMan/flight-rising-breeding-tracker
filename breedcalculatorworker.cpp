@@ -1,18 +1,11 @@
-#include "breedingtreecalculator.h"
+#include "breedcalculatorworker.h"
 
 #include <list>
 #include <cassert>
 
 #include "binarytreegenerator.h"
 
-BreedingTreeCalculator::BreedingTreeCalculator(std::shared_ptr<Dragon> aim, const std::vector<Dragon>& possibleParents) :
-    possibleParents(convertDragonsToSharedPtr(possibleParents)),
-    aim(aim)
-{
-
-}
-
-const std::multiset<BreedingTreeConfig> &BreedingTreeCalculator::getConfigs(std::function<void (int)> percentageDoneCallback)
+const std::multiset<BreedingTreeConfig> &BreedCalculatorWorker::getConfigs()
 {
     if (!validTreeConfigs.empty())
     {
@@ -48,7 +41,7 @@ const std::multiset<BreedingTreeConfig> &BreedingTreeCalculator::getConfigs(std:
 
                 if ((runsDone % percentageDoneStep) == 0)
                 {
-                    percentageDoneCallback(runsDone / percentageDoneStep);
+                    emit progressUpdate(runsDone / percentageDoneStep);
                 }
 
                 if (!doesConfigHaveValidPairings(config))
@@ -66,17 +59,12 @@ const std::multiset<BreedingTreeConfig> &BreedingTreeCalculator::getConfigs(std:
         }
     }
 
-    percentageDoneCallback(100);
+    emit progressUpdate(100);
 
     return validTreeConfigs;
 }
 
-void BreedingTreeCalculator::doNothing(int n)
-{
-
-}
-
-int BreedingTreeCalculator::factorial(int n)
+int BreedCalculatorWorker::factorial(int n)
 {
     int value = 1;
 
@@ -88,12 +76,12 @@ int BreedingTreeCalculator::factorial(int n)
     return value;
 }
 
-int BreedingTreeCalculator::nPr(int n, int r)
+int BreedCalculatorWorker::nPr(int n, int r)
 {
     return factorial(n) / factorial(n - r);
 }
 
-std::vector<std::shared_ptr<Dragon>> BreedingTreeCalculator::convertDragonsToSharedPtr(const std::vector<Dragon> &dragons)
+std::vector<std::shared_ptr<Dragon>> BreedCalculatorWorker::convertDragonsToSharedPtr(const std::vector<Dragon> &dragons)
 {
     std::vector<std::shared_ptr<Dragon>> sharedDragons = decltype(sharedDragons)();
 
@@ -105,7 +93,7 @@ std::vector<std::shared_ptr<Dragon>> BreedingTreeCalculator::convertDragonsToSha
     return sharedDragons;
 }
 
-bool BreedingTreeCalculator::doesConfigHaveValidPairings(const BreedingTreeConfig &config)
+bool BreedCalculatorWorker::doesConfigHaveValidPairings(const BreedingTreeConfig &config)
 {
     std::list<std::shared_ptr<BinaryTreePossibilityNode>> nodesToCheck = decltype(nodesToCheck)();
     nodesToCheck.push_back(config.treeRoot);
@@ -137,7 +125,7 @@ bool BreedingTreeCalculator::doesConfigHaveValidPairings(const BreedingTreeConfi
     return true;
 }
 
-std::vector<std::shared_ptr<Dragon>> BreedingTreeCalculator::getPossibleParentPermutationFromSeed(int count, int seed) const
+std::vector<std::shared_ptr<Dragon>> BreedCalculatorWorker::getPossibleParentPermutationFromSeed(int count, int seed) const
 {
     std::vector<int> availableIndexes = decltype(availableIndexes)();
     std::vector<std::shared_ptr<Dragon>> permutation = decltype(permutation)();
@@ -158,3 +146,20 @@ std::vector<std::shared_ptr<Dragon>> BreedingTreeCalculator::getPossibleParentPe
 
     return permutation;
 }
+
+void BreedCalculatorWorker::doWork(const std::multiset<BreedingTreeConfig> &parameter, std::vector<std::shared_ptr<Dragon> > possibleParents, std::shared_ptr<Dragon> aim)
+{
+    if (this->aim != aim || this->possibleParents != possibleParents)
+    {
+        validTreeConfigs.clear();
+
+        this->aim = aim;
+        this->possibleParents = possibleParents;
+    }
+
+    emit resultReady(getConfigs());
+}
+
+BreedCalculatorWorker::BreedCalculatorWorker(QObject *parent)
+    : QObject{parent}
+{}

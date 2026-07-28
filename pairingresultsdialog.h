@@ -4,10 +4,12 @@
 #include <QDialog>
 
 #include <set>
+#include <qthread.h>
 #include <functional>
 #include <QTreeWidgetItem>
 
 #include "dragon.h"
+#include "dragonindexes.h"
 #include "breedingtreeconfig.h"
 
 namespace Ui {
@@ -22,26 +24,14 @@ public:
     explicit PairingResultsDialog(QWidget *parent = nullptr);
     ~PairingResultsDialog();
 
-    void enterResults(const std::multiset<BreedingTreeConfig>& results, const Dragon& dragon);
+public slots:
+    void setPercentage(int value);
+
+    void calculateResults(const std::vector<Dragon>& possibleParentDragons, const Dragon& aim);
+
+    void enterResults(const std::multiset<BreedingTreeConfig>& results);
 
 private:
-    struct DragonIndexes
-    {
-        DragonIndexes() = default;
-
-        DragonIndexes(const Dragon& dragon);
-
-        int breed;
-
-        int primaryColour;
-        int secondaryColour;
-        int tertiaryColour;
-
-        int primaryGene;
-        int secondaryGene;
-        int tertiaryGene;
-    };
-
     static bool probabilityCmp(const std::pair<int, double>& kvPair1, const std::pair<int, double>& kvPair2);
 
     static std::multiset<std::pair<int, double>, std::function<bool(const std::pair<int, double>&, const std::pair<int, double>&)>>
@@ -59,9 +49,13 @@ private:
 
     Ui::PairingResultsDialog *ui;
 
+    QThread workerThread;
+
     Dragon dragon;
 
     DragonIndexes dragonIndexes;
+
+    std::vector<Dragon> possibleParentDragons;
 
     QFont boldFont;
 

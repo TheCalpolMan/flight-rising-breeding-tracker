@@ -22,10 +22,13 @@ set(PROJECT_SOURCES
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     find_package(Qt6 REQUIRED COMPONENTS Widgets)
 find_package(Qt6 REQUIRED COMPONENTS Core)
+find_package(Qt6 REQUIRED COMPONENTS Core)
+
+    set(app_icon_resource_windows "${CMAKE_CURRENT_SOURCE_DIR}/resources/resources.rc")
 
     qt_add_executable(flight-rising-breeding-tracker
         MANUAL_FINALIZATION
-        ${PROJECT_SOURCES}
+        ${PROJECT_SOURCES} ${app_icon_resource_windows}
         information.h information.cpp
         rarity.h
         allele.h allele.cpp
@@ -50,6 +53,8 @@ find_package(Qt6 REQUIRED COMPONENTS Core)
         binarytreepossibilitynode.h binarytreepossibilitynode.cpp
         dragonpossibilityfactory.h dragonpossibilityfactory.cpp
         pairingresultsdialog.h pairingresultsdialog.cpp pairingresultsdialog.ui
+        dragonindexes.h dragonindexes.cpp
+        breedcalculatorworker.h breedcalculatorworker.cpp
 
 
     )
@@ -80,6 +85,7 @@ configure_file(assets/dragon-image-select.jpg assets/dragon-image-select.jpg COP
 
 target_link_libraries(flight-rising-breeding-tracker PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(flight-rising-breeding-tracker PRIVATE Qt6::Widgets)
+target_link_libraries(flight-rising-breeding-tracker PRIVATE Qt6::Core)
 target_link_libraries(flight-rising-breeding-tracker PRIVATE Qt6::Core)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

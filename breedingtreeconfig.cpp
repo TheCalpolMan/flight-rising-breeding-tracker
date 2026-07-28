@@ -6,7 +6,8 @@
 BreedingTreeConfig::BreedingTreeConfig(std::shared_ptr<Dragon> aim, const std::vector<std::shared_ptr<Dragon>>& dragons, std::shared_ptr<BinaryTreePossibilityNode> treeRoot) :
     dragons(dragons),
     treeRoot(treeRoot),
-    aim(aim)
+    aim(aim),
+    dragonIndexes(*aim)
 {
 
 }
@@ -25,13 +26,17 @@ double BreedingTreeConfig::getChance()
 
     // TODO potentially return on chance == 0 to save on complexity?
 
-    chance *= getIndividualChance(treeRoot->possibility->breed, VectorHelpers::getIndex(information.getBreeds(), aim->breed));
-    chance *= getIndividualChance(treeRoot->possibility->primaryColour, VectorHelpers::getIndex(information.getColours(true), aim->primaryColour));
-    chance *= getIndividualChance(treeRoot->possibility->secondaryColour, VectorHelpers::getIndex(information.getColours(true), aim->secondaryColour));
-    chance *= getIndividualChance(treeRoot->possibility->tertiaryColour, VectorHelpers::getIndex(information.getColours(true), aim->tertiaryColour));
-    chance *= getIndividualChance(treeRoot->possibility->primaryGene, VectorHelpers::getIndex(information.getPrimaryGenes(), aim->primaryGene));
-    chance *= getIndividualChance(treeRoot->possibility->secondaryGene, VectorHelpers::getIndex(information.getSecondaryGenes(), aim->secondaryGene));
-    chance *= getIndividualChance(treeRoot->possibility->tertiaryGene, VectorHelpers::getIndex(information.getTertiaryGenes(), aim->tertiaryGene));
+    chance *= getIndividualChance(treeRoot->possibility->breed, dragonIndexes.breed);
+    chance *= getIndividualChance(treeRoot->possibility->primaryColour, dragonIndexes.primaryColour);
+    chance *= getIndividualChance(treeRoot->possibility->secondaryColour, dragonIndexes.secondaryColour);
+    chance *= getIndividualChance(treeRoot->possibility->primaryGene, dragonIndexes.primaryGene);
+    chance *= getIndividualChance(treeRoot->possibility->secondaryGene, dragonIndexes.secondaryGene);
+    chance *= getIndividualChance(treeRoot->possibility->tertiaryGene, dragonIndexes.tertiaryGene);
+
+    if (aim->tertiaryGene.string == "Basic")
+    {
+        chance *= getIndividualChance(treeRoot->possibility->tertiaryColour, dragonIndexes.tertiaryColour);
+    }
 
     return chance;
 }

@@ -4,9 +4,9 @@
 #include <set>
 #include <vector>
 #include <memory>
+#include <functional>
 
 #include "dragon.h"
-#include "binarytreenode.h"
 #include "breedingtreeconfig.h"
 
 class BreedingTreeCalculator
@@ -14,8 +14,10 @@ class BreedingTreeCalculator
 public:
     BreedingTreeCalculator(std::shared_ptr<Dragon> aim, const std::vector<Dragon>& possibleParents);
 
-    const std::multiset<BreedingTreeConfig>& getConfigs();
+    const std::multiset<BreedingTreeConfig> &getConfigs(std::function<void (int)> percentageDoneCallback = &doNothing);
 private:
+    static void doNothing(int n);
+
     static int factorial(int n);
 
     static int nPr(int n, int r);

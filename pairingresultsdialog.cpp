@@ -3,16 +3,25 @@
 
 #include <QList>
 #include <iomanip>
+#include <QThread>
 #include <QVariant>
 
 #include "information.h"
-#include "vectorhelpers.h"
+#include "breedcalculatorworker.h"
 
 PairingResultsDialog::PairingResultsDialog(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::PairingResultsDialog)
 {
     ui->setupUi(this);
+
+    BreedCalculatorWorker *worker = new BreedCalculatorWorker;
+    worker->moveToThread(&workerThread);
+    connect(&workerThread, &QThread::finished, worker, &QObject::deleteLater);
+    connect(this, &PairingResultsDialog::calculateResults, worker, &BreedCalculatorWorker::doWork);
+    connect(worker, &BreedCalculatorWorker::progressUpdate, this, &PairingResultsDialog::setPercentage);
+    connect(worker, &BreedCalculatorWorker::resultReady, this, &PairingResultsDialog::enterResults);
+    workerThread.start();
 
     boldFont.setBold(true);
 
@@ -24,12 +33,20 @@ PairingResultsDialog::~PairingResultsDialog()
     delete ui;
 }
 
-void PairingResultsDialog::enterResults(const std::multiset<BreedingTreeConfig> &results, const Dragon &dragon)
+void PairingResultsDialog::calculateResults(const std::vector<Dragon> &possibleParentDragons, const Dragon &aim)
+{
+    dragon = aim;
+    this->possibleParentDragons = possibleParentDragons;
+
+    std::thread thread(&PairingResultsDialog::calculateResultsThread, &*this);
+    thread.detach();
+}
+
+void PairingResultsDialog::enterResults(const std::multiset<BreedingTreeConfig> &results)
 {
     ui->treeWidget->clear();
     treeItems.clear();
 
-    this->dragon = dragon;
     dragonIndexes = DragonIndexes(dragon);
 
     int i = 0;
@@ -40,7 +57,13 @@ void PairingResultsDialog::enterResults(const std::multiset<BreedingTreeConfig> 
     }
 
     ui->treeWidget->insertTopLevelItems(0, treeItems);
+    ui->treeWidget->insertTopLevelItems(0, treeItems);
     ui->treeWidget->update();
+}
+
+void PairingResultsDialog::setPercentage(int value)
+{
+    ui->progressBar->setValue(value);
 }
 
 bool PairingResultsDialog::probabilityCmp(const std::pair<int, double> &kvPair1, const std::pair<int, double> &kvPair2)
@@ -202,19 +225,4 @@ void PairingResultsDialog::addChildResult(QTreeWidgetItem *parent, std::shared_p
 
     addChildResult(resultRow, childResult->castLeft(), childResult->castLeft()->possibility->name);
     addChildResult(resultRow, childResult->castRight(), childResult->castRight()->possibility->name);
-}
-
-PairingResultsDialog::DragonIndexes::DragonIndexes(const Dragon &dragon)
-{
-    const auto& information = Information::getInstance();
-
-    breed = VectorHelpers::getIndex(information.getBreeds(), dragon.breed);
-
-    primaryColour = VectorHelpers::getIndex(information.getColours(true), dragon.primaryColour);
-    secondaryColour = VectorHelpers::getIndex(information.getColours(true), dragon.secondaryColour);
-    tertiaryColour = VectorHelpers::getIndex(information.getColours(true), dragon.tertiaryColour);
-
-    primaryGene = VectorHelpers::getIndex(information.getPrimaryGenes(), dragon.primaryGene);
-    secondaryGene = VectorHelpers::getIndex(information.getSecondaryGenes(), dragon.secondaryGene);
-    tertiaryGene = VectorHelpers::getIndex(information.getTertiaryGenes(), dragon.tertiaryGene);
 }
