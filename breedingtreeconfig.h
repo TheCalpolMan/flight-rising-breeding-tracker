@@ -5,6 +5,7 @@
 #include <memory>
 
 #include "dragon.h"
+#include "dragonindexes.h"
 #include "binarytreepossibilitynode.h"
 
 class BreedingTreeConfig
@@ -28,6 +29,7 @@ private:
     double getIndividualChance(const std::unordered_map<int, double>& target, int key);
 
     std::shared_ptr<Dragon> aim;
+    DragonIndexes dragonIndexes;
     double chance = -1;
 };
 

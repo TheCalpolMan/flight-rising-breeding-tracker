@@ -23,9 +23,11 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     find_package(Qt6 REQUIRED COMPONENTS Widgets)
 find_package(Qt6 REQUIRED COMPONENTS Core)
 
+    set(app_icon_resource_windows "${CMAKE_CURRENT_SOURCE_DIR}/resources/resources.rc")
+
     qt_add_executable(flight-rising-breeding-tracker
         MANUAL_FINALIZATION
-        ${PROJECT_SOURCES}
+        ${PROJECT_SOURCES} ${app_icon_resource_windows}
         information.h information.cpp
         rarity.h
         allele.h allele.cpp
@@ -50,6 +52,7 @@ find_package(Qt6 REQUIRED COMPONENTS Core)
         binarytreepossibilitynode.h binarytreepossibilitynode.cpp
         dragonpossibilityfactory.h dragonpossibilityfactory.cpp
         pairingresultsdialog.h pairingresultsdialog.cpp pairingresultsdialog.ui
+        dragonindexes.h dragonindexes.cpp
 
 
     )
