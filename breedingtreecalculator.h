@@ -6,7 +6,6 @@
 #include <memory>
 
 #include "dragon.h"
-#include "binarytreenode.h"
 #include "breedingtreeconfig.h"
 
 class BreedingTreeCalculator

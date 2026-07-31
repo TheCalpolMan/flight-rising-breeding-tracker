@@ -1,5 +1,6 @@
 #include "dragonpossibilityfactory.h"
 
+#include "tracy/Tracy.hpp"
 
 void DragonPossibilityFactory::clear()
 {
@@ -9,6 +10,7 @@ void DragonPossibilityFactory::clear()
 
 std::shared_ptr<DragonPossibility> DragonPossibilityFactory::constructPossiblilty(std::shared_ptr<Dragon> base)
 {
+    ZoneScoped;
     auto it = dragonToPossibilityMap.find(base);
 
     if (it != dragonToPossibilityMap.cend())
@@ -21,6 +23,7 @@ std::shared_ptr<DragonPossibility> DragonPossibilityFactory::constructPossiblilt
 
 std::shared_ptr<DragonPossibility> DragonPossibilityFactory::constructPossiblilty(std::shared_ptr<DragonPossibility> parent1, std::shared_ptr<DragonPossibility> parent2)
 {
+    ZoneScoped;
     if (parent1 > parent2)
     {
         auto temp = parent1;

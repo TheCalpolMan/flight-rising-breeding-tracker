@@ -2,11 +2,14 @@
 
 #include <list>
 
+#include "tracy/Tracy.hpp"
+
 #include "dragonpossibilityfactory.h"
 
 BinaryTreePossibilityNode::BinaryTreePossibilityNode(std::shared_ptr<BinaryTreeNode> rootNode, const std::vector<std::shared_ptr<Dragon>>& possibleParents) :
     BinaryTreePossibilityNode(rootNode)
 {
+    ZoneScoped;
     if (isLeaf())
     {
         return;
@@ -53,6 +56,7 @@ std::shared_ptr<BinaryTreePossibilityNode> BinaryTreePossibilityNode::castRight(
 
 void BinaryTreePossibilityNode::propogate()
 {
+    ZoneScoped;
     if (propogated)
     {
         return;
@@ -73,6 +77,7 @@ void BinaryTreePossibilityNode::propogate()
 
 BinaryTreePossibilityNode::BinaryTreePossibilityNode(std::shared_ptr<BinaryTreeNode> baseNode)
 {
+    ZoneScoped;
     if (baseNode->leftChild != nullptr)
     {
         leftChild = std::shared_ptr<BinaryTreePossibilityNode>(new BinaryTreePossibilityNode(baseNode->leftChild));

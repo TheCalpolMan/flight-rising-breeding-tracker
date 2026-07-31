@@ -117,6 +117,8 @@ private:
 
     std::vector<Dragon> possibleParentDragons = decltype(possibleParentDragons)();
 
+    QThread* thread;
+
     void updateColoursBasedOnGene(bool showDialogOnNoColour);
 
     void updateColours(int middleValue);

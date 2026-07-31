@@ -22,6 +22,10 @@ public:
     explicit PairingResultsDialog(QWidget *parent = nullptr);
     ~PairingResultsDialog();
 
+public slots:
+
+    void updatePercentage(int value);
+
     void enterResults(const std::multiset<BreedingTreeConfig>& results, const Dragon& dragon);
 
 private:
@@ -47,9 +51,12 @@ private:
     static std::multiset<std::pair<int, double>, std::function<bool(const std::pair<int, double>&, const std::pair<int, double>&)>>
         getSortedProbabilities(const std::unordered_map<int, double>& target);
 
+    static std::multiset<std::pair<int, double>, std::function<bool(const std::pair<int, double>&, const std::pair<int, double>&)>>
+        getSortedColourProbabilities(const double target[]);
+
     void addGeneColumn(QTreeWidgetItem& targetItem, int columnIndex, const std::unordered_map<int, double> &values, int targetGeneIndex, const std::vector<Allele>& genes);
 
-    void addColourColumn(QTreeWidgetItem& targetItem, int columnIndex, const std::unordered_map<int, double> &values, int targetColourIndex);
+    void addColourColumn(QTreeWidgetItem& targetItem, int columnIndex, const double values[], int targetColourIndex);
 
     static std::string getChanceAsString(double chance);
 

@@ -3,8 +3,9 @@
 #include <cmath>
 #include <cassert>
 
+#include "tracy/Tracy.hpp"
+
 #include "modutils.h"
-#include "information.h"
 #include "vectorhelpers.h"
 
 DragonPossibility::DragonPossibility(const Dragon& base) :
@@ -15,9 +16,9 @@ DragonPossibility::DragonPossibility(const Dragon& base) :
 
     breed.insert(std::make_pair(VectorHelpers::getIndex(information.getBreeds(), base.breed), 1));
 
-    primaryColour.insert(std::make_pair(base.primaryColour.wheelIndex, 1));
-    secondaryColour.insert(std::make_pair(base.secondaryColour.wheelIndex, 1));
-    tertiaryColour.insert(std::make_pair(base.tertiaryColour.wheelIndex, 1));
+    primaryColour[base.primaryColour.wheelIndex] = 1;
+    secondaryColour[base.secondaryColour.wheelIndex] = 1;
+    tertiaryColour[base.tertiaryColour.wheelIndex] = 1;
 
     primaryGene.insert(std::make_pair(VectorHelpers::getIndex(information.getPrimaryGenes(), base.primaryGene), 1));
     secondaryGene.insert(std::make_pair(VectorHelpers::getIndex(information.getSecondaryGenes(), base.secondaryGene), 1));
@@ -26,6 +27,7 @@ DragonPossibility::DragonPossibility(const Dragon& base) :
 
 DragonPossibility::DragonPossibility(const DragonPossibility& parent1, const DragonPossibility& parent2)
 {
+    ZoneScoped;
     Information& information = Information::getInstance();
 
     setGeneWeights(breed, information.getBreeds(), parent1.breed, parent2.breed);
@@ -44,6 +46,7 @@ void DragonPossibility::setGeneWeights(std::unordered_map<int, double>& targetGe
                                        const std::unordered_map<int, double>& parent1,
                                        const std::unordered_map<int, double>& parent2)
 {
+    ZoneScoped;
     Information& information = Information::getInstance();
 
     for (const auto& breedWeightPair1 : parent1)
@@ -59,34 +62,49 @@ void DragonPossibility::setGeneWeights(std::unordered_map<int, double>& targetGe
     }
 }
 
-void DragonPossibility::setColourWeights(std::unordered_map<int, double>& targetColour,
-                                          const std::unordered_map<int, double>& parent1,
-                                          const std::unordered_map<int, double>& parent2)
+void DragonPossibility::setColourWeights(double targetColour[177], const double parent1[177], const double parent2[177])
 {
-    Information& information = Information::getInstance();
+    ZoneScoped;
 
-    for (const auto& breedWeightPair1 : parent1)
+    std::vector<int> parent2Indexes = decltype(parent2Indexes)();
+
+    for (int parent2Index = 0; parent2Index < 177; parent2Index++)
     {
-        for (const auto& breedWeightPair2 : parent2)
+        if (parent2[parent2Index] == 0)
         {
-            int startIndex = breedWeightPair1.first;
-            int endIndex = breedWeightPair2.first + 1;
+            continue;
+        }
 
-            int distance = ModUtils::getDisplacement(startIndex, endIndex, information.getColours(true).size());
+        parent2Indexes.push_back(parent2Index);
+    }
+
+    for (int parent1Index = 0; parent1Index < 177; parent1Index++)
+    {
+        if (parent1[parent1Index] == 0)
+        {
+            continue;
+        }
+
+        for (int parent2Index : parent2Indexes)
+        {
+            int startIndex = parent1Index;
+            int endIndex = (parent2Index + 1) % 177;
+
+            int distance = ModUtils::getDisplacement(startIndex, endIndex, 177);
 
             if (distance <= 0)
             {
-                startIndex = breedWeightPair2.first;
-                endIndex = breedWeightPair1.first + 1;
+                startIndex = parent2Index;
+                endIndex = (parent1Index + 1)  % 177;
 
-                distance = ModUtils::getDisplacement(startIndex, endIndex, information.getColours(true).size());
+                distance = ModUtils::getDisplacement(startIndex, endIndex, 177);
             }
 
-            double chance = breedWeightPair1.second * breedWeightPair2.second / distance;
+            double chance = parent1[parent1Index] * parent2[parent2Index] / distance;
 
-            for (int i = startIndex; i != endIndex; i = (i + 1) % information.getColours(true).size())
+            for (int i = startIndex; i != endIndex; i = (i + 1) % 177)
             {
-                addWeight(targetColour, i, chance);
+                targetColour[i] += chance;
             }
         }
     }

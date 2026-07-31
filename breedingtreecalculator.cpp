@@ -2,7 +2,8 @@
 
 #include <list>
 #include <cassert>
-#include <iostream>
+
+#include "tracy/Tracy.hpp"
 
 #include "binarytreegenerator.h"
 
@@ -15,12 +16,22 @@ BreedingTreeCalculator::BreedingTreeCalculator(std::shared_ptr<Dragon> aim, cons
 
 const std::multiset<BreedingTreeConfig> &BreedingTreeCalculator::getConfigs()
 {
+    ZoneScoped;
     if (!validTreeConfigs.empty())
     {
         return validTreeConfigs;
     }
 
     auto& treeGenerator = BinaryTreeGenerator::getInstance();
+
+    int totalConfigs = 0;
+
+    for (int parentCount = 2; parentCount <= possibleParents.size(); parentCount++)
+    {
+        totalConfigs += nPr(possibleParents.size(), parentCount) * treeGenerator.getCombinations(parentCount).size();
+    }
+
+    int configsDone = 0;
 
     for (int parentCount = 2; parentCount <= possibleParents.size(); parentCount++)
     {
@@ -33,6 +44,7 @@ const std::multiset<BreedingTreeConfig> &BreedingTreeCalculator::getConfigs()
             for (const auto& binaryTree : treeGenerator.getCombinations(parentCount))
             {
                 BreedingTreeConfig config = BreedingTreeConfig(aim, permutation, std::make_shared<BinaryTreePossibilityNode>(binaryTree, permutation));
+                configsDone++;
 
                 if (!doesConfigHaveValidPairings(config))
                 {

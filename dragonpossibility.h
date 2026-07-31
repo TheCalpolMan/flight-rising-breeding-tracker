@@ -8,6 +8,7 @@
 
 #include "dragon.h"
 #include "gender.h"
+#include "information.h"
 
 class DragonPossibility
 {
@@ -19,9 +20,9 @@ public:
 
     std::unordered_map<int, double> breed = decltype(breed)();
 
-    std::unordered_map<int, double> primaryColour = decltype(primaryColour)();
-    std::unordered_map<int, double> secondaryColour = decltype(secondaryColour)();
-    std::unordered_map<int, double> tertiaryColour = decltype(tertiaryColour)();
+    double primaryColour[177] = { 0.0 };
+    double secondaryColour[177] = { 0.0 };
+    double tertiaryColour[177] = { 0.0 };
 
     std::unordered_map<int, double> primaryGene = decltype(primaryGene)();
     std::unordered_map<int, double> secondaryGene = decltype(secondaryGene)();
@@ -38,9 +39,9 @@ private:
                         const std::unordered_map<int, double>& parent1,
                         const std::unordered_map<int, double>& parent2);
 
-    void setColourWeights(std::unordered_map<int, double>& targetColour,
-                        const std::unordered_map<int, double>& parent1,
-                        const std::unordered_map<int, double>& parent2);
+    void setColourWeights(double targetColour[177],
+                          const double parent1[177],
+                          const double parent2[177]);
 
     static void modifyAllWeights(std::unordered_map<int, double>& targetWeights, std::function<double(double)> modification);
 

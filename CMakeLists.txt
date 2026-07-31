@@ -9,6 +9,17 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+include(FetchContent)
+
+FetchContent_Declare (
+    tracy
+    GIT_REPOSITORY https://github.com/wolfpld/tracy.git
+    GIT_TAG tags/v0.13.1
+    GIT_SHALLOW TRUE
+    GIT_PROGRESS TRUE
+    )
+FetchContent_MakeAvailable(tracy)
+
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
@@ -84,6 +95,7 @@ configure_file(assets/dragon-image-select.jpg assets/dragon-image-select.jpg COP
 target_link_libraries(flight-rising-breeding-tracker PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(flight-rising-breeding-tracker PRIVATE Qt6::Widgets)
 target_link_libraries(flight-rising-breeding-tracker PRIVATE Qt6::Core)
+target_link_libraries(flight-rising-breeding-tracker PUBLIC TracyClient)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an

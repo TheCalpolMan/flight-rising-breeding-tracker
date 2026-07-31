@@ -3,6 +3,7 @@
 #include "information.h"
 
 #include <QIcon>
+#include <QThread>
 #include <iostream>
 #include <QMessageBox>
 #include <QFileDialog>
@@ -26,6 +27,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->breedgraphicsview->setScene(&dragonScene);
     loadImage();
+
+    pairingResultsDialog = new PairingResultsDialog(this);
 
     // getting relevant ui elements
 
@@ -160,11 +163,10 @@ void MainWindow::loadImage()
 {
     ui->breedgraphicsview->scene()->clear();
 
-    QPixmap pixmap(imageLocation);
+    QPixmap image(imageLocation);
+    QPixmap scaled = image.scaled(ui->breedgraphicsview->size().shrunkBy(QMargins(1, 1, 1, 1)), Qt::KeepAspectRatio);
 
-    ui->breedgraphicsview->scene()->addPixmap(
-        pixmap.scaled(ui->breedgraphicsview->size().shrunkBy(
-            QMargins(1, 1, 1, 1)), Qt::KeepAspectRatio));
+    ui->breedgraphicsview->scene()->addPixmap(scaled);
 }
 
 void MainWindow::loadMorphologyDragon(const Dragon& dragon)
@@ -692,22 +694,24 @@ void MainWindow::on_addpairingpushbutton_clicked()
 
 void MainWindow::on_calculatepairingspushbutton_clicked()
 {
-    if (pairingResultsDialog == nullptr)
-    {
-        pairingResultsDialog = new PairingResultsDialog(this);
-    }
-
     if (pairingResultsDialog->isHidden())
     {
         pairingResultsDialog->show();
     }
 
-    Dragon dragon = constructMorphologyDragon();
+    thread = QThread::create([&](){
+        Dragon dragon = constructMorphologyDragon();
 
-    auto calculator = BreedingTreeCalculator(std::make_shared<Dragon>(dragon), possibleParentDragons);
-    pairingResultsDialog->enterResults(calculator.getConfigs(), dragon);
+        auto calculator = BreedingTreeCalculator(std::make_shared<Dragon>(dragon), possibleParentDragons);
+        auto configs = calculator.getConfigs();
 
-    return;
+        pairingResultsDialog->enterResults(configs, dragon);
+
+        return;
+    });
+
+    connect(thread, &QThread::finished, thread, &QObject::deleteLater);
+    thread->start();
 }
 
 

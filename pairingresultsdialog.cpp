@@ -43,6 +43,11 @@ void PairingResultsDialog::enterResults(const std::multiset<BreedingTreeConfig> 
     ui->treeWidget->update();
 }
 
+void PairingResultsDialog::updatePercentage(int value)
+{
+    ui->progressBar->setValue(value);
+}
+
 bool PairingResultsDialog::probabilityCmp(const std::pair<int, double> &kvPair1, const std::pair<int, double> &kvPair2)
 {
     return kvPair1.second > kvPair2.second;
@@ -54,6 +59,23 @@ std::multiset<std::pair<int, double>, std::function<bool (const std::pair<int, d
     std::multiset<std::pair<int, double>, std::function<bool (const std::pair<int, double> &, const std::pair<int, double> &)>> sorted = decltype(sorted)(probabilityCmp);
 
     sorted.insert(target.cbegin(), target.cend());
+
+    return sorted;
+}
+
+std::multiset<std::pair<int, double>, std::function<bool (const std::pair<int, double> &, const std::pair<int, double> &)> > PairingResultsDialog::getSortedColourProbabilities(const double target[])
+{
+    std::multiset<std::pair<int, double>, std::function<bool (const std::pair<int, double> &, const std::pair<int, double> &)>> sorted = decltype(sorted)(probabilityCmp);
+
+    for (int i = 0; i < 177; i++)
+    {
+        if (target[i] == 0)
+        {
+            continue;
+        }
+
+        sorted.emplace(i, target[i]);
+    }
 
     return sorted;
 }
@@ -107,14 +129,14 @@ void PairingResultsDialog::addGeneColumn(QTreeWidgetItem &targetItem, int column
     targetItem.setToolTip(columnIndex, QString(tooltip.str().c_str()));
 }
 
-void PairingResultsDialog::addColourColumn(QTreeWidgetItem &targetItem, int columnIndex, const std::unordered_map<int, double> &values, int targetColourIndex)
+void PairingResultsDialog::addColourColumn(QTreeWidgetItem &targetItem, int columnIndex, const double values[], int targetColourIndex)
 {
     auto& colours = Information::getInstance().getColours(true);
-    auto sorted = getSortedProbabilities(values);
+    auto sorted = getSortedColourProbabilities(values);
 
     targetItem.setData(columnIndex, Qt::DisplayRole, QVariant(QString((
-        colours.at(sorted.begin()->first).name + " " + getChanceAsString(sorted.begin()->second * 100) + "%"
-    ).c_str())));
+                                                                          colours.at(sorted.begin()->first).name + " " + getChanceAsString(sorted.begin()->second * 100) + "%"
+                                                                          ).c_str())));
 
     if (sorted.begin()->first == targetColourIndex)
     {
