@@ -135,8 +135,8 @@ void PairingResultsDialog::addColourColumn(QTreeWidgetItem &targetItem, int colu
     auto sorted = getSortedColourProbabilities(values);
 
     targetItem.setData(columnIndex, Qt::DisplayRole, QVariant(QString((
-                                                                          colours.at(sorted.begin()->first).name + " " + getChanceAsString(sorted.begin()->second * 100) + "%"
-                                                                          ).c_str())));
+        colours.at(sorted.begin()->first).name + " " + getChanceAsString(sorted.begin()->second * 100) + "%"
+    ).c_str())));
 
     if (sorted.begin()->first == targetColourIndex)
     {

@@ -3,8 +3,8 @@
 #include "information.h"
 
 #include <QIcon>
-#include <QThread>
 #include <iostream>
+#include <filesystem>
 #include <QMessageBox>
 #include <QFileDialog>
 
@@ -22,8 +22,6 @@ MainWindow::MainWindow(QWidget *parent)
     setFixedSize(size());
 
     // inital setup
-
-    ui->threadcountlabel->setToolTip("Make this number higher the more threads your CPU has!");
 
     ui->breedgraphicsview->setScene(&dragonScene);
     loadImage();
@@ -162,6 +160,11 @@ void MainWindow::updateSearchColourLabel(QLabel* label, const std::string& name,
 void MainWindow::loadImage()
 {
     ui->breedgraphicsview->scene()->clear();
+
+    if (!std::filesystem::exists(imageLocation.toStdString()))
+    {
+        imageLocation = "./assets/dragon-image-select.jpg";
+    }
 
     QPixmap image(imageLocation);
     QPixmap scaled = image.scaled(ui->breedgraphicsview->size().shrunkBy(QMargins(1, 1, 1, 1)), Qt::KeepAspectRatio);
@@ -699,19 +702,12 @@ void MainWindow::on_calculatepairingspushbutton_clicked()
         pairingResultsDialog->show();
     }
 
-    thread = QThread::create([&](){
-        Dragon dragon = constructMorphologyDragon();
+    Dragon dragon = constructMorphologyDragon();
 
-        auto calculator = BreedingTreeCalculator(std::make_shared<Dragon>(dragon), possibleParentDragons);
-        auto configs = calculator.getConfigs();
+    auto calculator = BreedingTreeCalculator(std::make_shared<Dragon>(dragon), possibleParentDragons);
+    auto configs = calculator.getConfigs();
 
-        pairingResultsDialog->enterResults(configs, dragon);
-
-        return;
-    });
-
-    connect(thread, &QThread::finished, thread, &QObject::deleteLater);
-    thread->start();
+    pairingResultsDialog->enterResults(configs, dragon);
 }
 
 
@@ -729,13 +725,5 @@ void MainWindow::on_possibleparentlistwidget_currentRowChanged(int currentRow)
 void MainWindow::on_namelineedit_returnPressed()
 {
     on_addpairingpushbutton_clicked();
-}
-
-
-void MainWindow::on_threadcounthorizontalSlider_valueChanged(int value)
-{
-    ui->threadcountlabel->setText((
-        "<html><head/><body><p align=\"center\">Calculation Thread Count: " + std::to_string(value) +" <span style=\" font-weight:700;\">(?)</span></p></body></html>"
-    ).c_str());
 }
 

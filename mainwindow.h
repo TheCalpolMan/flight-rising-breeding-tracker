@@ -80,8 +80,6 @@ private slots:
 
     void on_namelineedit_returnPressed();
 
-    void on_threadcounthorizontalSlider_valueChanged(int value);
-
 private:
     Ui::MainWindow *ui;
     std::string loadedFile = "";
@@ -116,8 +114,6 @@ private:
     QPointer<PairingResultsDialog> pairingResultsDialog;
 
     std::vector<Dragon> possibleParentDragons = decltype(possibleParentDragons)();
-
-    QThread* thread;
 
     void updateColoursBasedOnGene(bool showDialogOnNoColour);
 

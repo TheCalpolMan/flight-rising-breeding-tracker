@@ -23,8 +23,6 @@ double BreedingTreeConfig::getChance()
 
     chance = 1;
 
-    // TODO potentially return on chance == 0 to save on complexity?
-
     chance *= getIndividualChance(treeRoot->possibility->breed, dragonIndexes.breed);
     chance *= treeRoot->possibility->primaryColour[dragonIndexes.primaryColour];
     chance *= treeRoot->possibility->secondaryColour[dragonIndexes.secondaryColour];
