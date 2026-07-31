@@ -8,10 +8,14 @@
 #include <QString>
 #include <QSlider>
 #include <QPainter>
+#include <QPointer>
+#include <QComboBox>
 #include <QGraphicsView>
 #include <QGraphicsScene>
+#include <QListWidgetItem>
 
 #include "saveformat.h"
+#include "pairingresultsdialog.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -66,6 +70,16 @@ private slots:
 
     void on_actionSave_As_triggered();
 
+    void on_possibleparentlistwidget_itemDoubleClicked(QListWidgetItem *item);
+
+    void on_addpairingpushbutton_clicked();
+
+    void on_calculatepairingspushbutton_clicked();
+
+    void on_possibleparentlistwidget_currentRowChanged(int currentRow);
+
+    void on_namelineedit_returnPressed();
+
 private:
     Ui::MainWindow *ui;
     std::string loadedFile = "";
@@ -95,6 +109,12 @@ private:
         "Currency: Treasure"
     });
 
+    // pairings
+
+    QPointer<PairingResultsDialog> pairingResultsDialog;
+
+    std::vector<Dragon> possibleParentDragons = decltype(possibleParentDragons)();
+
     void updateColoursBasedOnGene(bool showDialogOnNoColour);
 
     void updateColours(int middleValue);
@@ -103,13 +123,25 @@ private:
 
     void loadImage();
 
-    void loadDragon(const Dragon& dragon);
+    void loadMorphologyDragon(const Dragon& dragon);
+
+    void loadPairingDragon(const Dragon& dragon);
 
     void loadSearch(const SaveFormat& save);
+
+    bool checkEditableComboBox(const QComboBox* targetBox, bool createDialog, const std::string& dialogText = "");
+
+    bool checkAllMorphologyInputs(bool createDialog);
+
+    bool checkAllPairingInputs(bool createDialog);
+
+    void updatePossibleParentDragons();
 
     SaveFormat constructSave();
 
     Dragon constructMorphologyDragon();
+
+    Dragon constructPairingDragon();
 
 };
 #endif // MAINWINDOW_H

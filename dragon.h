@@ -8,8 +8,9 @@
 struct Dragon
 {
 public:
-    long long family = 0b0;
+    unsigned long long family = 0b0;
 
+    bool male = false;
     Allele breed;
     EyeAllele eye;
 
@@ -21,11 +22,12 @@ public:
     Allele secondaryGene;
     Allele tertiaryGene;
 
+    std::string name = "";
     std::string imageLocation = "";
 
     Dragon() = default;
 
-    Dragon(const EyeAllele& eye, const Allele& breed,
+    Dragon(const std::string& name, bool male, const EyeAllele& eye, const Allele& breed,
        const Colour& primaryColour, const Colour& secondaryColour, const Colour& tertiaryColour,
        const Allele& primaryGene, const Allele& secondaryGene, const Allele& tertiaryGene);
 };

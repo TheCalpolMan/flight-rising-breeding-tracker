@@ -1,10 +1,33 @@
 #include "information.h"
 
-#include <iostream>
 #include <algorithm>
+
+#include "csvreader.h"
 
 Information::Information()
 {
+    // rarity chances
+
+    auto unprocessedRarityChances = CsvReader("assets/rarity-chances.csv").getValues();
+
+    for (int row = 0; row < unprocessedRarityChances.size(); row++)
+    {
+        std::vector<std::pair<float, float>> processedRow = decltype(processedRow)();
+
+        for (int column = 0; column < unprocessedRarityChances.at(row).size(); column++)
+        {
+            const std::string& workingValue = unprocessedRarityChances.at(row).at(column);
+
+            int slashPos = workingValue.find('/');
+
+            processedRow.push_back(std::make_pair(
+                std::stof(workingValue.substr(0, slashPos)),
+                std::stof(workingValue.substr(slashPos + 1))));
+        }
+
+        rarityChances.push_back(std::move(processedRow));
+    }
+
     // eyes
     {
         // weightings pulled from https://www1.flightrising.com/forums/gde/3327165 on 24/06/2026
@@ -1998,4 +2021,9 @@ int Information::rarityToRank(Rarity rarity)
     case(Rarity::Rare): return 5;
     default:return -1;
     }
+}
+
+std::pair<float, float> Information::getRarityChances(Rarity a, Rarity b)
+{
+    return rarityChances.at(rarityToRank(a) - 1).at(rarityToRank(b) - 1);
 }

@@ -2,6 +2,9 @@
 #include "./ui_mainwindow.h"
 #include "information.h"
 
+#include <QIcon>
+#include <iostream>
+#include <filesystem>
 #include <QMessageBox>
 #include <QFileDialog>
 
@@ -9,18 +12,21 @@
 #include "urlopener.h"
 #include "searchbuilder.h"
 #include "vectorhelpers.h"
+#include "breedingtreecalculator.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    setFixedSize(size());
 
     // inital setup
 
     ui->breedgraphicsview->setScene(&dragonScene);
-
     loadImage();
+
+    pairingResultsDialog = new PairingResultsDialog(this);
 
     // getting relevant ui elements
 
@@ -52,26 +58,34 @@ MainWindow::MainWindow(QWidget *parent)
         ui->primarycolourcombobox->addItem(QString(colour.name.c_str()));
         ui->secondarycolourcombobox->addItem(QString(colour.name.c_str()));
         ui->tertiarycolourcombobox->addItem(QString(colour.name.c_str()));
+
+        ui->primarycolourcombobox_pairings->addItem(QString(colour.name.c_str()));
+        ui->secondarycolourcombobox_pairings->addItem(QString(colour.name.c_str()));
+        ui->tertiarycolourcombobox_pairings->addItem(QString(colour.name.c_str()));
     }
 
     for (const auto& gene : Information::getInstance().getBreeds())
     {
         ui->breedcombobox->addItem(QString(gene.string.c_str()));
+        ui->breedcombobox_pairings->addItem(QString(gene.string.c_str()));
     }
 
     for (const auto& gene : Information::getInstance().getPrimaryGenes())
     {
         ui->primarygenecombobox->addItem(QString(gene.string.c_str()));
+        ui->primarygenecombobox_pairings->addItem(QString(gene.string.c_str()));
     }
 
     for (const auto& gene : Information::getInstance().getSecondaryGenes())
     {
         ui->secondarygenecombobox->addItem(QString(gene.string.c_str()));
+        ui->secondarygenecombobox_pairings->addItem(QString(gene.string.c_str()));
     }
 
     for (const auto& gene : Information::getInstance().getTertiaryGenes())
     {
         ui->tertiarygenecombobox->addItem(QString(gene.string.c_str()));
+        ui->tertiarygenecombobox_pairings->addItem(QString(gene.string.c_str()));
     }
 
     for (const auto& gene : Information::getInstance().getEyes())
@@ -89,41 +103,29 @@ MainWindow::~MainWindow()
 
 void MainWindow::updateColoursBasedOnGene(bool showDialogOnNoColour)
 {
-    int colourIndex = -1;
-    std::string colourString;
+    std::string boxLabel;
+    QComboBox* targetBox;
 
     switch (geneSelected)
     {
     case 0:
-        colourIndex = ui->primarycolourcombobox->currentIndex();
-        colourString = ui->primarycolourcombobox->currentText().toStdString();
+        boxLabel = "Primary";
+        targetBox = ui->primarycolourcombobox;
         break;
     case 1:
-        colourIndex = ui->secondarycolourcombobox->currentIndex();
-        colourString = ui->secondarycolourcombobox->currentText().toStdString();
+        boxLabel = "Secondary";
+        targetBox = ui->secondarycolourcombobox;
         break;
     case 2:
-        colourIndex = ui->tertiarycolourcombobox->currentIndex();
-        colourString = ui->tertiarycolourcombobox->currentText().toStdString();
+        boxLabel = "Tertiary";
+        targetBox = ui->tertiarycolourcombobox;
         break;
     }
 
-    auto colours = Information::getInstance().getColours(true);
+    int colourIndex = targetBox->currentIndex();
+    std::string colourString = targetBox->currentText().toStdString();
 
-    if (colourString != colours.at(colourIndex).name)
-    {
-        if (!showDialogOnNoColour)
-        {
-            return;
-        }
-
-        QMessageBox msgBox;
-        msgBox.setText("Invalid colour in selected message box");
-        msgBox.setDefaultButton(QMessageBox::Close);
-        msgBox.exec();
-
-        return;
-    }
+    checkEditableComboBox(targetBox, showDialogOnNoColour, boxLabel + " colour is invalid");
 
     updateColours(colourIndex);
 }
@@ -159,23 +161,27 @@ void MainWindow::loadImage()
 {
     ui->breedgraphicsview->scene()->clear();
 
-    QPixmap pixmap(imageLocation);
+    if (!std::filesystem::exists(imageLocation.toStdString()))
+    {
+        imageLocation = "./assets/dragon-image-select.jpg";
+    }
 
-    ui->breedgraphicsview->scene()->addPixmap(
-        pixmap.scaled(ui->breedgraphicsview->size().shrunkBy(
-            QMargins(1, 1, 1, 1)), Qt::KeepAspectRatio));
+    QPixmap image(imageLocation);
+    QPixmap scaled = image.scaled(ui->breedgraphicsview->size().shrunkBy(QMargins(1, 1, 1, 1)), Qt::KeepAspectRatio);
+
+    ui->breedgraphicsview->scene()->addPixmap(scaled);
 }
 
-void MainWindow::loadDragon(const Dragon& dragon)
+void MainWindow::loadMorphologyDragon(const Dragon& dragon)
 {
     auto& information = Information::getInstance();
 
     ui->breedcombobox->setCurrentIndex(VectorHelpers::getIndex(information.getBreeds(), dragon.breed));
     ui->eyecombobox->setCurrentIndex(VectorHelpers::getIndex(information.getEyes(), dragon.eye));
 
-    ui->primarycolourcombobox->setCurrentIndex(dragon.primaryColour.wheelIndex - 1);
-    ui->secondarycolourcombobox->setCurrentIndex(dragon.secondaryColour.wheelIndex - 1);
-    ui->tertiarycolourcombobox->setCurrentIndex(dragon.tertiaryColour.wheelIndex - 1);
+    ui->primarycolourcombobox->setCurrentIndex(dragon.primaryColour.wheelIndex);
+    ui->secondarycolourcombobox->setCurrentIndex(dragon.secondaryColour.wheelIndex);
+    ui->tertiarycolourcombobox->setCurrentIndex(dragon.tertiaryColour.wheelIndex);
 
     ui->primarygenecombobox->setCurrentIndex(VectorHelpers::getIndex(information.getPrimaryGenes(), dragon.primaryGene));
     ui->secondarygenecombobox->setCurrentIndex(VectorHelpers::getIndex(information.getSecondaryGenes(), dragon.secondaryGene));
@@ -185,6 +191,24 @@ void MainWindow::loadDragon(const Dragon& dragon)
 
     loadImage();
     updateColoursBasedOnGene(true);
+}
+
+void MainWindow::loadPairingDragon(const Dragon &dragon)
+{
+    const auto& information = Information::getInstance();
+
+    ui->namelineedit->setText(dragon.name.c_str());
+
+    ui->maleradiopairings->setChecked(dragon.male);
+    ui->femaleradiopairings->setChecked(!dragon.male);
+
+    ui->breedcombobox_pairings->setCurrentIndex(VectorHelpers::getIndex(information.getBreeds(), dragon.breed));
+    ui->primarycolourcombobox_pairings->setCurrentIndex(VectorHelpers::getIndex(information.getColours(true), dragon.primaryColour));
+    ui->secondarycolourcombobox_pairings->setCurrentIndex(VectorHelpers::getIndex(information.getColours(true), dragon.secondaryColour));
+    ui->tertiarycolourcombobox_pairings->setCurrentIndex(VectorHelpers::getIndex(information.getColours(true), dragon.tertiaryColour));
+    ui->primarygenecombobox_pairings->setCurrentIndex(VectorHelpers::getIndex(information.getPrimaryGenes(), dragon.primaryGene));
+    ui->secondarygenecombobox_pairings->setCurrentIndex(VectorHelpers::getIndex(information.getSecondaryGenes(), dragon.secondaryGene));
+    ui->tertiarygenecombobox_pairings->setCurrentIndex(VectorHelpers::getIndex(information.getTertiaryGenes(), dragon.tertiaryGene));
 }
 
 void MainWindow::loadSearch(const SaveFormat& save)
@@ -203,6 +227,154 @@ void MainWindow::loadSearch(const SaveFormat& save)
     ui->tertiarycolouroffsetslider->setValue(save.tertiaryColourOffset + ui->tertiarycolouroffsetslider->maximum() / 2);
 }
 
+bool MainWindow::checkEditableComboBox(const QComboBox* targetBox, bool createDialog, const std::string& dialogText)
+{
+    int index = targetBox->currentIndex();
+    std::string text = targetBox->currentText().toStdString();
+
+    if (text == targetBox->itemText(index))
+    {
+        return true;
+    }
+
+    if (!createDialog)
+    {
+        return false;
+    }
+
+    QMessageBox msgBox(this);
+    msgBox.setText(dialogText.c_str());
+    msgBox.setStandardButtons(QMessageBox::Close);
+    msgBox.exec();
+
+    return false;
+}
+
+bool MainWindow::checkAllMorphologyInputs(bool createDialog)
+{
+    if (!checkEditableComboBox(ui->breedcombobox, createDialog, "Breed is invalid"))
+    {
+        return false;
+    }
+
+    if (!checkEditableComboBox(ui->eyecombobox, createDialog, "Eye type is invalid"))
+    {
+        return false;
+    }
+
+    if (!checkEditableComboBox(ui->primarycolourcombobox, createDialog, "Primary colour is invalid"))
+    {
+        return false;
+    }
+
+    if (!checkEditableComboBox(ui->secondarycolourcombobox, createDialog, "Secondary colour is invalid"))
+    {
+        return false;
+    }
+
+    if (!checkEditableComboBox(ui->tertiarycolourcombobox, createDialog, "Tertiary colour is invalid"))
+    {
+        return false;
+    }
+
+    if (!checkEditableComboBox(ui->primarygenecombobox, createDialog, "Primary gene is invalid"))
+    {
+        return false;
+    }
+
+    if (!checkEditableComboBox(ui->secondarygenecombobox, createDialog, "Secondary gene is invalid"))
+    {
+        return false;
+    }
+
+    if (!checkEditableComboBox(ui->tertiarygenecombobox, createDialog, "Tertiary gene is invalid"))
+    {
+        return false;
+    }
+
+    return true;
+}
+
+bool MainWindow::checkAllPairingInputs(bool createDialog)
+{
+    if (!checkEditableComboBox(ui->breedcombobox_pairings, createDialog, "Breed is invalid"))
+    {
+        return false;
+    }
+
+    if (!checkEditableComboBox(ui->primarycolourcombobox_pairings, createDialog, "Primary colour is invalid"))
+    {
+        return false;
+    }
+
+    if (!checkEditableComboBox(ui->secondarycolourcombobox_pairings, createDialog, "Secondary colour is invalid"))
+    {
+        return false;
+    }
+
+    if (!checkEditableComboBox(ui->tertiarycolourcombobox_pairings, createDialog, "Tertiary colour is invalid"))
+    {
+        return false;
+    }
+
+    if (!checkEditableComboBox(ui->primarygenecombobox_pairings, createDialog, "Primary gene is invalid"))
+    {
+        return false;
+    }
+
+    if (!checkEditableComboBox(ui->secondarygenecombobox_pairings, createDialog, "Secondary gene is invalid"))
+    {
+        return false;
+    }
+
+    if (!checkEditableComboBox(ui->tertiarygenecombobox_pairings, createDialog, "Tertiary gene is invalid"))
+    {
+        return false;
+    }
+
+    if (ui->namelineedit->text() == "")
+    {
+        if (!createDialog)
+        {
+            return false;
+        }
+
+        QMessageBox msgBox(this);
+        msgBox.setText("Dragon must have a name");
+        msgBox.setStandardButtons(QMessageBox::Close);
+        msgBox.exec();
+
+        return false;
+    }
+
+    return true;
+}
+
+void MainWindow::updatePossibleParentDragons()
+{
+    ui->possibleparentlistwidget->clear();
+
+    std::stringstream tooltip;
+
+    for (int i = 0; i < possibleParentDragons.size(); i++)
+    {
+        const auto& dragon = possibleParentDragons.at(i);
+
+        ui->possibleparentlistwidget->addItem(dragon.name.c_str());
+        ui->possibleparentlistwidget->item(i)->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::EditDelete));
+
+        tooltip << dragon.breed.string << " " << (dragon.male ? "Male" : "Female") << std::endl;
+        tooltip << "Primary Gene: " << dragon.primaryColour.name << " " << dragon.primaryGene.string << std::endl;
+        tooltip << "Secondary Gene: " << dragon.secondaryColour.name << " " << dragon.secondaryGene.string << std::endl;
+        tooltip << "Tertiary Gene: " << dragon.tertiaryColour.name << " " << dragon.tertiaryGene.string;
+
+        ui->possibleparentlistwidget->item(i)->setToolTip(tooltip.str().c_str());
+        tooltip.str("");
+    }
+
+    ui->possibleparentlistwidget->update();
+}
+
 SaveFormat MainWindow::constructSave()
 {
     SaveFormat format = SaveFormat(
@@ -216,7 +388,8 @@ SaveFormat MainWindow::constructSave()
         ui->secondarycolourrangeslider->value(),
         ui->secondarycolouroffsetslider->value() - ui->secondarycolouroffsetslider->maximum() / 2,
         ui->tertiarycolourrangeslider->value(),
-        ui->tertiarycolouroffsetslider->value() - ui->tertiarycolouroffsetslider->maximum() / 2
+        ui->tertiarycolouroffsetslider->value() - ui->tertiarycolouroffsetslider->maximum() / 2,
+        possibleParentDragons
     );
 
     return format;
@@ -227,6 +400,8 @@ Dragon MainWindow::constructMorphologyDragon()
     const auto& information = Information::getInstance();
 
     Dragon dragon = Dragon(
+        "",
+        false,
         information.getEyes().at(ui->eyecombobox->currentIndex()),
         information.getBreeds().at(ui->breedcombobox->currentIndex()),
         information.getColours(true).at(ui->primarycolourcombobox->currentIndex()),
@@ -238,6 +413,26 @@ Dragon MainWindow::constructMorphologyDragon()
     );
 
     dragon.imageLocation = imageLocation.toStdString();
+
+    return dragon;
+}
+
+Dragon MainWindow::constructPairingDragon()
+{
+    const auto& information = Information::getInstance();
+
+    Dragon dragon = Dragon(
+        ui->namelineedit->text().toStdString(),
+        ui->maleradiopairings->isChecked(),
+        information.getEyes().at(0),
+        information.getBreeds().at(ui->breedcombobox_pairings->currentIndex()),
+        information.getColours(true).at(ui->primarycolourcombobox_pairings->currentIndex()),
+        information.getColours(true).at(ui->secondarycolourcombobox_pairings->currentIndex()),
+        information.getColours(true).at(ui->tertiarycolourcombobox_pairings->currentIndex()),
+        information.getPrimaryGenes().at(ui->primarygenecombobox_pairings->currentIndex()),
+        information.getSecondaryGenes().at(ui->secondarygenecombobox_pairings->currentIndex()),
+        information.getTertiaryGenes().at(ui->tertiarygenecombobox_pairings->currentIndex())
+    );
 
     return dragon;
 }
@@ -308,6 +503,11 @@ void MainWindow::on_breedgraphicsview_mousePressEvent(QMouseEvent *)
 
 void MainWindow::on_pushButton_clicked()
 {
+    if (!checkAllMorphologyInputs(true))
+    {
+        return;
+    }
+
     auto save = constructSave();
 
     Gender gender;
@@ -384,6 +584,11 @@ void MainWindow::on_currencycheckbox_stateChanged(int arg1)
 
 void MainWindow::on_actionSave_triggered()
 {
+    if (!checkAllMorphologyInputs(true))
+    {
+        return;
+    }
+
     if (loadedFile == "")
     {
         on_actionSave_As_triggered();
@@ -424,16 +629,38 @@ void MainWindow::on_actionOpen_triggered()
         return;
     }
 
-    loadedFile = targetFile.toStdString();
-    SaveFormat save = SaveFormat(loadedFile);
+    std::unique_ptr<SaveFormat> save;
 
-    loadDragon(save.dragon);
-    loadSearch(save);
+    try
+    {
+        save = std::make_unique<SaveFormat>(targetFile.toStdString());
+    }
+    catch (std::invalid_argument e)
+    {
+        QMessageBox msgBox(this);
+        msgBox.setText(e.what());
+        msgBox.setStandardButtons(QMessageBox::Close);
+        msgBox.exec();
+
+        return;
+    }
+
+    loadedFile = targetFile.toStdString();
+    loadMorphologyDragon(save->dragon);
+    loadSearch(*save);
+    possibleParentDragons = save->pairingDragons;
+
+    updatePossibleParentDragons();
 }
 
 
 void MainWindow::on_actionSave_As_triggered()
 {
+    if (!checkAllMorphologyInputs(true))
+    {
+        return;
+    }
+
     loadedFile = QFileDialog::getSaveFileName(this,
                                                  tr("Save File"),
                                                  ".",
@@ -445,5 +672,58 @@ void MainWindow::on_actionSave_As_triggered()
     }
 
     constructSave().write(loadedFile);
+}
+
+
+void MainWindow::on_possibleparentlistwidget_itemDoubleClicked(QListWidgetItem *item)
+{
+    possibleParentDragons.erase(possibleParentDragons.cbegin() + ui->possibleparentlistwidget->row(item));
+    updatePossibleParentDragons();
+}
+
+void MainWindow::on_addpairingpushbutton_clicked()
+{
+    if (!checkAllPairingInputs(true))
+    {
+        return;
+    }
+
+    Dragon dragon = constructPairingDragon();
+
+    ui->namelineedit->clear();
+    possibleParentDragons.push_back(dragon);
+    updatePossibleParentDragons();
+}
+
+void MainWindow::on_calculatepairingspushbutton_clicked()
+{
+    if (pairingResultsDialog->isHidden())
+    {
+        pairingResultsDialog->show();
+    }
+
+    Dragon dragon = constructMorphologyDragon();
+
+    auto calculator = BreedingTreeCalculator(std::make_shared<Dragon>(dragon), possibleParentDragons);
+    auto configs = calculator.getConfigs();
+
+    pairingResultsDialog->enterResults(configs, dragon);
+}
+
+
+void MainWindow::on_possibleparentlistwidget_currentRowChanged(int currentRow)
+{
+    if (currentRow == -1)
+    {
+        return;
+    }
+
+    loadPairingDragon(possibleParentDragons.at(currentRow));
+}
+
+
+void MainWindow::on_namelineedit_returnPressed()
+{
+    on_addpairingpushbutton_clicked();
 }
 

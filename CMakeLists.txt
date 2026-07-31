@@ -9,6 +9,17 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+include(FetchContent)
+
+FetchContent_Declare (
+    tracy
+    GIT_REPOSITORY https://github.com/wolfpld/tracy.git
+    GIT_TAG tags/v0.13.1
+    GIT_SHALLOW TRUE
+    GIT_PROGRESS TRUE
+    )
+FetchContent_MakeAvailable(tracy)
+
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
@@ -23,9 +34,11 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     find_package(Qt6 REQUIRED COMPONENTS Widgets)
 find_package(Qt6 REQUIRED COMPONENTS Core)
 
+    set(app_icon_resource_windows "${CMAKE_CURRENT_SOURCE_DIR}/resources/resources.rc")
+
     qt_add_executable(flight-rising-breeding-tracker
         MANUAL_FINALIZATION
-        ${PROJECT_SOURCES}
+        ${PROJECT_SOURCES} ${app_icon_resource_windows}
         information.h information.cpp
         rarity.h
         allele.h allele.cpp
@@ -39,6 +52,20 @@ find_package(Qt6 REQUIRED COMPONENTS Core)
         currency.h
         saveformat.h saveformat.cpp
         vectorhelpers.h
+        dragonpossibility.h dragonpossibility.cpp
+        csvreader.h csvreader.cpp
+        binarytreenode.h binarytreenode.cpp
+        binarytreegenerator.h binarytreegenerator.cpp
+        modutils.h modutils.cpp
+        breedingtreecalculator.h breedingtreecalculator.cpp
+        breedingtreeconfig.h
+        breedingtreeconfig.cpp
+        binarytreepossibilitynode.h binarytreepossibilitynode.cpp
+        dragonpossibilityfactory.h dragonpossibilityfactory.cpp
+        pairingresultsdialog.h pairingresultsdialog.cpp pairingresultsdialog.ui
+        dragonindexes.h dragonindexes.cpp
+
+
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET flight-rising-breeding-tracker APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -62,11 +89,13 @@ target_include_directories(flight-rising-breeding-tracker PRIVATE .)
 target_include_directories(flight-rising-breeding-tracker PRIVATE rapidjson)
 
 configure_file(assets/save-schema.json assets/save-schema.json COPYONLY)
+configure_file(assets/rarity-chances.csv assets/rarity-chances.csv COPYONLY)
 configure_file(assets/dragon-image-select.jpg assets/dragon-image-select.jpg COPYONLY)
 
 target_link_libraries(flight-rising-breeding-tracker PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(flight-rising-breeding-tracker PRIVATE Qt6::Widgets)
 target_link_libraries(flight-rising-breeding-tracker PRIVATE Qt6::Core)
+target_link_libraries(flight-rising-breeding-tracker PUBLIC TracyClient)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
