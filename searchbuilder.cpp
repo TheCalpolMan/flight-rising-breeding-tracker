@@ -135,6 +135,9 @@ std::string SearchBuilder::fromDragon(const Dragon& dragon, std::vector<int> col
 
 void SearchBuilder::addColourRange(const Colour& colour, int range, int offset, std::stringstream& stream)
 {
+    // done so that UI reads better, positive offsets should be up (when by default they're down), and vice versa
+    offset = offset * -1;
+
     auto& information = Information::getInstance();
 
     Colour startColour = information.getColours(true).at((

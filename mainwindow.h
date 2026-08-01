@@ -16,6 +16,7 @@
 
 #include "saveformat.h"
 #include "pairingresultsdialog.h"
+#include "colourdistributiontool.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -80,6 +81,8 @@ private slots:
 
     void on_namelineedit_returnPressed();
 
+    void on_actionColour_Distribution_triggered();
+
 private:
     Ui::MainWindow *ui;
     std::string loadedFile = "";
@@ -114,6 +117,10 @@ private:
     QPointer<PairingResultsDialog> pairingResultsDialog;
 
     std::vector<Dragon> possibleParentDragons = decltype(possibleParentDragons)();
+
+    // tools
+
+    QPointer<ColourDistributionTool> colourToolDialog;
 
     void updateColoursBasedOnGene(bool showDialogOnNoColour);
 
