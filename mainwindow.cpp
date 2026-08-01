@@ -26,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->breedgraphicsview->setScene(&dragonScene);
     loadImage();
 
+    colourToolDialog = new ColourDistributionTool(this);
     pairingResultsDialog = new PairingResultsDialog(this);
 
     // getting relevant ui elements
@@ -725,5 +726,14 @@ void MainWindow::on_possibleparentlistwidget_currentRowChanged(int currentRow)
 void MainWindow::on_namelineedit_returnPressed()
 {
     on_addpairingpushbutton_clicked();
+}
+
+
+void MainWindow::on_actionColour_Distribution_triggered()
+{
+    if (colourToolDialog->isHidden())
+    {
+        colourToolDialog->show();
+    }
 }
 
