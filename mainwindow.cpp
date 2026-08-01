@@ -374,6 +374,11 @@ void MainWindow::updatePossibleParentDragons()
     }
 
     ui->possibleparentlistwidget->update();
+
+    if (!colourToolDialog->isHidden())
+    {
+        colourToolDialog->updateDisplay(constructMorphologyDragon(), possibleParentDragons);
+    }
 }
 
 SaveFormat MainWindow::constructSave()
@@ -731,9 +736,6 @@ void MainWindow::on_namelineedit_returnPressed()
 
 void MainWindow::on_actionColour_Distribution_triggered()
 {
-    if (colourToolDialog->isHidden())
-    {
-        colourToolDialog->show();
-    }
+    colourToolDialog->open(constructMorphologyDragon(), possibleParentDragons);
 }
 
