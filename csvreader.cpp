@@ -2,9 +2,15 @@
 
 #include <sstream>
 #include <fstream>
+#include <filesystem>
 
 CsvReader::CsvReader(const std::string& location, char delimiter)
 {
+    if (!std::filesystem::exists(location))
+    {
+        throw std::invalid_argument(location + " does not exist");
+    }
+
     std::fstream file = std::fstream(location, std::fstream::in);
 
     std::stringstream currentValue;
@@ -16,6 +22,11 @@ CsvReader::CsvReader(const std::string& location, char delimiter)
 
         if (character == '#' && currentValue.str().empty() && currentLine.empty())
         {
+            while(file.get() != '\n' && !file.eof())
+            {
+
+            }
+
             continue;
         }
 

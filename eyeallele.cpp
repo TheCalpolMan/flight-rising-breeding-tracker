@@ -1,7 +1,8 @@
 #include "eyeallele.h"
 
-EyeAllele::EyeAllele(int weighting, std::string string)
+EyeAllele::EyeAllele(std::string string, int weighting) :
+    string(string),
+    weighting(weighting)
 {
-    this->weighting = weighting;
-    this->string = string;
+
 }

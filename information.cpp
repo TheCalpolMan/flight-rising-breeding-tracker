@@ -6,64 +6,37 @@
 
 Information::Information()
 {
-    // rarity chances
+    readEyes();
+    readColours();
+    readRarityChances();
 
-    auto unprocessedRarityChances = CsvReader("assets/rarity-chances.csv").getValues();
+    readAlleles(breeds, "assets/breeds.csv");
+    readAlleles(primaryGenes, "assets/primary-genes.csv");
+    readAlleles(secondaryGenes, "assets/secondary-genes.csv");
+    readAlleles(tertiaryGenes, "assets/tertiary-genes.csv");
+}
 
-    for (int row = 0; row < unprocessedRarityChances.size(); row++)
+void Information::readAlleles(std::vector<Allele> &destinationVector, const std::string& filePath)
+{
+    auto unprocessedRows = CsvReader(filePath).getValues();
+
+    for(const auto& row : unprocessedRows)
     {
-        std::vector<std::pair<float, float>> processedRow = decltype(processedRow)();
+        Rarity rarity = stringToRarity(row.at(1));
 
-        for (int column = 0; column < unprocessedRarityChances.at(row).size(); column++)
+        if (rarity == Rarity::Spacer)
         {
-            const std::string& workingValue = unprocessedRarityChances.at(row).at(column);
-
-            int slashPos = workingValue.find('/');
-
-            processedRow.push_back(std::make_pair(
-                std::stof(workingValue.substr(0, slashPos)),
-                std::stof(workingValue.substr(slashPos + 1))));
+            destinationVector.emplace_back("", Rarity::Spacer);
+            continue;
         }
 
-        rarityChances.push_back(std::move(processedRow));
-    }
+        if (row.at(2) == "Modern")
+        {
+            destinationVector.emplace_back(row.at(0), rarity);
+            continue;
+        }
 
-    // eyes
-    {
-
-    }
-
-    // breeds
-    {
-
-    }
-
-    // primary genes
-    {
-
-    }
-
-    // secondary genes
-    {
-
-    }
-
-    // tertiary genes
-    {
-
-    }
-
-    // Colours
-    {
-
-
-        coloursByWheel = colours;
-        std::sort(coloursByWheel.begin(), coloursByWheel.end(),
-            [](const Colour& a, const Colour& b)
-            {
-                return a.wheelIndex < b.wheelIndex;
-            }
-        );
+        destinationVector.emplace_back(row.at(0), rarity, row.at(2));
     }
 }
 
@@ -116,7 +89,74 @@ int Information::rarityToRank(Rarity rarity)
     }
 }
 
+Rarity Information::stringToRarity(const std::string &string)
+{
+    static std::unordered_map<std::string, Rarity> map = decltype(map)(
+    {
+        {"Plentiful", Rarity::Plentiful},
+        {"Common", Rarity::Common},
+        {"Uncommon", Rarity::Uncommon},
+        {"Limited", Rarity::Limited},
+        {"Rare", Rarity::Rare},
+        {"Ancient", Rarity::Ancient},
+        {"Spacer", Rarity::Spacer}
+    });
+
+    return map.find(string)->second;
+}
+
 std::pair<float, float> Information::getRarityChances(Rarity a, Rarity b)
 {
     return rarityChances.at(rarityToRank(a) - 1).at(rarityToRank(b) - 1);
+}
+
+void Information::readEyes()
+{
+    auto unprocessedRows = CsvReader("assets/eyes.csv").getValues();
+
+    for(const auto& row : unprocessedRows)
+    {
+        eyes.emplace_back(row.at(0), std::stoi(row.at(1)));
+    }
+}
+
+void Information::readColours()
+{
+    auto unprocessedRows = CsvReader("assets/colours.csv").getValues();
+
+    for (const auto& row : unprocessedRows)
+    {
+        colours.emplace_back(row.at(0), row.at(1), std::stoi(row.at(2)));
+    }
+
+    coloursByWheel = colours;
+    std::sort(coloursByWheel.begin(), coloursByWheel.end(),
+        [](const Colour& a, const Colour& b)
+        {
+            return a.wheelIndex < b.wheelIndex;
+        }
+    );
+}
+
+void Information::readRarityChances()
+{
+    auto unprocessedRows = CsvReader("assets/rarity-chances.csv").getValues();
+
+    for (int row = 0; row < unprocessedRows.size(); row++)
+    {
+        std::vector<std::pair<float, float>> processedRow = decltype(processedRow)();
+
+        for (int column = 0; column < unprocessedRows.at(row).size(); column++)
+        {
+            const std::string& workingValue = unprocessedRows.at(row).at(column);
+
+            int slashPos = workingValue.find('/');
+
+            processedRow.push_back(std::make_pair(
+                std::stof(workingValue.substr(0, slashPos)),
+                std::stof(workingValue.substr(slashPos + 1))));
+        }
+
+        rarityChances.push_back(std::move(processedRow));
+    }
 }

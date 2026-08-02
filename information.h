@@ -3,11 +3,13 @@
 
 #include <vector>
 #include <utility>
+#include <functional>
 
 #include "rarity.h"
 #include "allele.h"
 #include "colour.h"
 #include "eyeallele.h"
+#include "csvreader.h"
 
 class Information
 {
@@ -38,8 +40,6 @@ public:
 
     static int rarityToRank(Rarity rarity);
 private:
-    Information();
-
     std::vector<EyeAllele> eyes = decltype(eyes)();
     std::vector<Allele> breeds = decltype(breeds)();
     std::vector<Allele> primaryGenes = decltype(primaryGenes)();
@@ -50,6 +50,18 @@ private:
     std::vector<Colour> coloursByWheel = decltype(coloursByWheel)();
 
     std::vector<std::vector<std::pair<float, float>>> rarityChances = decltype(rarityChances)();
+
+    Information();
+
+    static Rarity stringToRarity(const std::string& string);
+
+    static void readAlleles(std::vector<Allele>& destinationVector, const std::string &filePath);
+
+    void readEyes();
+
+    void readColours();
+
+    void readRarityChances();
 };
 
 #endif // INFORMATION_H
