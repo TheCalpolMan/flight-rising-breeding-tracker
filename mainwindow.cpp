@@ -7,9 +7,11 @@
 #include <filesystem>
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QInputDialog>
 
 #include "dragon.h"
 #include "urlopener.h"
+#include "dragonregex.h"
 #include "searchbuilder.h"
 #include "vectorhelpers.h"
 #include "breedingtreecalculator.h"
@@ -737,5 +739,20 @@ void MainWindow::on_namelineedit_returnPressed()
 void MainWindow::on_actionColour_Distribution_triggered()
 {
     colourToolDialog->open(constructMorphologyDragon(), possibleParentDragons);
+}
+
+
+void MainWindow::on_pastedragonpushbutton_clicked()
+{
+    bool ok;
+    QString text = QInputDialog::getMultiLineText(this, tr("Dragon Input"),
+        "Ctrl-A, Ctrl-C on any dragon's page, then Ctrl-V here!", "", &ok);
+
+    if (!ok)
+    {
+        return;
+    }
+
+    DragonRegex::ConstructDragon(text.toStdString());
 }
 

@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
     <property name="tabBarAutoHide">
      <bool>true</bool>
@@ -1825,7 +1825,7 @@
         <string>Add</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="addrelationpushbutton">
+      <widget class="QPushButton" name="pastedragonpushbutton">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -1835,7 +1835,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Add Relation</string>
+        <string>Paste Dragon</string>
        </property>
       </widget>
      </widget>
@@ -1884,7 +1884,7 @@
      <x>0</x>
      <y>0</y>
      <width>550</width>
-     <height>26</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

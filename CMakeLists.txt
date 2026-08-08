@@ -65,6 +65,7 @@ find_package(Qt6 REQUIRED COMPONENTS Core)
         pairingresultsdialog.h pairingresultsdialog.cpp pairingresultsdialog.ui
         dragonindexes.h dragonindexes.cpp
         colourdistributiontool.h colourdistributiontool.cpp colourdistributiontool.ui
+        dragonregex.h dragonregex.cpp
 
 
 
