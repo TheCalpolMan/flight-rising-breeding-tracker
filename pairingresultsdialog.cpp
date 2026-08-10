@@ -66,8 +66,9 @@ std::multiset<std::pair<int, double>, std::function<bool (const std::pair<int, d
 std::multiset<std::pair<int, double>, std::function<bool (const std::pair<int, double> &, const std::pair<int, double> &)> > PairingResultsDialog::getSortedColourProbabilities(const double target[])
 {
     std::multiset<std::pair<int, double>, std::function<bool (const std::pair<int, double> &, const std::pair<int, double> &)>> sorted = decltype(sorted)(probabilityCmp);
+    int colourCount = Information::getInstance().getColours(true).size();
 
-    for (int i = 0; i < 177; i++)
+    for (int i = 0; i < colourCount; i++)
     {
         if (target[i] == 0)
         {

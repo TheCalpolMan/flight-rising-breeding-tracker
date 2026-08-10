@@ -6,12 +6,12 @@
 struct EyeAllele
 {
 public:
-    int weighting;
     std::string string;
+    int weighting;
 
     EyeAllele() = default;
 
-    EyeAllele(int weighting, std::string string);
+    EyeAllele(std::string string, int weighting);
 
     bool operator==(const EyeAllele& other) const
     {

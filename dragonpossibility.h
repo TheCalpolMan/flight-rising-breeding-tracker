@@ -20,28 +20,34 @@ public:
 
     std::unordered_map<int, double> breed = decltype(breed)();
 
-    double primaryColour[177] = { 0.0 };
-    double secondaryColour[177] = { 0.0 };
-    double tertiaryColour[177] = { 0.0 };
+    int colourCount;
+
+    double* primaryColour = nullptr;
+    double* secondaryColour = nullptr;
+    double* tertiaryColour = nullptr;
 
     std::unordered_map<int, double> primaryGene = decltype(primaryGene)();
     std::unordered_map<int, double> secondaryGene = decltype(secondaryGene)();
     std::unordered_map<int, double> tertiaryGene = decltype(tertiaryGene)();
+
+    ~DragonPossibility();
 private:
-    DragonPossibility() = default;
+    DragonPossibility();
 
     DragonPossibility(const Dragon& base);
 
     DragonPossibility(const DragonPossibility& parent1, const DragonPossibility& parent2);
+
+    void setupColourMembers();
 
     void setGeneWeights(std::unordered_map<int, double>& targetGene,
                         const std::vector<Allele>& possibleGenes,
                         const std::unordered_map<int, double>& parent1,
                         const std::unordered_map<int, double>& parent2);
 
-    void setColourWeights(double targetColour[177],
-                          const double parent1[177],
-                          const double parent2[177]);
+    void setColourWeights(double* targetColour,
+                          const double* parent1,
+                          const double* parent2);
 
     static void modifyAllWeights(std::unordered_map<int, double>& targetWeights, std::function<double(double)> modification);
 

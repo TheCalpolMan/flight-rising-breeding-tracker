@@ -65,13 +65,14 @@ void ColourDistributionTool::scrollToMiddle(QScrollArea *scrollArea)
 
 std::vector<std::shared_ptr<QGraphicsScene>> ColourDistributionTool::createAllColourViewFrames(QWidget *parentWidget, const std::string &prefix)
 {
+    int colourCount = Information::getInstance().getColours(true).size();
     std::vector<std::shared_ptr<QGraphicsScene>> graphicsViews = decltype(graphicsViews)();
 
     QGridLayout* gridLayout = new QGridLayout(parentWidget);
     gridLayout->setObjectName(prefix + "GridLayout");
     gridLayout->setVerticalSpacing(2);
 
-    for (int i = 0; i < 177; i++)
+    for (int i = 0; i < colourCount; i++)
     {
         graphicsViews.push_back(std::make_shared<QGraphicsScene>());
         std::string indexString = std::to_string(i);
@@ -113,6 +114,7 @@ std::vector<std::shared_ptr<QGraphicsScene>> ColourDistributionTool::createAllCo
 
 void ColourDistributionTool::populateDragons(QWidget *scrollAreaWidgetContents, int geneColour, int colourOffset, const std::vector<Dragon> &possibleParentDragons)
 {
+    int colourCount = Information::getInstance().getColours(true).size();
     auto frames = scrollAreaWidgetContents->findChildren<QFrame*>(Qt::FindDirectChildrenOnly);
 
     std::sort(frames.begin(), frames.end(),
@@ -147,7 +149,7 @@ void ColourDistributionTool::populateDragons(QWidget *scrollAreaWidgetContents, 
         default:throw std::invalid_argument("geneColour must be 1-3");
         }
 
-        auto frame = frames.at((colour.wheelIndex - colourOffset + 177 / 2 + 177) % 177);
+        auto frame = frames.at((colour.wheelIndex - colourOffset + colourCount / 2 + colourCount) % colourCount);
         auto labelChildren = frame->findChildren<QLabel *>(Qt::FindDirectChildrenOnly);
 
         for (auto child : labelChildren)
@@ -170,6 +172,7 @@ void ColourDistributionTool::populateDragons(QWidget *scrollAreaWidgetContents, 
 
 void ColourDistributionTool::setMiddleColour(QWidget *scrollAreaWidgetContents, const std::vector<std::shared_ptr<QGraphicsScene> > &graphicsSenes, int index)
 {
+    int colourCount = Information::getInstance().getColours(true).size();
     auto frames = scrollAreaWidgetContents->findChildren<QFrame*>(Qt::FindDirectChildrenOnly);
 
     std::sort(frames.begin(), frames.end(),
@@ -179,7 +182,7 @@ void ColourDistributionTool::setMiddleColour(QWidget *scrollAreaWidgetContents, 
 
     auto colours = Information::getInstance().getColours(true);
 
-    for (int i = 0; i < 177; i++)
+    for (int i = 0; i < colourCount; i++)
     {
         Colour colour = colours.at((i + index + (colours.size() + 1) / 2) % colours.size());
 
@@ -192,7 +195,7 @@ void ColourDistributionTool::setMiddleColour(QWidget *scrollAreaWidgetContents, 
                 continue;
             }
 
-            if (i != 177 / 2)
+            if (i != colourCount / 2)
             {
                 child->setText(colour.name.c_str());
                 continue;

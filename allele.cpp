@@ -1,9 +1,9 @@
 #include "allele.h"
 
-Allele::Allele(Rarity rarity, std::string string, std::string ancientSpecies)
+Allele::Allele(std::string string, Rarity rarity, std::string ancientSpecies)
 {
-    this->rarity = rarity;
     this->string = string;
+    this->rarity = rarity;
 
     if (ancientSpecies == "")
     {

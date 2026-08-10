@@ -1,0 +1,546 @@
+# name, rarity, ancient name
+Basic,Plentiful,Modern
+Shimmer,Rare,Modern
+Stripes,Common,Modern
+Eye Spots,Common,Modern
+Freckle,Common,Modern
+Seraph,Uncommon,Modern
+Current,Uncommon,Modern
+Daub,Uncommon,Modern
+Facet,Rare,Modern
+Hypnotic,Uncommon,Modern
+Paint,Common,Modern
+Peregrine,Common,Modern
+Toxin,Limited,Modern
+Butterfly,Rare,Modern
+Hex,Uncommon,Modern
+Saturn,Uncommon,Modern
+Spinner,Limited,Modern
+Alloy,Rare,Modern
+Safari,Common,Modern
+Rosette,Uncommon,Modern
+Bee,Rare,Modern
+Striation,Common,Modern
+Trail,Limited,Modern
+Morph,Limited,Modern
+Noxtide,Uncommon,Modern
+Constellation,Rare,Modern
+Edged,Common,Modern
+Hex (Gaoler),Uncommon,Gaoler
+Bee (Gaoler),Rare,Gaoler
+Streak (Gaoler),Common,Gaoler
+Peregrine (Gaoler),Common,Gaoler
+Paint (Gaoler),Common,Gaoler
+Trail (Gaoler),Limited,Gaoler
+Rosette (Gaoler),Uncommon,Gaoler
+Daub (Gaoler),Uncommon,Gaoler
+Striation (Gaoler),Common,Gaoler
+Stripes (Gaoler),Common,Gaoler
+Facet (Gaoler),Rare,Gaoler
+Breakup (Gaoler),Uncommon,Gaoler
+Spirit (Gaoler),Limited,Gaoler
+Clouded,Common,Modern
+Sludge,Limited,Modern
+Blend,Common,Modern
+Seraph (Banescale),Uncommon,Banescale
+Rosette (Banescale),Uncommon,Banescale
+Trail (Banescale),Limited,Banescale
+Stripes (Banescale),Common,Banescale
+Mottle (Banescale),Common,Banescale
+Edged (Banescale),Common,Banescale
+Alloy (Banescale),Rare,Banescale
+Safari (Banescale),Common,Banescale
+Butterfly (Banescale),Rare,Banescale
+Spinner (Banescale),Limited,Banescale
+Toxin (Banescale),Limited,Banescale
+Arrow (Banescale),Uncommon,Banescale
+Sugarplum (Banescale),Limited,Banescale
+Tear (Banescale),Uncommon,Banescale
+Marbled,Common,Modern
+Breakup,Uncommon,Modern
+Patchwork,Limited,Modern
+Bee (Veilspun),Rare,Veilspun
+Blend (Veilspun),Common,Veilspun
+Edged (Veilspun),Common,Veilspun
+Striation (Veilspun),Common,Veilspun
+Hypnotic (Veilspun),Uncommon,Veilspun
+Saturn (Veilspun),Uncommon,Veilspun
+Constellation (Veilspun),Rare,Veilspun
+Patchwork (Veilspun),Limited,Veilspun
+Spinner (Veilspun),Limited,Veilspun
+Vivid (Veilspun),Uncommon,Veilspun
+Loop (Veilspun),Limited,Veilspun
+Web (Veilspun),Uncommon,Veilspun
+Hawkmoth (Veilspun),Uncommon,Veilspun
+Edged (Gaoler),Common,Gaoler
+Striation (Banescale),Common,Banescale
+Eye Spots (Banescale),Common,Banescale
+Eye Spots (Veilspun),Common,Veilspun
+Eye Spots (Gaoler),Common,Gaoler
+Current (Gaoler),Uncommon,Gaoler
+Current (Banescale),Uncommon,Banescale
+Peregrine (Banescale),Common,Banescale
+Hex (Banescale),Uncommon,Banescale
+Flair,Uncommon,Modern
+Hex (Veilspun),Uncommon,Veilspun
+Eel,Uncommon,Modern
+Blend (Banescale),Common,Banescale
+Blend (Gaoler),Common,Gaoler
+Sarcophagus,Rare,Modern
+Fissure,Limited,Modern
+Daub (Aberration),Uncommon,Aberration
+Facet (Aberration),Rare,Aberration
+Blend (Aberration),Common,Aberration
+Peregrine (Aberration),Common,Aberration
+Spade (Aberration),Limited,Aberration
+Hex (Aberration),Uncommon,Aberration
+Striation (Aberration),Common,Aberration
+Hypnotic (Aberration),Uncommon,Aberration
+Fissure (Aberration),Limited,Aberration
+Freckle (Aberration),Common,Aberration
+Rosette (Aberration),Uncommon,Aberration
+Noxtide (Aberration),Uncommon,Aberration
+Sarcophagus (Aberration),Rare,Aberration
+Weaver (Aberration),Limited,Aberration
+Marbled (Aberration),Common,Aberration
+Safari (Aberration),Common,Aberration
+Eel (Aberration),Uncommon,Aberration
+Sludge (Aberration),Limited,Aberration
+Patchwork (Aberration),Limited,Aberration
+Bee (Aberration),Rare,Aberration
+Clouded (Banescale),Common,Banescale
+Myrid,Limited,Modern
+Flair (Gaoler),Uncommon,Gaoler
+Flair (Aberration),Uncommon,Aberration
+Foam,Limited,Modern
+Foam (Undertide),Limited,Undertide
+Blend (Undertide),Common,Undertide
+Pack (Undertide),Uncommon,Undertide
+Daub (Undertide),Uncommon,Undertide
+Facet (Undertide),Rare,Undertide
+Seraph (Undertide),Uncommon,Undertide
+Sarcophagus (Undertide),Rare,Undertide
+Trail (Undertide),Limited,Undertide
+Peregrine (Undertide),Common,Undertide
+Hex (Undertide),Uncommon,Undertide
+Eel (Undertide),Uncommon,Undertide
+Bee (Undertide),Rare,Undertide
+Noxtide (Undertide),Uncommon,Undertide
+Chess (Undertide),Common,Undertide
+Saddle (Undertide),Uncommon,Undertide
+Safari (Undertide),Common,Undertide
+Current (Undertide),Uncommon,Undertide
+Toxin (Undertide),Limited,Undertide
+Freckle (Undertide),Common,Undertide
+Rings (Undertide),Limited,Undertide
+Marbled (Undertide),Common,Undertide
+Myrid (Undertide),Limited,Undertide
+Paisley,Limited,Modern
+Paisley (Banescale),Limited,Banescale
+Paisley (Veilspun),Limited,Veilspun
+Peregrine (Veilspun),Common,Veilspun
+Toxin (Veilspun),Limited,Veilspun
+Sludge (Veilspun),Limited,Veilspun
+Clouded (Veilspun),Common,Veilspun
+Freckle (Veilspun),Common,Veilspun
+Butterfly (Veilspun),Rare,Veilspun
+Daub (Veilspun),Uncommon,Veilspun
+Facet (Veilspun),Rare,Veilspun
+Freckle (Banescale),Common,Banescale
+Blend (Aether),Common,Aether
+Flair (Aether),Uncommon,Aether
+Daub (Aether),Uncommon,Aether
+Myrid (Aether),Limited,Aether
+Rosette (Aether),Uncommon,Aether
+Saturn (Aether),Uncommon,Aether
+Butterfly (Aether),Rare,Aether
+Breakup (Aether),Uncommon,Aether
+Edged (Aether),Common,Aether
+Alloy (Aether),Rare,Aether
+Noxtide (Aether),Uncommon,Aether
+Paint (Aether),Common,Aether
+Morph (Aether),Limited,Aether
+Spinner (Aether),Limited,Aether
+Thread (Aether),Common,Aether
+Blaze (Aether),Uncommon,Aether
+Foam (Aether),Limited,Aether
+Patchwork (Aether),Limited,Aether
+Flicker (Aether),Rare,Aether
+Icing (Aether),Limited,Aether
+Constellation (Aether),Rare,Aether
+Eye Spots (Aether),Common,Aether
+Jester,Rare,Modern
+Saddle (Gaoler),Uncommon,Gaoler
+Foam (Gaoler),Limited,Gaoler
+Toxin (Gaoler),Limited,Gaoler
+Eel (Gaoler),Uncommon,Gaoler
+Safari (Gaoler),Common,Gaoler
+Spinner (Gaoler),Limited,Gaoler
+Sludge (Gaoler),Limited,Gaoler
+Marbled (Gaoler),Common,Gaoler
+Patchwork (Gaoler),Limited,Gaoler
+Clouded (Gaoler),Common,Gaoler
+Daub (Banescale),Uncommon,Banescale
+Facet (Banescale),Rare,Banescale
+Eel (Banescale),Uncommon,Banescale
+Foam (Banescale),Limited,Banescale
+Sarcophagus (Banescale),Rare,Banescale
+Fissure (Sandsurge),Limited,Sandsurge
+Spire (Sandsurge),Common,Sandsurge
+Myrid (Sandsurge),Limited,Sandsurge
+Saddle (Sandsurge),Uncommon,Sandsurge
+Seraph (Sandsurge),Uncommon,Sandsurge
+Blend (Sandsurge),Common,Sandsurge
+Jester (Sandsurge),Rare,Sandsurge
+Flair (Sandsurge),Uncommon,Sandsurge
+Arowana (Sandsurge),Common,Sandsurge
+Malachite (Sandsurge),Limited,Sandsurge
+Eye Spots (Sandsurge),Common,Sandsurge
+Saturn (Sandsurge),Uncommon,Sandsurge
+Rosette (Sandsurge),Uncommon,Sandsurge
+Noxtide (Sandsurge),Uncommon,Sandsurge
+Breakup (Sandsurge),Uncommon,Sandsurge
+Paint (Sandsurge),Common,Sandsurge
+Trail (Sandsurge),Limited,Sandsurge
+Morph (Sandsurge),Limited,Sandsurge
+Safari (Sandsurge),Common,Sandsurge
+Coil (Dusthide),Uncommon,Dusthide
+Diamondback (Sandsurge),Uncommon,Sandsurge
+Bee (Sandsurge),Rare,Sandsurge
+Sludge (Sandsurge),Limited,Sandsurge
+Marbled (Sandsurge),Common,Sandsurge
+Striation (Sandsurge),Common,Sandsurge
+Stripes (Sandsurge),Common,Sandsurge
+Marlin (Sandsurge),Limited,Sandsurge
+Blaze,Uncommon,Modern
+Blaze (Aberration),Uncommon,Aberration
+Blaze (Banescale),Uncommon,Banescale
+Blaze (Gaoler),Uncommon,Gaoler
+Blaze (Sandsurge),Uncommon,Sandsurge
+Blaze (Undertide),Uncommon,Undertide
+Blaze (Veilspun),Uncommon,Veilspun
+Clouded (Aberration),Common,Aberration
+Constellation (Aberration),Rare,Aberration
+Current (Aberration),Uncommon,Aberration
+Eye Spots (Aberration),Common,Aberration
+Foam (Aberration),Limited,Aberration
+Jester (Aberration),Rare,Aberration
+Myrid (Aberration),Limited,Aberration
+Paisley (Aberration),Limited,Aberration
+Seraph (Aberration),Uncommon,Aberration
+Spinner (Aberration),Limited,Aberration
+Toxin (Aberration),Limited,Aberration
+Trail (Aberration),Limited,Aberration
+Saddle,Uncommon,Modern
+Saddle (Aberration),Uncommon,Aberration
+Saddle (Aether),Uncommon,Aether
+Saddle (Banescale),Uncommon,Banescale
+Saddle (Veilspun),Uncommon,Veilspun
+Malachite,Limited,Modern
+Daub (Auraboa),Uncommon,Auraboa
+Saddle (Auraboa),Uncommon,Auraboa
+Myrid (Auraboa),Limited,Auraboa
+Larvae (Auraboa),Common,Auraboa
+Blend (Auraboa),Common,Auraboa
+Peregrine (Auraboa),Common,Auraboa
+Paisley (Auraboa),Limited,Auraboa
+Flair (Auraboa),Uncommon,Auraboa
+Hex (Auraboa),Uncommon,Auraboa
+Jester (Auraboa),Rare,Auraboa
+Rosette (Auraboa),Uncommon,Auraboa
+Edged (Auraboa),Common,Auraboa
+Alloy (Auraboa),Rare,Auraboa
+Riopa (Auraboa),Uncommon,Auraboa
+Breakup (Auraboa),Uncommon,Auraboa
+Weaver (Auraboa),Limited,Auraboa
+Paint (Auraboa),Common,Auraboa
+Morph (Auraboa),Limited,Auraboa
+Diamondback (Auraboa),Uncommon,Auraboa
+Current (Auraboa),Uncommon,Auraboa
+Striation (Auraboa),Common,Auraboa
+Stripes (Auraboa),Common,Auraboa
+Hypnotic (Auraboa),Uncommon,Auraboa
+Lacquer (Auraboa),Common,Auraboa
+Woven (Auraboa),Rare,Auraboa
+Constellation (Auraboa),Rare,Auraboa
+Malachite (Undertide),Limited,Undertide
+Eye Spots (Undertide),Common,Undertide
+Paisley (Undertide),Limited,Undertide
+Flair (Undertide),Uncommon,Undertide
+Fissure (Undertide),Limited,Undertide
+Rosette (Undertide),Uncommon,Undertide
+Saturn (Undertide),Uncommon,Undertide
+Weaver (Undertide),Limited,Undertide
+Paint (Undertide),Common,Undertide
+Constellation (Undertide),Rare,Undertide
+Striation (Undertide),Common,Undertide
+Stripes (Undertide),Common,Undertide
+Lacquer (Undertide),Common,Undertide
+Spire (Undertide),Common,Undertide
+Alloy (Undertide),Rare,Undertide
+Affection (Auraboa),Limited,Auraboa
+Patchwork (Undertide),Limited,Undertide
+Butterfly (Undertide),Rare,Undertide
+Jester (Undertide),Rare,Undertide
+Weaver,Limited,Modern
+Weaver (Aether),Limited,Aether
+Weaver (Banescale),Limited,Banescale
+Weaver (Gaoler),Limited,Gaoler
+Weaver (Sandsurge),Limited,Sandsurge
+Weaver (Veilspun),Limited,Veilspun
+Myrid (Banescale),Limited,Banescale
+Myrid (Gaoler),Limited,Gaoler
+Myrid (Veilspun),Limited,Veilspun
+Daub (Dusthide),Uncommon,Dusthide
+Chess (Dusthide),Common,Dusthide
+Freckle (Dusthide),Common,Dusthide
+Blaze (Dusthide),Uncommon,Dusthide
+Blend (Dusthide),Common,Dusthide
+Hex (Dusthide),Uncommon,Dusthide
+Fissure (Dusthide),Limited,Dusthide
+Jester (Dusthide),Rare,Dusthide
+Saturn (Dusthide),Uncommon,Dusthide
+Peregrine (Dusthide),Common,Dusthide
+Edged (Dusthide),Common,Dusthide
+Weaver (Dusthide),Limited,Dusthide
+Butterfly (Dusthide),Rare,Dusthide
+Paint (Dusthide),Common,Dusthide
+Loop (Dusthide),Limited,Dusthide
+Spire (Dusthide),Common,Dusthide
+Trail (Dusthide),Limited,Dusthide
+Lode (Dusthide),Rare,Dusthide
+Bee (Dusthide),Rare,Dusthide
+Eel (Dusthide),Uncommon,Dusthide
+Current (Dusthide),Uncommon,Dusthide
+Marlin (Dusthide),Limited,Dusthide
+Safari (Dusthide),Common,Dusthide
+Spinner (Dusthide),Limited,Dusthide
+Lacquer (Dusthide),Common,Dusthide
+Parade (Dusthide),Limited,Dusthide
+Lode,Rare,Modern
+Bee (Aether),Rare,Aether
+Chess (Aether),Common,Aether
+Current (Aether),Uncommon,Aether
+Eel (Aether),Uncommon,Aether
+Facet (Aether),Rare,Aether
+Fissure (Aether),Limited,Aether
+Hex (Aether),Uncommon,Aether
+Hypnotic (Aether),Uncommon,Aether
+Jester (Aether),Rare,Aether
+Lacquer (Aether),Common,Aether
+Malachite (Aether),Limited,Aether
+Paisley (Aether),Limited,Aether
+Peregrine (Aether),Common,Aether
+Safari (Aether),Common,Aether
+Striation (Aether),Common,Aether
+Stripes (Aether),Common,Aether
+Spire (Aether),Common,Aether
+Sludge (Aether),Limited,Aether
+Choir,Uncommon,Modern
+Choir (Veilspun),Uncommon,Veilspun
+Seraph (Veilspun),Uncommon,Veilspun
+Seraph (Dusthide),Uncommon,Dusthide
+Breakup (Aberration),Uncommon,Aberration
+Breakup (Banescale),Uncommon,Banescale
+Breakup (Dusthide),Uncommon,Dusthide
+Breakup (Veilspun),Uncommon,Veilspun
+Arowana (Everlux),Common,Everlux
+Choir (Everlux),Uncommon,Everlux
+Blend (Everlux),Common,Everlux
+Daub (Everlux),Uncommon,Everlux
+Facet (Everlux),Rare,Everlux
+Flair (Everlux),Uncommon,Everlux
+Larvae (Everlux),Common,Everlux
+Malachite (Everlux),Limited,Everlux
+Seraph (Everlux),Uncommon,Everlux
+Silkspot (Everlux),Uncommon,Everlux
+Edged (Everlux),Common,Everlux
+Mottle (Everlux),Common,Everlux
+Noxtide (Everlux),Uncommon,Everlux
+Saturn (Everlux),Uncommon,Everlux
+Butterfly (Everlux),Rare,Everlux
+Lode (Everlux),Rare,Everlux
+Paint (Everlux),Common,Everlux
+Morph (Everlux),Limited,Everlux
+Sarcophagus (Everlux),Rare,Everlux
+Swallowtail (Everlux),Limited,Everlux
+Sarcophagus (Veilspun),Rare,Veilspun
+Current (Everlux),Uncommon,Everlux
+Spinner (Everlux),Limited,Everlux
+Trail (Everlux),Limited,Everlux
+Hawkmoth (Everlux),Uncommon,Everlux
+Sludge (Everlux),Limited,Everlux
+Coil (Everlux),Uncommon,Everlux
+Constellation (Everlux),Rare,Everlux
+Foam (Everlux),Limited,Everlux
+Stripes (Everlux),Common,Everlux
+Toxin (Everlux),Limited,Everlux
+Lacquer (Everlux),Common,Everlux
+Fissure (Veilspun),Limited,Veilspun
+Crown (Everlux),Rare,Everlux
+Chess (Gaoler),Common,Gaoler
+Jester (Gaoler),Rare,Gaoler
+Noxtide (Gaoler),Uncommon,Gaoler
+Lacquer (Gaoler),Common,Gaoler
+Rosette (Veilspun),Uncommon,Veilspun
+Spire (Veilspun),Common,Veilspun
+Larvae (Veilspun),Common,Veilspun
+Larvae (Aberration),Common,Aberration
+Larvae (Aether),Common,Aether
+Larvae (Banescale),Common,Banescale
+Larvae (Dusthide),Common,Dusthide
+Larvae (Undertide),Common,Undertide
+Larvae (Sandsurge),Common,Sandsurge
+Larvae (Gaoler),Common,Gaoler
+,Spacer,Modern
+Paisley (Sandsurge),Limited,Sandsurge
+Hypnotic (Banescale),Uncommon,Banescale
+Hypnotic (Gaoler),Uncommon,Gaoler
+Hypnotic (Sandsurge),Uncommon,Sandsurge
+Hypnotic (Undertide),Uncommon,Undertide
+Facet (Sandsurge),Rare,Sandsurge
+Loam,Limited,Modern
+Loam (Aberration),Limited,Aberration
+Loam (Aether),Limited,Aether
+Loam (Auraboa),Limited,Auraboa
+Loam (Banescale),Limited,Banescale
+Loam (Dusthide),Limited,Dusthide
+Loam (Gaoler),Limited,Gaoler
+Loam (Sandsurge),Limited,Sandsurge
+Loam (Undertide),Limited,Undertide
+Loam (Veilspun),Limited,Veilspun
+Loam (Everlux),Limited,Everlux
+Affection,Limited,Modern
+Chess,Common,Modern
+Chess (Aberration),Common,Aberration
+Silkspot (Cirrus),Uncommon,Cirrus
+Safari (Cirrus),Common,Cirrus
+Loop (Cirrus),Limited,Cirrus
+Daub (Cirrus),Uncommon,Cirrus
+Carousel (Cirrus),Uncommon,Cirrus
+Seraph (Cirrus),Uncommon,Cirrus
+Choir (Cirrus),Uncommon,Cirrus
+Blaze (Cirrus),Uncommon,Cirrus
+Blend (Cirrus),Common,Cirrus
+Flair (Cirrus),Uncommon,Cirrus
+Mottle (Cirrus),Common,Cirrus
+Weaver (Cirrus),Limited,Cirrus
+Dye (Cirrus),Uncommon,Cirrus
+Jester (Cirrus),Rare,Cirrus
+Paint (Cirrus),Common,Cirrus
+Alloy (Cirrus),Rare,Cirrus
+Morph (Cirrus),Limited,Cirrus
+Tear (Cirrus),Uncommon,Cirrus
+Current (Cirrus),Uncommon,Cirrus
+Bee (Cirrus),Rare,Cirrus
+Hypnotic (Cirrus),Uncommon,Cirrus
+Lacquer (Cirrus),Common,Cirrus
+Stripes (Cirrus),Common,Cirrus
+Spinner (Cirrus),Limited,Cirrus
+Loam (Cirrus),Limited,Cirrus
+Roan (Cirrus),Common,Cirrus
+Chess (Sandsurge),Common,Sandsurge
+Spinner (Sandsurge),Limited,Sandsurge
+Lacquer (Sandsurge),Common,Sandsurge
+Hawkmoth (Sandsurge),Uncommon,Sandsurge
+Daub (Sandsurge),Uncommon,Sandsurge
+Tear (Sandsurge),Uncommon,Sandsurge
+Butterfly (Sandsurge),Rare,Sandsurge
+Eel (Sandsurge),Uncommon,Sandsurge
+Peregrine (Sandsurge),Common,Sandsurge
+Lode (Sandsurge),Rare,Sandsurge
+Lacquer,Common,Modern
+Lacquer (Aberration),Common,Aberration
+Lacquer (Banescale),Common,Banescale
+Lacquer (Veilspun),Common,Veilspun
+Chess (Auraboa),Common,Auraboa
+Chess (Banescale),Common,Banescale
+Chess (Veilspun),Common,Veilspun
+Loop (Thorntail),Limited,Thorntail
+Arowana (Thorntail),Common,Thorntail
+Warp (Thorntail),Rare,Thorntail
+Daub (Thorntail),Uncommon,Thorntail
+Lumen (Thorntail),Rare,Thorntail
+Saddle (Thorntail),Uncommon,Thorntail
+Croc (Thorntail),Uncommon,Thorntail
+Sugarplum (Thorntail),Limited,Thorntail
+Seraph (Thorntail),Uncommon,Thorntail
+Choir (Thorntail),Uncommon,Thorntail
+Blaze (Thorntail),Uncommon,Thorntail
+Silkspot (Thorntail),Uncommon,Thorntail
+Blend (Thorntail),Common,Thorntail
+Paisley (Thorntail),Limited,Thorntail
+Dye (Thorntail),Uncommon,Thorntail
+Rosette (Thorntail),Uncommon,Thorntail
+Mottle (Thorntail),Common,Thorntail
+Weaver (Thorntail),Limited,Thorntail
+Butterfly (Thorntail),Rare,Thorntail
+Sarcophagus (Thorntail),Rare,Thorntail
+Paint (Thorntail),Common,Thorntail
+Morph (Thorntail),Limited,Thorntail
+Tear (Thorntail),Uncommon,Thorntail
+Diamondback (Thorntail),Uncommon,Thorntail
+Current (Thorntail),Uncommon,Thorntail
+Marlin (Thorntail),Limited,Thorntail
+Spinner (Thorntail),Limited,Thorntail
+Loam (Thorntail),Limited,Thorntail
+Striation (Thorntail),Common,Thorntail
+Foam (Thorntail),Limited,Thorntail
+Lacquer (Thorntail),Common,Thorntail
+Hypnotic (Thorntail),Uncommon,Thorntail
+Chalice (Thorntail),Rare,Thorntail
+Signal (Thorntail),Common,Thorntail
+Drip (Thorntail),Uncommon,Thorntail
+Marlin,Limited,Modern
+Marlin (Aberration),Limited,Aberration
+Marlin (Aether),Limited,Aether
+Marlin (Auraboa),Limited,Auraboa
+Marlin (Cirrus),Limited,Cirrus
+Marlin (Everlux),Limited,Everlux
+Marlin (Gaoler),Limited,Gaoler
+Marlin (Undertide),Limited,Undertide
+Marlin (Veilspun),Limited,Veilspun
+Thread (Auraboa),Common,Auraboa
+Lode (Auraboa),Rare,Auraboa
+Sludge (Auraboa),Limited,Auraboa
+Seraph (Auraboa),Uncommon,Auraboa
+Tear,Uncommon,Modern
+Tear (Auraboa),Uncommon,Auraboa
+Tear (Dusthide),Uncommon,Dusthide
+Tear (Everlux),Uncommon,Everlux
+Tear (Veilspun),Uncommon,Veilspun
+Rosette (Everlux),Uncommon,Everlux
+Arowana (Vigil),Common,Vigil
+Daub (Vigil),Uncommon,Vigil
+Eye Spots (Vigil),Common,Vigil
+Larvae (Vigil),Common,Vigil
+Chess (Vigil),Common,Vigil
+Coil (Vigil),Uncommon,Vigil
+Hawkmoth,Uncommon,Modern
+Hawkmoth (Aberration),Uncommon,Aberration
+Hawkmoth (Aether),Uncommon,Aether
+Hawkmoth (Auraboa),Uncommon,Auraboa
+Hawkmoth (Banescale),Uncommon,Banescale
+Hawkmoth (Dusthide),Uncommon,Dusthide
+Hawkmoth (Gaoler),Uncommon,Gaoler
+Hawkmoth (Undertide),Uncommon,Undertide
+Blaze (Vigil),Uncommon,Vigil
+Silkspot (Vigil),Uncommon,Vigil
+Hatch (Vigil),Limited,Vigil
+Warp (Vigil),Rare,Vigil
+Blend (Vigil),Common,Vigil
+Rosette (Vigil),Uncommon,Vigil
+Clouded (Vigil),Common,Vigil
+Mottle (Vigil),Common,Vigil
+Alloy (Vigil),Rare,Vigil
+Oxidize (Vigil),Uncommon,Vigil
+Paint (Vigil),Common,Vigil
+Eel (Vigil),Uncommon,Vigil
+Marlin (Vigil),Limited,Vigil
+Spinner (Vigil),Limited,Vigil
+Marbled (Vigil),Common,Vigil
+Current (Vigil),Uncommon,Vigil
+Striation (Vigil),Common,Vigil
+Hypnotic (Vigil),Uncommon,Vigil
+Spire (Vigil),Common,Vigil
+Lacquer (Vigil),Common,Vigil

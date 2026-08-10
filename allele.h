@@ -15,7 +15,7 @@ public:
 
     Allele() = default;
 
-    Allele(Rarity rarity,std::string string, std::string ancientSpecies = "");
+    Allele(std::string string, Rarity rarity, std::string ancientSpecies = "");
 
     bool operator==(const Allele& other) const
     {
