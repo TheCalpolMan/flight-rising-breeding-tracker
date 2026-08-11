@@ -762,5 +762,15 @@ void MainWindow::on_pastedragonpushbutton_clicked()
 
         return;
     }
+
+    QMessageBox msgBox(this);
+
+    msgBox.setText("<html>This format doesn't work! Please submit an issue at:<br>"
+                   "<a href=\"https://github.com/TheCalpolMan/flight-rising-breeding-tracker/issues\">"
+                   "https://github.com/TheCalpolMan/flight-rising-breeding-tracker/issues</a><br>"
+                   "containing information about your operating system, browser, and dragon!</html>");
+
+    msgBox.setStandardButtons(QMessageBox::Close);
+    msgBox.exec();
 }
 
