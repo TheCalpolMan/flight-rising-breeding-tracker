@@ -9,9 +9,6 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(absl_DIR ./abseil-cpp)
-add_subdirectory(re2)
-
 include(FetchContent)
 
 FetchContent_Declare (
@@ -93,8 +90,7 @@ endif()
 
 target_include_directories(flight-rising-breeding-tracker PRIVATE .)
 target_include_directories(flight-rising-breeding-tracker PRIVATE rapidjson)
-# target_include_directories(flight-rising-breeding-tracker PRIVATE re2)
-# target_include_directories(flight-rising-breeding-tracker PRIVATE re2/re2)
+target_include_directories(flight-rising-breeding-tracker PRIVATE boost-1.91.0/include)
 
 configure_file(assets/eyes.csv assets/eyes.csv COPYONLY)
 configure_file(assets/breeds.csv assets/breeds.csv COPYONLY)
@@ -110,10 +106,6 @@ configure_file(assets/dragon-image-select.jpg assets/dragon-image-select.jpg COP
 target_link_libraries(flight-rising-breeding-tracker PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(flight-rising-breeding-tracker PRIVATE Qt6::Widgets)
 target_link_libraries(flight-rising-breeding-tracker PRIVATE Qt6::Core)
-
-target_link_libraries(flight-rising-breeding-tracker PRIVATE absl::base)
-# target_link_libraries(flight-rising-breeding-tracker PRIVATE re2::re2)
-
 target_link_libraries(flight-rising-breeding-tracker PUBLIC TracyClient)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

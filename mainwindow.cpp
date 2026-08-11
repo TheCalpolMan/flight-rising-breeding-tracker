@@ -753,6 +753,14 @@ void MainWindow::on_pastedragonpushbutton_clicked()
         return;
     }
 
-    DragonRegex::ConstructDragon(text.toStdString());
+    Dragon dragon;
+
+    if (DragonRegex::ConstructDragon(text.toStdString(), dragon))
+    {
+        possibleParentDragons.push_back(dragon);
+        updatePossibleParentDragons();
+
+        return;
+    }
 }
 
