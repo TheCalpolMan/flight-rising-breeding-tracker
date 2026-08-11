@@ -8,11 +8,24 @@
 #include "modutils.h"
 #include "vectorhelpers.h"
 
+DragonPossibility::~DragonPossibility()
+{
+    std::free(primaryColour);
+    std::free(secondaryColour);
+    std::free(tertiaryColour);
+}
+
+DragonPossibility::DragonPossibility()
+{
+    setupColourMembers();
+}
+
 DragonPossibility::DragonPossibility(const Dragon& base) :
     name(base.name),
     gender(base.male ? Gender::Male : Gender::Female)
 {
     Information& information = Information::getInstance();
+    setupColourMembers();
 
     breed.insert(std::make_pair(VectorHelpers::getIndex(information.getBreeds(), base.breed), 1));
 
@@ -29,6 +42,7 @@ DragonPossibility::DragonPossibility(const DragonPossibility& parent1, const Dra
 {
     ZoneScoped;
     Information& information = Information::getInstance();
+    setupColourMembers();
 
     setGeneWeights(breed, information.getBreeds(), parent1.breed, parent2.breed);
 
@@ -39,6 +53,16 @@ DragonPossibility::DragonPossibility(const DragonPossibility& parent1, const Dra
     setColourWeights(primaryColour, parent1.primaryColour, parent2.primaryColour);
     setColourWeights(secondaryColour, parent1.secondaryColour, parent2.secondaryColour);
     setColourWeights(tertiaryColour, parent1.tertiaryColour, parent2.tertiaryColour);
+}
+
+void DragonPossibility::setupColourMembers()
+{
+    ZoneScoped;
+    colourCount = Information::getInstance().getColours(true).size();
+
+    primaryColour = reinterpret_cast<double*>(std::calloc(colourCount, sizeof(double)));
+    secondaryColour = reinterpret_cast<double*>(std::calloc(colourCount, sizeof(double)));
+    tertiaryColour = reinterpret_cast<double*>(std::calloc(colourCount, sizeof(double)));
 }
 
 void DragonPossibility::setGeneWeights(std::unordered_map<int, double>& targetGene,
@@ -62,13 +86,13 @@ void DragonPossibility::setGeneWeights(std::unordered_map<int, double>& targetGe
     }
 }
 
-void DragonPossibility::setColourWeights(double targetColour[177], const double parent1[177], const double parent2[177])
+void DragonPossibility::setColourWeights(double *targetColour, const double *parent1, const double *parent2)
 {
     ZoneScoped;
 
     std::vector<int> parent2Indexes = decltype(parent2Indexes)();
 
-    for (int parent2Index = 0; parent2Index < 177; parent2Index++)
+    for (int parent2Index = 0; parent2Index < colourCount; parent2Index++)
     {
         if (parent2[parent2Index] == 0)
         {
@@ -78,7 +102,7 @@ void DragonPossibility::setColourWeights(double targetColour[177], const double 
         parent2Indexes.push_back(parent2Index);
     }
 
-    for (int parent1Index = 0; parent1Index < 177; parent1Index++)
+    for (int parent1Index = 0; parent1Index < colourCount; parent1Index++)
     {
         if (parent1[parent1Index] == 0)
         {
@@ -88,21 +112,21 @@ void DragonPossibility::setColourWeights(double targetColour[177], const double 
         for (int parent2Index : parent2Indexes)
         {
             int startIndex = parent1Index;
-            int endIndex = (parent2Index + 1) % 177;
+            int endIndex = (parent2Index + 1) % colourCount;
 
-            int distance = ModUtils::getDisplacement(startIndex, endIndex, 177);
+            int distance = ModUtils::getDisplacement(startIndex, endIndex, colourCount);
 
             if (distance <= 0)
             {
                 startIndex = parent2Index;
-                endIndex = (parent1Index + 1)  % 177;
+                endIndex = (parent1Index + 1)  % colourCount;
 
-                distance = ModUtils::getDisplacement(startIndex, endIndex, 177);
+                distance = ModUtils::getDisplacement(startIndex, endIndex, colourCount);
             }
 
             double chance = parent1[parent1Index] * parent2[parent2Index] / distance;
 
-            for (int i = startIndex; i != endIndex; i = (i + 1) % 177)
+            for (int i = startIndex; i != endIndex; i = (i + 1) % colourCount)
             {
                 targetColour[i] += chance;
             }

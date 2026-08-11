@@ -14,7 +14,7 @@ include(FetchContent)
 FetchContent_Declare (
     tracy
     GIT_REPOSITORY https://github.com/wolfpld/tracy.git
-    GIT_TAG tags/v0.13.1
+    GIT_TAG tags/v0.14.0
     GIT_SHALLOW TRUE
     GIT_PROGRESS TRUE
     )
@@ -90,6 +90,13 @@ endif()
 
 target_include_directories(flight-rising-breeding-tracker PRIVATE .)
 target_include_directories(flight-rising-breeding-tracker PRIVATE rapidjson)
+
+configure_file(assets/eyes.csv assets/eyes.csv COPYONLY)
+configure_file(assets/breeds.csv assets/breeds.csv COPYONLY)
+configure_file(assets/colours.csv assets/colours.csv COPYONLY)
+configure_file(assets/primary-genes.csv assets/primary-genes.csv COPYONLY)
+configure_file(assets/secondary-genes.csv assets/secondary-genes.csv COPYONLY)
+configure_file(assets/tertiary-genes.csv assets/tertiary-genes.csv COPYONLY)
 
 configure_file(assets/save-schema.json assets/save-schema.json COPYONLY)
 configure_file(assets/rarity-chances.csv assets/rarity-chances.csv COPYONLY)
