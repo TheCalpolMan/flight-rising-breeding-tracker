@@ -65,6 +65,7 @@ find_package(Qt6 REQUIRED COMPONENTS Core)
         pairingresultsdialog.h pairingresultsdialog.cpp pairingresultsdialog.ui
         dragonindexes.h dragonindexes.cpp
         colourdistributiontool.h colourdistributiontool.cpp colourdistributiontool.ui
+        dragonregex.h dragonregex.cpp
 
 
 
@@ -89,6 +90,7 @@ endif()
 
 target_include_directories(flight-rising-breeding-tracker PRIVATE .)
 target_include_directories(flight-rising-breeding-tracker PRIVATE rapidjson)
+target_include_directories(flight-rising-breeding-tracker PRIVATE boost-1.91.0/include)
 
 configure_file(assets/eyes.csv assets/eyes.csv COPYONLY)
 configure_file(assets/breeds.csv assets/breeds.csv COPYONLY)

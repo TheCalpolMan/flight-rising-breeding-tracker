@@ -7,9 +7,11 @@
 #include <filesystem>
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QInputDialog>
 
 #include "dragon.h"
 #include "urlopener.h"
+#include "dragonregex.h"
 #include "searchbuilder.h"
 #include "vectorhelpers.h"
 #include "breedingtreecalculator.h"
@@ -737,5 +739,38 @@ void MainWindow::on_namelineedit_returnPressed()
 void MainWindow::on_actionColour_Distribution_triggered()
 {
     colourToolDialog->open(constructMorphologyDragon(), possibleParentDragons);
+}
+
+
+void MainWindow::on_pastedragonpushbutton_clicked()
+{
+    bool ok;
+    QString text = QInputDialog::getMultiLineText(this, tr("Dragon Input"),
+        "Ctrl-A, Ctrl-C on any dragon's page, then Ctrl-V here!", "", &ok);
+
+    if (!ok)
+    {
+        return;
+    }
+
+    Dragon dragon;
+
+    if (DragonRegex::ConstructDragon(text.toStdString(), dragon))
+    {
+        possibleParentDragons.push_back(dragon);
+        updatePossibleParentDragons();
+
+        return;
+    }
+
+    QMessageBox msgBox(this);
+
+    msgBox.setText("<html>This format doesn't work! Please submit an issue at:<br>"
+                   "<a href=\"https://github.com/TheCalpolMan/flight-rising-breeding-tracker/issues\">"
+                   "https://github.com/TheCalpolMan/flight-rising-breeding-tracker/issues</a><br>"
+                   "containing information about your operating system, browser, and dragon!</html>");
+
+    msgBox.setStandardButtons(QMessageBox::Close);
+    msgBox.exec();
 }
 

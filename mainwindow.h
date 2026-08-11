@@ -83,6 +83,8 @@ private slots:
 
     void on_actionColour_Distribution_triggered();
 
+    void on_pastedragonpushbutton_clicked();
+
 private:
     Ui::MainWindow *ui;
     std::string loadedFile = "";

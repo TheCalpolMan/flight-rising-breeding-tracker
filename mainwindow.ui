@@ -1825,7 +1825,7 @@
         <string>Add</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="addrelationpushbutton">
+      <widget class="QPushButton" name="pastedragonpushbutton">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -1835,7 +1835,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Add Relation</string>
+        <string>Paste Dragon</string>
        </property>
       </widget>
      </widget>
