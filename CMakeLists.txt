@@ -9,25 +9,10 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(absl_DIR ./abseil-cpp)
+add_subdirectory(re2)
+
 include(FetchContent)
-
-FetchContent_Declare (
-    abseil
-    GIT_REPOSITORY https://github.com/abseil/abseil-cpp.git
-    GIT_TAG tags/20260526.0
-    GIT_SHALLOW FALSE
-    GIT_PROGRESS TRUE
-    )
-FetchContent_MakeAvailable(abseil)
-
-FetchContent_Declare (
-    google-re2
-    GIT_REPOSITORY https://github.com/google/re2.git
-    GIT_TAG tags/2025-11-05
-    GIT_SHALLOW FALSE
-    GIT_PROGRESS TRUE
-    )
-FetchContent_MakeAvailable(google-re2)
 
 FetchContent_Declare (
     tracy
@@ -108,8 +93,8 @@ endif()
 
 target_include_directories(flight-rising-breeding-tracker PRIVATE .)
 target_include_directories(flight-rising-breeding-tracker PRIVATE rapidjson)
-# target_include_directories(flight-rising-breeding-tracker PRIVATE ${CMAKE_BINARY_DIR}/_deps/re2-src/re2)
-# target_include_directories(flight-rising-breeding-tracker PRIVATE ${CMAKE_BINARY_DIR}/_deps/re2-src/re2)
+# target_include_directories(flight-rising-breeding-tracker PRIVATE re2)
+# target_include_directories(flight-rising-breeding-tracker PRIVATE re2/re2)
 
 configure_file(assets/eyes.csv assets/eyes.csv COPYONLY)
 configure_file(assets/breeds.csv assets/breeds.csv COPYONLY)
@@ -125,9 +110,11 @@ configure_file(assets/dragon-image-select.jpg assets/dragon-image-select.jpg COP
 target_link_libraries(flight-rising-breeding-tracker PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(flight-rising-breeding-tracker PRIVATE Qt6::Widgets)
 target_link_libraries(flight-rising-breeding-tracker PRIVATE Qt6::Core)
+
+target_link_libraries(flight-rising-breeding-tracker PRIVATE absl::base)
+# target_link_libraries(flight-rising-breeding-tracker PRIVATE re2::re2)
+
 target_link_libraries(flight-rising-breeding-tracker PUBLIC TracyClient)
-target_link_libraries(flight-rising-breeding-tracker PUBLIC absl::base)
-target_link_libraries(flight-rising-breeding-tracker PUBLIC re2::re2)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an

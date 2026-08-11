@@ -1,0 +1,7 @@
+[submodule "abseil-cpp"]
+	path = abseil-cpp
+	url = https://github.com/abseil/abseil-cpp.git
+	branch = lts_2026_05_26
+[submodule "re2"]
+	path = re2
+	url = https://github.com/google/re2.git

@@ -3,6 +3,7 @@
 #include <sstream>
 #include <iostream>
 
+#include "re2/re2/re2.h"
 
 #include "information.h"
 
@@ -16,9 +17,13 @@ Dragon DragonRegex::ConstructDragon(const std::string &paste)
     std::string breedGenderString = "icon\\s*((Female)?(Male)?)\\s*(" + getConcatenatedDragonBreeds() + ")";
     // std::cout << paste << std::endl;
 
-    // re2::RE2::FullMatch("hello", "h.*o");
+    int i;
+    std::string s;
+    assert(RE2::FullMatch("ruby:1234", "(\\w+):(\\d+)", &s, &i));
+    assert(s == "ruby");
+    assert(i == 1234);
 
-    std::cout << std::endl;
+    // std::cout << "Joined string: " << s << std::endl;
 
     return dragon;
 }
