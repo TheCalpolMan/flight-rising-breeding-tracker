@@ -16,3 +16,8 @@ Dragon::Dragon(const std::string& name, bool male, const EyeAllele& eye, const A
 {
 
 }
+
+void Dragon::addLineage(int generation, std::shared_ptr<Dragon> progenitor)
+{
+    lineage.emplace_back(generation, std::weak_ptr<Dragon>(progenitor));
+}

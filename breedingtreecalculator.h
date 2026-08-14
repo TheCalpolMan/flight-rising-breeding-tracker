@@ -11,15 +11,13 @@
 class BreedingTreeCalculator
 {
 public:
-    BreedingTreeCalculator(std::shared_ptr<Dragon> aim, const std::vector<Dragon>& possibleParents);
+    BreedingTreeCalculator(Dragon aim, const std::vector<std::shared_ptr<Dragon>>& possibleParents);
 
     const std::multiset<BreedingTreeConfig>& getConfigs();
 private:
     static int factorial(int n);
 
     static int nPr(int n, int r);
-
-    static std::vector<std::shared_ptr<Dragon>> convertDragonsToSharedPtr(const std::vector<Dragon>& dragons);
 
     static bool doesConfigHaveValidPairings(const BreedingTreeConfig& config);
 

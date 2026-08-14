@@ -14,7 +14,7 @@ public:
     SaveFormat(const Dragon& dragon, bool primaryToggle, bool secondaryToggle, bool tertiaryToggle,
                bool breedToggle, int primaryColourRange, int primaryColourOffset, int secondaryColourRange,
                int secondaryColourOffset, int tertiaryColourRange, int tertiaryColourOffset,
-               const std::vector<Dragon>& pairingDragons);
+               const std::vector<std::shared_ptr<Dragon>>& pairingDragons);
 
     SaveFormat(const std::string& fileLocation);
 
@@ -38,7 +38,7 @@ public:
     int tertiaryColourRange;
     int tertiaryColourOffset;
 
-    std::vector<Dragon> pairingDragons;
+    std::vector<std::shared_ptr<Dragon>> pairingDragons;
 };
 
 #endif // SAVEFORMAT_H

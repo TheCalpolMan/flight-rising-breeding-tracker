@@ -85,6 +85,8 @@ private slots:
 
     void on_pastedragonpushbutton_clicked();
 
+    void on_childlistwidget_currentRowChanged(int currentRow);
+
 private:
     Ui::MainWindow *ui;
     std::string loadedFile = "";
@@ -118,7 +120,7 @@ private:
 
     QPointer<PairingResultsDialog> pairingResultsDialog;
 
-    std::vector<Dragon> possibleParentDragons = decltype(possibleParentDragons)();
+    std::vector<std::shared_ptr<Dragon>> possibleParentDragons = decltype(possibleParentDragons)();
 
     // tools
 

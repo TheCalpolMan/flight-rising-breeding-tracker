@@ -7,9 +7,9 @@
 
 #include "binarytreegenerator.h"
 
-BreedingTreeCalculator::BreedingTreeCalculator(std::shared_ptr<Dragon> aim, const std::vector<Dragon>& possibleParents) :
-    possibleParents(convertDragonsToSharedPtr(possibleParents)),
-    aim(aim)
+BreedingTreeCalculator::BreedingTreeCalculator(Dragon aim, const std::vector<std::shared_ptr<Dragon>>& possibleParents) :
+    possibleParents(possibleParents),
+    aim(std::make_shared<Dragon>(aim))
 {
 
 }
@@ -79,18 +79,6 @@ int BreedingTreeCalculator::factorial(int n)
 int BreedingTreeCalculator::nPr(int n, int r)
 {
     return factorial(n) / factorial(n - r);
-}
-
-std::vector<std::shared_ptr<Dragon>> BreedingTreeCalculator::convertDragonsToSharedPtr(const std::vector<Dragon> &dragons)
-{
-    std::vector<std::shared_ptr<Dragon>> sharedDragons = decltype(sharedDragons)();
-
-    for(const auto& dragon : dragons)
-    {
-        sharedDragons.push_back(std::make_shared<Dragon>(dragon));
-    }
-
-    return sharedDragons;
 }
 
 bool BreedingTreeCalculator::doesConfigHaveValidPairings(const BreedingTreeConfig &config)

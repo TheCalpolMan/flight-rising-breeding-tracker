@@ -355,15 +355,20 @@ bool MainWindow::checkAllPairingInputs(bool createDialog)
 
 void MainWindow::updatePossibleParentDragons()
 {
+    ui->childlistwidget->clear();
+    ui->parentlistwidget->clear();
     ui->possibleparentlistwidget->clear();
 
     std::stringstream tooltip;
 
     for (int i = 0; i < possibleParentDragons.size(); i++)
     {
-        const auto& dragon = possibleParentDragons.at(i);
+        const Dragon& dragon = *possibleParentDragons.at(i);
 
+        ui->childlistwidget->addItem(dragon.name.c_str());
+        ui->parentlistwidget->addItem(dragon.name.c_str());
         ui->possibleparentlistwidget->addItem(dragon.name.c_str());
+
         ui->possibleparentlistwidget->item(i)->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::EditDelete));
 
         tooltip << dragon.breed.string << " " << (dragon.male ? "Male" : "Female") << std::endl;
@@ -371,10 +376,15 @@ void MainWindow::updatePossibleParentDragons()
         tooltip << "Secondary Gene: " << dragon.secondaryColour.name << " " << dragon.secondaryGene.string << std::endl;
         tooltip << "Tertiary Gene: " << dragon.tertiaryColour.name << " " << dragon.tertiaryGene.string;
 
+        ui->childlistwidget->item(i)->setToolTip(tooltip.str().c_str());
+        ui->parentlistwidget->item(i)->setToolTip(tooltip.str().c_str());
         ui->possibleparentlistwidget->item(i)->setToolTip(tooltip.str().c_str());
+
         tooltip.str("");
     }
 
+    ui->childlistwidget->update();
+    ui->parentlistwidget->update();
     ui->possibleparentlistwidget->update();
 
     if (!colourToolDialog->isHidden())
@@ -699,7 +709,7 @@ void MainWindow::on_addpairingpushbutton_clicked()
     Dragon dragon = constructPairingDragon();
 
     ui->namelineedit->clear();
-    possibleParentDragons.push_back(dragon);
+    possibleParentDragons.push_back(std::make_shared<Dragon>(dragon));
     updatePossibleParentDragons();
 }
 
@@ -712,7 +722,7 @@ void MainWindow::on_calculatepairingspushbutton_clicked()
 
     Dragon dragon = constructMorphologyDragon();
 
-    auto calculator = BreedingTreeCalculator(std::make_shared<Dragon>(dragon), possibleParentDragons);
+    auto calculator = BreedingTreeCalculator(dragon, possibleParentDragons);
     auto configs = calculator.getConfigs();
 
     pairingResultsDialog->enterResults(configs, dragon);
@@ -726,7 +736,7 @@ void MainWindow::on_possibleparentlistwidget_currentRowChanged(int currentRow)
         return;
     }
 
-    loadPairingDragon(possibleParentDragons.at(currentRow));
+    loadPairingDragon(*possibleParentDragons.at(currentRow));
 }
 
 
@@ -757,7 +767,7 @@ void MainWindow::on_pastedragonpushbutton_clicked()
 
     if (DragonRegex::ConstructDragon(text.toStdString(), dragon))
     {
-        possibleParentDragons.push_back(dragon);
+        possibleParentDragons.push_back(std::make_shared<Dragon>(dragon));
         updatePossibleParentDragons();
 
         return;
@@ -772,5 +782,11 @@ void MainWindow::on_pastedragonpushbutton_clicked()
 
     msgBox.setStandardButtons(QMessageBox::Close);
     msgBox.exec();
+}
+
+
+void MainWindow::on_childlistwidget_currentRowChanged(int currentRow)
+{
+
 }
 
