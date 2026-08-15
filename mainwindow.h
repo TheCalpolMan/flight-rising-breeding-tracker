@@ -87,6 +87,10 @@ private slots:
 
     void on_childlistwidget_currentRowChanged(int currentRow);
 
+    void on_removeRelationPushButton_clicked();
+
+    void on_addRelationPushButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     std::string loadedFile = "";
@@ -126,6 +130,8 @@ private:
 
     QPointer<ColourDistributionTool> colourToolDialog;
 
+    static std::string generateDragonTooltip(const Dragon& dragon);
+
     void updateColoursBasedOnGene(bool showDialogOnNoColour);
 
     void updateColours(int middleValue);
@@ -147,6 +153,10 @@ private:
     bool checkAllPairingInputs(bool createDialog);
 
     void updatePossibleParentDragons();
+
+    void updateLineages(std::shared_ptr<Dragon> target);
+
+    void pruneExpiredLineages();
 
     SaveFormat constructSave();
 

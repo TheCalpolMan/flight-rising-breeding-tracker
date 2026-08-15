@@ -359,8 +359,6 @@ void MainWindow::updatePossibleParentDragons()
     ui->parentlistwidget->clear();
     ui->possibleparentlistwidget->clear();
 
-    std::stringstream tooltip;
-
     for (int i = 0; i < possibleParentDragons.size(); i++)
     {
         const Dragon& dragon = *possibleParentDragons.at(i);
@@ -371,16 +369,11 @@ void MainWindow::updatePossibleParentDragons()
 
         ui->possibleparentlistwidget->item(i)->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::EditDelete));
 
-        tooltip << dragon.breed.string << " " << (dragon.male ? "Male" : "Female") << std::endl;
-        tooltip << "Primary Gene: " << dragon.primaryColour.name << " " << dragon.primaryGene.string << std::endl;
-        tooltip << "Secondary Gene: " << dragon.secondaryColour.name << " " << dragon.secondaryGene.string << std::endl;
-        tooltip << "Tertiary Gene: " << dragon.tertiaryColour.name << " " << dragon.tertiaryGene.string;
+        std::string tooltip = generateDragonTooltip(dragon);
 
-        ui->childlistwidget->item(i)->setToolTip(tooltip.str().c_str());
-        ui->parentlistwidget->item(i)->setToolTip(tooltip.str().c_str());
-        ui->possibleparentlistwidget->item(i)->setToolTip(tooltip.str().c_str());
-
-        tooltip.str("");
+        ui->childlistwidget->item(i)->setToolTip(tooltip.c_str());
+        ui->parentlistwidget->item(i)->setToolTip(tooltip.c_str());
+        ui->possibleparentlistwidget->item(i)->setToolTip(tooltip.c_str());
     }
 
     ui->childlistwidget->update();
@@ -390,6 +383,73 @@ void MainWindow::updatePossibleParentDragons()
     if (!colourToolDialog->isHidden())
     {
         colourToolDialog->updateDisplay(constructMorphologyDragon(), possibleParentDragons);
+    }
+}
+
+void MainWindow::updateLineages(std::shared_ptr<Dragon> target)
+{
+    int index = ui->parentlistwidget->currentRow();
+    ui->parentlistwidget->clear();
+
+    for (int i = 0; i < possibleParentDragons.size(); i++)
+    {
+        auto dragon = possibleParentDragons.at(i);
+
+        auto relation = target->isDragonRelated(dragon);
+        bool relationValid = 0 <= relation.first && relation.first < ui->relationComboBox->count();
+
+        auto transitiveRelation = target->isDragonTransitivelyRelated(dragon);
+        bool transitiveRelationValid = 0 <= transitiveRelation.first && transitiveRelation.first < ui->relationComboBox->count();
+
+        std::string row = dragon->name;
+
+        if (relationValid)
+        {
+            row = row + " (" + ui->relationComboBox->itemText(relation.first).toStdString() + ")";
+        }
+        else if (transitiveRelationValid)
+        {
+            row = row + " (" + ui->relationComboBox->itemText(transitiveRelation.first).toStdString() + ")";
+        }
+
+        ui->parentlistwidget->addItem(row.c_str());
+
+        if (relationValid)
+        {
+            auto font = ui->parentlistwidget->item(i)->font();
+            font.setBold(true);
+            ui->parentlistwidget->item(i)->setFont(font);
+        }
+        else if (transitiveRelationValid)
+        {
+            auto font = ui->parentlistwidget->item(i)->font();
+            font.setItalic(true);
+            ui->parentlistwidget->item(i)->setFont(font);
+        }
+
+        ui->parentlistwidget->item(i)->setToolTip(generateDragonTooltip(*dragon).c_str());
+    }
+
+    ui->parentlistwidget->update();
+
+    if (index < ui->parentlistwidget->count())
+    {
+        ui->parentlistwidget->setCurrentRow(index);
+    }
+}
+
+void MainWindow::pruneExpiredLineages()
+{
+    for (auto& dragon : possibleParentDragons)
+    {
+        for (int i = 0; i < dragon->lineage.size(); i++)
+        {
+            if (dragon->lineage.at(i).second.expired())
+            {
+                dragon->lineage.erase(dragon->lineage.cbegin() + i);
+                i--;
+            }
+        }
     }
 }
 
@@ -696,6 +756,8 @@ void MainWindow::on_actionSave_As_triggered()
 void MainWindow::on_possibleparentlistwidget_itemDoubleClicked(QListWidgetItem *item)
 {
     possibleParentDragons.erase(possibleParentDragons.cbegin() + ui->possibleparentlistwidget->row(item));
+
+    pruneExpiredLineages();
     updatePossibleParentDragons();
 }
 
@@ -787,6 +849,54 @@ void MainWindow::on_pastedragonpushbutton_clicked()
 
 void MainWindow::on_childlistwidget_currentRowChanged(int currentRow)
 {
+    updateLineages(possibleParentDragons.at(ui->childlistwidget->currentRow()));
+    ui->parentlistwidget->setCurrentRow(currentRow);
+}
 
+std::string MainWindow::generateDragonTooltip(const Dragon &dragon)
+{
+    std::stringstream tooltip;
+
+    tooltip << dragon.breed.string << " " << (dragon.male ? "Male" : "Female") << std::endl;
+    tooltip << "Primary Gene: " << dragon.primaryColour.name << " " << dragon.primaryGene.string << std::endl;
+    tooltip << "Secondary Gene: " << dragon.secondaryColour.name << " " << dragon.secondaryGene.string << std::endl;
+    tooltip << "Tertiary Gene: " << dragon.tertiaryColour.name << " " << dragon.tertiaryGene.string;
+
+    return tooltip.str();
+}
+
+
+void MainWindow::on_removeRelationPushButton_clicked()
+{
+    if (ui->childlistwidget->currentRow() < 0 && ui->parentlistwidget->currentRow() < 0)
+    {
+        return;
+    }
+
+    auto targetDragon = possibleParentDragons.at(ui->childlistwidget->currentRow());
+    auto targetRelation = possibleParentDragons.at(ui->parentlistwidget->currentRow());
+
+    targetDragon->removeLineage(targetRelation);
+
+    updateLineages(targetDragon);
+}
+
+
+void MainWindow::on_addRelationPushButton_clicked()
+{
+    // TODO add cycle checking
+
+    if (ui->childlistwidget->currentRow() < 0 || ui->parentlistwidget->currentRow() < 0)
+    {
+        return;
+    }
+
+    auto targetDragon = possibleParentDragons.at(ui->childlistwidget->currentRow());
+    auto targetRelation = possibleParentDragons.at(ui->parentlistwidget->currentRow());
+
+    targetDragon->removeLineage(targetRelation);
+    targetDragon->lineage.emplace_back(ui->relationComboBox->currentIndex(), targetRelation);
+
+    updateLineages(targetDragon);
 }
 

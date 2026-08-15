@@ -35,6 +35,12 @@ public:
        const Allele& primaryGene, const Allele& secondaryGene, const Allele& tertiaryGene);
 
     void addLineage(int generation, std::shared_ptr<Dragon> progenitor);
+
+    bool removeLineage(std::shared_ptr<Dragon> progenitor);
+
+    std::pair<int, std::weak_ptr<Dragon>> isDragonRelated(const std::shared_ptr<Dragon> potentialRelative);
+
+    std::pair<int, std::weak_ptr<Dragon>> isDragonTransitivelyRelated(const std::shared_ptr<Dragon> potentialRelative);
 };
 
 #endif // DRAGON_H

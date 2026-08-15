@@ -1880,7 +1880,7 @@
        <rect>
         <x>10</x>
         <y>230</y>
-        <width>181</width>
+        <width>141</width>
         <height>281</height>
        </rect>
       </property>
@@ -1888,17 +1888,17 @@
      <widget class="QListWidget" name="parentlistwidget">
       <property name="geometry">
        <rect>
-        <x>350</x>
+        <x>310</x>
         <y>230</y>
-        <width>181</width>
+        <width>221</width>
         <height>281</height>
        </rect>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_2">
+     <widget class="QPushButton" name="addRelationPushButton">
       <property name="geometry">
        <rect>
-        <x>200</x>
+        <x>160</x>
         <y>480</y>
         <width>141</width>
         <height>29</height>
@@ -1908,10 +1908,10 @@
        <string>Add Relation</string>
       </property>
      </widget>
-     <widget class="QComboBox" name="comboBox">
+     <widget class="QComboBox" name="relationComboBox">
       <property name="geometry">
        <rect>
-        <x>200</x>
+        <x>160</x>
         <y>450</y>
         <width>141</width>
         <height>26</height>
@@ -1943,10 +1943,10 @@
        </property>
       </item>
      </widget>
-     <widget class="QPushButton" name="pushButton_3">
+     <widget class="QPushButton" name="removeRelationPushButton">
       <property name="geometry">
        <rect>
-        <x>200</x>
+        <x>160</x>
         <y>230</y>
         <width>141</width>
         <height>29</height>
@@ -1959,7 +1959,7 @@
      <widget class="QLabel" name="label_33">
       <property name="geometry">
        <rect>
-        <x>200</x>
+        <x>160</x>
         <y>350</y>
         <width>141</width>
         <height>20</height>
