@@ -15,17 +15,19 @@ public:
 
     const std::multiset<BreedingTreeConfig>& getConfigs();
 private:
+    std::multiset<BreedingTreeConfig> validTreeConfigs = decltype(validTreeConfigs)();
+    const std::vector<std::shared_ptr<Dragon>> possibleParents;
+    std::shared_ptr<Dragon> aim;
+
     static int factorial(int n);
 
     static int nPr(int n, int r);
 
     static bool doesConfigHaveValidPairings(const BreedingTreeConfig& config);
 
-    std::vector<std::shared_ptr<Dragon>> getPossibleParentPermutationFromSeed(int count, int seed) const;
+    void initialiseDragons();
 
-    std::multiset<BreedingTreeConfig> validTreeConfigs = decltype(validTreeConfigs)();
-    const std::vector<std::shared_ptr<Dragon>> possibleParents;
-    std::shared_ptr<Dragon> aim;
+    std::vector<std::shared_ptr<Dragon>> getPossibleParentPermutationFromSeed(int count, int seed) const;
 };
 
 #endif // BREEDINGTREECALCULATOR_H

@@ -28,6 +28,8 @@ public:
     std::string name = "";
     std::string imageLocation = "";
 
+    int id = -1;
+
     Dragon() = default;
 
     Dragon(const std::string& name, bool male, const EyeAllele& eye, const Allele& breed,

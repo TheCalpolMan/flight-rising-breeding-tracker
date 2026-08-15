@@ -1,11 +1,12 @@
 #include "dragonpossibility.h"
 
 #include <cmath>
-#include <cassert>
+#include <iostream> // TODO remove
 
 #include "tracy/Tracy.hpp"
 
 #include "modutils.h"
+#include "information.h"
 #include "vectorhelpers.h"
 
 DragonPossibility::~DragonPossibility()
@@ -36,6 +37,20 @@ DragonPossibility::DragonPossibility(const Dragon& base) :
     primaryGene.insert(std::make_pair(VectorHelpers::getIndex(information.getPrimaryGenes(), base.primaryGene), 1));
     secondaryGene.insert(std::make_pair(VectorHelpers::getIndex(information.getSecondaryGenes(), base.secondaryGene), 1));
     tertiaryGene.insert(std::make_pair(VectorHelpers::getIndex(information.getTertiaryGenes(), base.tertiaryGene), 1));
+
+    if (base.id < 0)
+    {
+        throw std::invalid_argument("Base dragon has an unititialised ID");
+    }
+
+    if (base.id > 64)
+    {
+        throw std::runtime_error("Run out of unique dragon IDs, please restart session!");
+    }
+
+    lineage[0] = 1 << base.id;
+
+    std::cout << lineage[0] << std::endl; // TODO remove
 }
 
 DragonPossibility::DragonPossibility(const DragonPossibility& parent1, const DragonPossibility& parent2)
@@ -53,6 +68,11 @@ DragonPossibility::DragonPossibility(const DragonPossibility& parent1, const Dra
     setColourWeights(primaryColour, parent1.primaryColour, parent2.primaryColour);
     setColourWeights(secondaryColour, parent1.secondaryColour, parent2.secondaryColour);
     setColourWeights(tertiaryColour, parent1.tertiaryColour, parent2.tertiaryColour);
+
+    for (int i = 1; i < 5; i++)
+    {
+        lineage[i] = parent1.lineage[i - 1] || parent2.lineage[i - 1];
+    }
 }
 
 void DragonPossibility::setupColourMembers()

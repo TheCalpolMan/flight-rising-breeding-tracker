@@ -66,6 +66,7 @@ find_package(Qt6 REQUIRED COMPONENTS Core)
         dragonindexes.h dragonindexes.cpp
         colourdistributiontool.h colourdistributiontool.cpp colourdistributiontool.ui
         dragonregex.h dragonregex.cpp
+        uniqueid.h
 
 
 

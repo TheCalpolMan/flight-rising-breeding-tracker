@@ -5,6 +5,7 @@
 
 #include "tracy/Tracy.hpp"
 
+#include "uniqueid.h"
 #include "binarytreegenerator.h"
 
 BreedingTreeCalculator::BreedingTreeCalculator(Dragon aim, const std::vector<std::shared_ptr<Dragon>>& possibleParents) :
@@ -111,6 +112,11 @@ bool BreedingTreeCalculator::doesConfigHaveValidPairings(const BreedingTreeConfi
     }
 
     return true;
+}
+
+void BreedingTreeCalculator::initialiseDragons()
+{
+
 }
 
 std::vector<std::shared_ptr<Dragon>> BreedingTreeCalculator::getPossibleParentPermutationFromSeed(int count, int seed) const

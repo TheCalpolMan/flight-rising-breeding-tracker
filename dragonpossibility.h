@@ -8,7 +8,6 @@
 
 #include "dragon.h"
 #include "gender.h"
-#include "information.h"
 
 class DragonPossibility
 {
@@ -29,6 +28,8 @@ public:
     std::unordered_map<int, double> primaryGene = decltype(primaryGene)();
     std::unordered_map<int, double> secondaryGene = decltype(secondaryGene)();
     std::unordered_map<int, double> tertiaryGene = decltype(tertiaryGene)();
+
+    unsigned long long lineage[5] = { 0b0 };
 
     ~DragonPossibility();
 private:
