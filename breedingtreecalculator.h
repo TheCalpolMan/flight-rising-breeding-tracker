@@ -23,6 +23,8 @@ private:
 
     static int nPr(int n, int r);
 
+    static bool doesConfigHaveInbreeding(const BreedingTreeConfig& config);
+
     static bool doesConfigHaveValidPairings(const BreedingTreeConfig& config);
 
     void initialiseDragons();

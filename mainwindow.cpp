@@ -15,6 +15,7 @@
 #include "searchbuilder.h"
 #include "vectorhelpers.h"
 #include "breedingtreecalculator.h"
+#include "dragonpossibilityfactory.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -729,6 +730,7 @@ void MainWindow::on_actionOpen_triggered()
     possibleParentDragons = save->pairingDragons;
 
     updatePossibleParentDragons();
+    DragonPossibilityFactory::getInstance().clear();
 }
 
 
@@ -879,6 +881,7 @@ void MainWindow::on_removeRelationPushButton_clicked()
     targetDragon->removeLineage(targetRelation);
 
     updateLineages(targetDragon);
+    DragonPossibilityFactory::getInstance().clear();
 }
 
 
@@ -898,5 +901,6 @@ void MainWindow::on_addRelationPushButton_clicked()
     targetDragon->lineage.emplace_back(ui->relationComboBox->currentIndex(), targetRelation);
 
     updateLineages(targetDragon);
+    DragonPossibilityFactory::getInstance().clear();
 }
 

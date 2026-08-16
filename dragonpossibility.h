@@ -31,13 +31,23 @@ public:
 
     unsigned long long lineage[5] = { 0b0 };
 
+    bool inbred = false;
+
     ~DragonPossibility();
+
+    unsigned long long getCombinedLineage(int generations = 5) const;
 private:
     DragonPossibility();
 
-    DragonPossibility(const Dragon& base);
+    DragonPossibility(std::shared_ptr<Dragon> base);
 
     DragonPossibility(const DragonPossibility& parent1, const DragonPossibility& parent2);
+
+    void setLineage(std::shared_ptr<Dragon> base);
+
+    void calculateInbred();
+
+    void calculateInbred(const DragonPossibility& parent1, const DragonPossibility& parent2);
 
     void setupColourMembers();
 

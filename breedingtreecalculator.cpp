@@ -5,7 +5,6 @@
 
 #include "tracy/Tracy.hpp"
 
-#include "uniqueid.h"
 #include "binarytreegenerator.h"
 
 BreedingTreeCalculator::BreedingTreeCalculator(Dragon aim, const std::vector<std::shared_ptr<Dragon>>& possibleParents) :
@@ -18,6 +17,9 @@ BreedingTreeCalculator::BreedingTreeCalculator(Dragon aim, const std::vector<std
 const std::multiset<BreedingTreeConfig> &BreedingTreeCalculator::getConfigs()
 {
     ZoneScoped;
+
+    initialiseDragons();
+
     if (!validTreeConfigs.empty())
     {
         return validTreeConfigs;
@@ -52,6 +54,11 @@ const std::multiset<BreedingTreeConfig> &BreedingTreeCalculator::getConfigs()
                     continue;
                 }
 
+                if (doesConfigHaveInbreeding(config))
+                {
+                    continue;
+                }
+
                 if (config.getChance() == 0)
                 {
                     continue;
@@ -82,8 +89,42 @@ int BreedingTreeCalculator::nPr(int n, int r)
     return factorial(n) / factorial(n - r);
 }
 
+bool BreedingTreeCalculator::doesConfigHaveInbreeding(const BreedingTreeConfig &config)
+{
+    ZoneScoped;
+    config.treeRoot->propogate();
+
+    std::list<std::shared_ptr<BinaryTreePossibilityNode>> nodesToCheck = decltype(nodesToCheck)();
+    nodesToCheck.push_back(config.treeRoot);
+
+    while(!nodesToCheck.empty())
+    {
+        std::shared_ptr<BinaryTreePossibilityNode> currentNode = nodesToCheck.front();
+        nodesToCheck.pop_front();
+
+        if (currentNode->possibility->inbred)
+        {
+            return true;
+        }
+
+        if (!currentNode->rightChild->isLeaf())
+        {
+            nodesToCheck.push_front(currentNode->castRight());
+        }
+
+        if (!currentNode->leftChild->isLeaf())
+        {
+            nodesToCheck.push_front(currentNode->castLeft());
+        }
+    }
+
+    return false;
+}
+
 bool BreedingTreeCalculator::doesConfigHaveValidPairings(const BreedingTreeConfig &config)
 {
+    ZoneScoped;
+
     std::list<std::shared_ptr<BinaryTreePossibilityNode>> nodesToCheck = decltype(nodesToCheck)();
     nodesToCheck.push_back(config.treeRoot);
 
@@ -116,7 +157,10 @@ bool BreedingTreeCalculator::doesConfigHaveValidPairings(const BreedingTreeConfi
 
 void BreedingTreeCalculator::initialiseDragons()
 {
-
+    for (int i = 0; i < possibleParents.size(); i++)
+    {
+        possibleParents.at(i)->id = i;
+    }
 }
 
 std::vector<std::shared_ptr<Dragon>> BreedingTreeCalculator::getPossibleParentPermutationFromSeed(int count, int seed) const
