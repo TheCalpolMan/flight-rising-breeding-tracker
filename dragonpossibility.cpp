@@ -1,11 +1,12 @@
 #include "dragonpossibility.h"
 
+#include <list>
 #include <cmath>
-#include <cassert>
 
 #include "tracy/Tracy.hpp"
 
 #include "modutils.h"
+#include "information.h"
 #include "vectorhelpers.h"
 
 DragonPossibility::~DragonPossibility()
@@ -15,27 +16,42 @@ DragonPossibility::~DragonPossibility()
     std::free(tertiaryColour);
 }
 
+unsigned long long DragonPossibility::getCombinedLineage(int generations) const
+{
+    unsigned long long combined = 0b0;
+
+    for (int i = 0; i < generations; i++)
+    {
+        combined = combined | lineage[i];
+    }
+
+    return combined;
+}
+
 DragonPossibility::DragonPossibility()
 {
     setupColourMembers();
 }
 
-DragonPossibility::DragonPossibility(const Dragon& base) :
-    name(base.name),
-    gender(base.male ? Gender::Male : Gender::Female)
+DragonPossibility::DragonPossibility(std::shared_ptr<Dragon> base) :
+    name(base->name),
+    gender(base->male ? Gender::Male : Gender::Female)
 {
     Information& information = Information::getInstance();
     setupColourMembers();
 
-    breed.insert(std::make_pair(VectorHelpers::getIndex(information.getBreeds(), base.breed), 1));
+    breed.insert(std::make_pair(VectorHelpers::getIndex(information.getBreeds(), base->breed), 1));
 
-    primaryColour[base.primaryColour.wheelIndex] = 1;
-    secondaryColour[base.secondaryColour.wheelIndex] = 1;
-    tertiaryColour[base.tertiaryColour.wheelIndex] = 1;
+    primaryColour[base->primaryColour.wheelIndex] = 1;
+    secondaryColour[base->secondaryColour.wheelIndex] = 1;
+    tertiaryColour[base->tertiaryColour.wheelIndex] = 1;
 
-    primaryGene.insert(std::make_pair(VectorHelpers::getIndex(information.getPrimaryGenes(), base.primaryGene), 1));
-    secondaryGene.insert(std::make_pair(VectorHelpers::getIndex(information.getSecondaryGenes(), base.secondaryGene), 1));
-    tertiaryGene.insert(std::make_pair(VectorHelpers::getIndex(information.getTertiaryGenes(), base.tertiaryGene), 1));
+    primaryGene.insert(std::make_pair(VectorHelpers::getIndex(information.getPrimaryGenes(), base->primaryGene), 1));
+    secondaryGene.insert(std::make_pair(VectorHelpers::getIndex(information.getSecondaryGenes(), base->secondaryGene), 1));
+    tertiaryGene.insert(std::make_pair(VectorHelpers::getIndex(information.getTertiaryGenes(), base->tertiaryGene), 1));
+
+    setLineage(base);
+    calculateInbred();
 }
 
 DragonPossibility::DragonPossibility(const DragonPossibility& parent1, const DragonPossibility& parent2)
@@ -53,6 +69,88 @@ DragonPossibility::DragonPossibility(const DragonPossibility& parent1, const Dra
     setColourWeights(primaryColour, parent1.primaryColour, parent2.primaryColour);
     setColourWeights(secondaryColour, parent1.secondaryColour, parent2.secondaryColour);
     setColourWeights(tertiaryColour, parent1.tertiaryColour, parent2.tertiaryColour);
+
+    for (int i = 1; i < 5; i++)
+    {
+        lineage[i] = parent1.lineage[i - 1] | parent2.lineage[i - 1];
+    }
+
+    calculateInbred(parent1, parent2);
+}
+
+void DragonPossibility::setLineage(std::shared_ptr<Dragon> base)
+{
+    if (base->id < 0)
+    {
+        throw std::invalid_argument("Base dragon has an unititialised ID");
+    }
+
+    if (base->id > 64)
+    {
+        throw std::runtime_error("Run out of unique dragon IDs, please restart session!");
+    }
+
+    lineage[0] = 1 << base->id;
+
+    std::list<std::pair<int, std::shared_ptr<Dragon>>> relations = decltype(relations)();
+    relations.emplace_back(-1, base);
+
+    while(!relations.empty())
+    {
+        auto currentRelation = relations.front();
+        relations.pop_front();
+
+        int generation = currentRelation.first + 1;
+
+        lineage[generation] = lineage[generation] | (1 << currentRelation.second->id);
+
+        for (const auto& secondOrderRelation : currentRelation.second->lineage)
+        {
+            if (secondOrderRelation.second.expired())
+            {
+                continue;
+            }
+
+            int secondOrderGeneration = generation + secondOrderRelation.first;
+
+            if (secondOrderGeneration > 5)
+            {
+                continue;
+            }
+
+            relations.emplace_back(secondOrderGeneration, secondOrderRelation.second);
+        }
+    }
+}
+
+void DragonPossibility::calculateInbred()
+{
+    unsigned long long combinedOr = 0b0;
+    unsigned long long combinedAdd = 0b0;
+
+    for (int i = 0; i < 5; i++)
+    {
+        combinedOr = combinedOr | lineage[i];
+        combinedAdd = combinedAdd + lineage[i];
+    }
+
+    inbred = inbred || (combinedOr != combinedAdd);
+}
+
+void DragonPossibility::calculateInbred(const DragonPossibility &parent1, const DragonPossibility &parent2)
+{
+    inbred = parent1.inbred || parent2.inbred;
+
+    if (!inbred)
+    {
+        inbred = (parent1.getCombinedLineage() & parent2.getCombinedLineage()) != 0;
+    }
+
+    // potentially redundant because of the other two checks
+    if (!inbred)
+    {
+        calculateInbred();
+    }
 }
 
 void DragonPossibility::setupColourMembers()

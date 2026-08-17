@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
     <property name="tabBarAutoHide">
      <bool>true</bool>
@@ -1873,6 +1873,100 @@
       </property>
       <property name="text">
        <string>Calculate</string>
+      </property>
+     </widget>
+     <widget class="QListWidget" name="childlistwidget">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>230</y>
+        <width>141</width>
+        <height>281</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QListWidget" name="parentlistwidget">
+      <property name="geometry">
+       <rect>
+        <x>310</x>
+        <y>230</y>
+        <width>221</width>
+        <height>281</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="addRelationPushButton">
+      <property name="geometry">
+       <rect>
+        <x>160</x>
+        <y>480</y>
+        <width>141</width>
+        <height>29</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Add Relation</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="relationComboBox">
+      <property name="geometry">
+       <rect>
+        <x>160</x>
+        <y>450</y>
+        <width>141</width>
+        <height>26</height>
+       </rect>
+      </property>
+      <item>
+       <property name="text">
+        <string>Parent</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Grandparent</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>G-Grandparent</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>G-G-Grandparent</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>G-G-G-Grandparent</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QPushButton" name="removeRelationPushButton">
+      <property name="geometry">
+       <rect>
+        <x>160</x>
+        <y>230</y>
+        <width>141</width>
+        <height>29</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Remove Relation</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_33">
+      <property name="geometry">
+       <rect>
+        <x>160</x>
+        <y>350</y>
+        <width>141</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;---&amp;gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
     </widget>

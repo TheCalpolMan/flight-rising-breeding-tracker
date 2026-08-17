@@ -1,5 +1,8 @@
 #include "dragon.h"
 
+#include <list>
+#include <algorithm>
+
 Dragon::Dragon(const std::string& name, bool male, const EyeAllele& eye, const Allele& breed,
     const Colour& primaryColour, const Colour& secondaryColour, const Colour& tertiaryColour,
     const Allele& primaryGene, const Allele& secondaryGene, const Allele& tertiaryGene) :
@@ -15,4 +18,111 @@ Dragon::Dragon(const std::string& name, bool male, const EyeAllele& eye, const A
     tertiaryGene(tertiaryGene)
 {
 
+}
+
+void Dragon::addLineage(int generation, std::shared_ptr<Dragon> progenitor)
+{
+    lineage.emplace_back(generation, std::weak_ptr<Dragon>(progenitor));
+}
+
+bool Dragon::removeLineage(std::shared_ptr<Dragon> progenitor)
+{
+    for (int i = 0; i < lineage.size(); i++)
+    {
+        const auto& relation = lineage.at(i);
+
+        if (relation.second.expired())
+        {
+            continue;
+        }
+
+        if (relation.second.lock() == progenitor)
+        {
+            lineage.erase(lineage.cbegin() + i);
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool Dragon::doesLineageContainCycles(std::shared_ptr<Dragon> sharedPtrToSelf)
+{
+    if (&*sharedPtrToSelf != this)
+    {
+        sharedPtrToSelf = std::shared_ptr<Dragon>(this);
+    }
+
+    std::vector<std::shared_ptr<Dragon>> visited = decltype(visited)();
+    std::list<std::shared_ptr<Dragon>> toCheck = decltype(toCheck)();
+
+    toCheck.push_front(sharedPtrToSelf);
+
+    while (toCheck.size() > 0)
+    {
+        std::shared_ptr<Dragon> currentDragon = toCheck.front();
+        toCheck.pop_front();
+
+        visited.push_back(currentDragon);
+
+        for (const auto& relation : currentDragon->lineage)
+        {
+            if (relation.second.expired())
+            {
+                continue;
+            }
+
+            if (std::find(visited.cbegin(), visited.cend(), relation.second.lock()) != visited.cend())
+            {
+                return true;
+            }
+
+            toCheck.push_back(relation.second.lock());
+        }
+    }
+
+    return false;
+}
+
+std::pair<int, std::weak_ptr<Dragon>> Dragon::isDragonRelated(const std::shared_ptr<Dragon> potentialRelative)
+{
+    for (const auto& relation : lineage)
+    {
+        if (relation.second.expired())
+        {
+            continue;
+        }
+
+        if (relation.second.lock() == potentialRelative)
+        {
+            return relation;
+        }
+    }
+
+    return std::make_pair<int, std::weak_ptr<Dragon>>(-1, std::weak_ptr<Dragon>());
+}
+
+std::pair<int, std::weak_ptr<Dragon>> Dragon::isDragonTransitivelyRelated(const std::shared_ptr<Dragon> potentialRelative)
+{
+    for (const auto& relation : lineage)
+    {
+        if (relation.second.expired())
+        {
+            continue;
+        }
+
+        if (relation.second.lock() == potentialRelative)
+        {
+            return relation;
+        }
+
+        auto transitiveRelation = relation.second.lock()->isDragonTransitivelyRelated(potentialRelative);
+
+        if (transitiveRelation.first != -1)
+        {
+            return std::make_pair(relation.first + transitiveRelation.first + 1, transitiveRelation.second);
+        }
+    }
+
+    return std::make_pair<int, std::weak_ptr<Dragon>>(-1, std::weak_ptr<Dragon>());
 }

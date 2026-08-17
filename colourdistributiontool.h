@@ -21,9 +21,9 @@ public:
     explicit ColourDistributionTool(QWidget *parent = nullptr);
     ~ColourDistributionTool();
 
-    void open(const Dragon& dragon, const std::vector<Dragon>& possibleParentDragons);
-
-    void updateDisplay(const Dragon& dragon, const std::vector<Dragon>& possibleParentDragons);
+    void open(const Dragon& dragon, const std::vector<std::shared_ptr<Dragon>>& possibleParentDragons);
+    
+    void updateDisplay(const Dragon& dragon, const std::vector<std::shared_ptr<Dragon> > &possibleParentDragons);
 
 private slots:
     void on_recentreprimarypushButton_clicked();
@@ -43,7 +43,7 @@ private:
 
     static std::vector<std::shared_ptr<QGraphicsScene>> createAllColourViewFrames(QWidget* parentWidget, const std::string& prefix);
 
-    static void populateDragons(QWidget* scrollAreaWidgetContents, int geneColour, int colourOffset, const std::vector<Dragon>& possibleParentDragons);
+    static void populateDragons(QWidget* scrollAreaWidgetContents, int geneColour, int colourOffset, const std::vector<std::shared_ptr<Dragon>>& possibleParentDragons);
 
     static void setMiddleColour(QWidget* scrollAreaWidgetContents, const std::vector<std::shared_ptr<QGraphicsScene>>& graphicsSenes, int index);
 };

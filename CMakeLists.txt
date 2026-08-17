@@ -69,6 +69,7 @@ find_package(Qt6 REQUIRED COMPONENTS Core)
 
 
 
+
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET flight-rising-breeding-tracker APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

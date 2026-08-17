@@ -14,15 +14,17 @@ public:
     SaveFormat(const Dragon& dragon, bool primaryToggle, bool secondaryToggle, bool tertiaryToggle,
                bool breedToggle, int primaryColourRange, int primaryColourOffset, int secondaryColourRange,
                int secondaryColourOffset, int tertiaryColourRange, int tertiaryColourOffset,
-               const std::vector<Dragon>& pairingDragons);
+               const std::vector<std::shared_ptr<Dragon>>& pairingDragons);
 
     SaveFormat(const std::string& fileLocation);
 
     void write(const std::string& fileLocation);
 
-    static rapidjson::Value writeDragon(const Dragon& dragon, rapidjson::MemoryPoolAllocator<>& allocator);
+    rapidjson::Value writeDragon(const Dragon& dragon, rapidjson::MemoryPoolAllocator<>& allocator);
 
     static Dragon readDragon(const rapidjson::GenericValue<rapidjson::UTF8<>>& dragonRoot);
+
+    void readDragonLineage(const rapidjson::GenericValue<rapidjson::UTF8<>>& dragonRoot, Dragon& dragon);
 
     Dragon dragon;
 
@@ -38,7 +40,7 @@ public:
     int tertiaryColourRange;
     int tertiaryColourOffset;
 
-    std::vector<Dragon> pairingDragons;
+    std::vector<std::shared_ptr<Dragon>> pairingDragons;
 };
 
 #endif // SAVEFORMAT_H

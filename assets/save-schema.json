@@ -14,9 +14,6 @@
             "name": {
               "type": "string"
             },
-            "family": {
-              "type": "integer"
-            },
             "breed": {
               "type": "integer"
             },
@@ -73,18 +70,36 @@
             },
             "image": {
               "type": "string"
-            }
+            },
+            "lineage": {
+			  "type": "array",
+			  "items": {
+			    "type": "object",
+			    "properties": {
+				  "generation": {
+				    "type": "integer"
+				  },
+				  "index": {
+				    "type": "integer"
+				  }
+			    },
+			    "required": [
+			      "generation",
+			      "index"
+			    ]
+			  }
+		    }
           },
           "required": [
             "name",
-            "family",
             "breed",
             "male",
             "eye",
             "primary",
             "secondary",
             "tertiary",
-            "image"
+            "image",
+            "lineage"
           ]
         }
       },
@@ -182,9 +197,6 @@
               "name": {
                 "type": "string"
               },
-              "family": {
-                "type": "integer"
-              },
               "breed": {
                 "type": "integer"
               },
@@ -241,18 +253,36 @@
               },
               "image": {
                 "type": "string"
+              },
+              "lineage": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "generation": {
+                      "type": "integer"
+                    },
+                    "index": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "generation",
+                    "index"
+                  ]
+                }
               }
             },
             "required": [
               "name",
-              "family",
               "breed",
               "male",
               "eye",
               "primary",
               "secondary",
               "tertiary",
-              "image"
+              "image",
+              "lineage"
             ]
           }
         }

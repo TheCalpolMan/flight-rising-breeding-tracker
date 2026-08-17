@@ -7,9 +7,9 @@
 
 #include "binarytreegenerator.h"
 
-BreedingTreeCalculator::BreedingTreeCalculator(std::shared_ptr<Dragon> aim, const std::vector<Dragon>& possibleParents) :
-    possibleParents(convertDragonsToSharedPtr(possibleParents)),
-    aim(aim)
+BreedingTreeCalculator::BreedingTreeCalculator(Dragon aim, const std::vector<std::shared_ptr<Dragon>>& possibleParents) :
+    possibleParents(possibleParents),
+    aim(std::make_shared<Dragon>(aim))
 {
 
 }
@@ -17,6 +17,9 @@ BreedingTreeCalculator::BreedingTreeCalculator(std::shared_ptr<Dragon> aim, cons
 const std::multiset<BreedingTreeConfig> &BreedingTreeCalculator::getConfigs()
 {
     ZoneScoped;
+
+    initialiseDragons();
+
     if (!validTreeConfigs.empty())
     {
         return validTreeConfigs;
@@ -51,6 +54,11 @@ const std::multiset<BreedingTreeConfig> &BreedingTreeCalculator::getConfigs()
                     continue;
                 }
 
+                if (doesConfigHaveInbreeding(config))
+                {
+                    continue;
+                }
+
                 if (config.getChance() == 0)
                 {
                     continue;
@@ -81,20 +89,42 @@ int BreedingTreeCalculator::nPr(int n, int r)
     return factorial(n) / factorial(n - r);
 }
 
-std::vector<std::shared_ptr<Dragon>> BreedingTreeCalculator::convertDragonsToSharedPtr(const std::vector<Dragon> &dragons)
+bool BreedingTreeCalculator::doesConfigHaveInbreeding(const BreedingTreeConfig &config)
 {
-    std::vector<std::shared_ptr<Dragon>> sharedDragons = decltype(sharedDragons)();
+    ZoneScoped;
+    config.treeRoot->propogate();
 
-    for(const auto& dragon : dragons)
+    std::list<std::shared_ptr<BinaryTreePossibilityNode>> nodesToCheck = decltype(nodesToCheck)();
+    nodesToCheck.push_back(config.treeRoot);
+
+    while(!nodesToCheck.empty())
     {
-        sharedDragons.push_back(std::make_shared<Dragon>(dragon));
+        std::shared_ptr<BinaryTreePossibilityNode> currentNode = nodesToCheck.front();
+        nodesToCheck.pop_front();
+
+        if (currentNode->possibility->inbred)
+        {
+            return true;
+        }
+
+        if (!currentNode->rightChild->isLeaf())
+        {
+            nodesToCheck.push_front(currentNode->castRight());
+        }
+
+        if (!currentNode->leftChild->isLeaf())
+        {
+            nodesToCheck.push_front(currentNode->castLeft());
+        }
     }
 
-    return sharedDragons;
+    return false;
 }
 
 bool BreedingTreeCalculator::doesConfigHaveValidPairings(const BreedingTreeConfig &config)
 {
+    ZoneScoped;
+
     std::list<std::shared_ptr<BinaryTreePossibilityNode>> nodesToCheck = decltype(nodesToCheck)();
     nodesToCheck.push_back(config.treeRoot);
 
@@ -123,6 +153,14 @@ bool BreedingTreeCalculator::doesConfigHaveValidPairings(const BreedingTreeConfi
     }
 
     return true;
+}
+
+void BreedingTreeCalculator::initialiseDragons()
+{
+    for (int i = 0; i < possibleParents.size(); i++)
+    {
+        possibleParents.at(i)->id = i;
+    }
 }
 
 std::vector<std::shared_ptr<Dragon>> BreedingTreeCalculator::getPossibleParentPermutationFromSeed(int count, int seed) const

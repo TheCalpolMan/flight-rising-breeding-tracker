@@ -85,6 +85,12 @@ private slots:
 
     void on_pastedragonpushbutton_clicked();
 
+    void on_childlistwidget_currentRowChanged(int currentRow);
+
+    void on_removeRelationPushButton_clicked();
+
+    void on_addRelationPushButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     std::string loadedFile = "";
@@ -118,11 +124,13 @@ private:
 
     QPointer<PairingResultsDialog> pairingResultsDialog;
 
-    std::vector<Dragon> possibleParentDragons = decltype(possibleParentDragons)();
+    std::vector<std::shared_ptr<Dragon>> possibleParentDragons = decltype(possibleParentDragons)();
 
     // tools
 
     QPointer<ColourDistributionTool> colourToolDialog;
+
+    static std::string generateDragonTooltip(const Dragon& dragon);
 
     void updateColoursBasedOnGene(bool showDialogOnNoColour);
 
@@ -145,6 +153,10 @@ private:
     bool checkAllPairingInputs(bool createDialog);
 
     void updatePossibleParentDragons();
+
+    void updateLineages(std::shared_ptr<Dragon> target);
+
+    void pruneExpiredLineages();
 
     SaveFormat constructSave();
 

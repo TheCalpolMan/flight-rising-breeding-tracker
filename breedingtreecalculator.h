@@ -11,23 +11,25 @@
 class BreedingTreeCalculator
 {
 public:
-    BreedingTreeCalculator(std::shared_ptr<Dragon> aim, const std::vector<Dragon>& possibleParents);
+    BreedingTreeCalculator(Dragon aim, const std::vector<std::shared_ptr<Dragon>>& possibleParents);
 
     const std::multiset<BreedingTreeConfig>& getConfigs();
 private:
+    std::multiset<BreedingTreeConfig> validTreeConfigs = decltype(validTreeConfigs)();
+    const std::vector<std::shared_ptr<Dragon>> possibleParents;
+    std::shared_ptr<Dragon> aim;
+
     static int factorial(int n);
 
     static int nPr(int n, int r);
 
-    static std::vector<std::shared_ptr<Dragon>> convertDragonsToSharedPtr(const std::vector<Dragon>& dragons);
+    static bool doesConfigHaveInbreeding(const BreedingTreeConfig& config);
 
     static bool doesConfigHaveValidPairings(const BreedingTreeConfig& config);
 
-    std::vector<std::shared_ptr<Dragon>> getPossibleParentPermutationFromSeed(int count, int seed) const;
+    void initialiseDragons();
 
-    std::multiset<BreedingTreeConfig> validTreeConfigs = decltype(validTreeConfigs)();
-    const std::vector<std::shared_ptr<Dragon>> possibleParents;
-    std::shared_ptr<Dragon> aim;
+    std::vector<std::shared_ptr<Dragon>> getPossibleParentPermutationFromSeed(int count, int seed) const;
 };
 
 #endif // BREEDINGTREECALCULATOR_H

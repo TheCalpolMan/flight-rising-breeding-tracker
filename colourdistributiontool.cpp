@@ -35,7 +35,7 @@ ColourDistributionTool::~ColourDistributionTool()
     delete ui;
 }
 
-void ColourDistributionTool::open(const Dragon &dragon, const std::vector<Dragon> &possibleParentDragons)
+void ColourDistributionTool::open(const Dragon &dragon, const std::vector<std::shared_ptr<Dragon>> &possibleParentDragons)
 {
     updateDisplay(dragon, possibleParentDragons);
 
@@ -46,7 +46,7 @@ void ColourDistributionTool::open(const Dragon &dragon, const std::vector<Dragon
     scrollToMiddle(ui->tertiaryscrollArea);
 }
 
-void ColourDistributionTool::updateDisplay(const Dragon &dragon, const std::vector<Dragon> &possibleParentDragons)
+void ColourDistributionTool::updateDisplay(const Dragon &dragon, const std::vector<std::shared_ptr<Dragon>> &possibleParentDragons)
 {
     setMiddleColour(ui->primaryscrollAreaWidgetContents, primaryColourViews, dragon.primaryColour.wheelIndex);
     setMiddleColour(ui->secondaryscrollAreaWidgetContents, secondaryColourViews, dragon.secondaryColour.wheelIndex);
@@ -112,7 +112,7 @@ std::vector<std::shared_ptr<QGraphicsScene>> ColourDistributionTool::createAllCo
     return graphicsViews;
 }
 
-void ColourDistributionTool::populateDragons(QWidget *scrollAreaWidgetContents, int geneColour, int colourOffset, const std::vector<Dragon> &possibleParentDragons)
+void ColourDistributionTool::populateDragons(QWidget *scrollAreaWidgetContents, int geneColour, int colourOffset, const std::vector<std::shared_ptr<Dragon>> &possibleParentDragons)
 {
     int colourCount = Information::getInstance().getColours(true).size();
     auto frames = scrollAreaWidgetContents->findChildren<QFrame*>(Qt::FindDirectChildrenOnly);
@@ -143,9 +143,9 @@ void ColourDistributionTool::populateDragons(QWidget *scrollAreaWidgetContents, 
 
         switch(geneColour)
         {
-        case 1: colour = dragon.primaryColour;break;
-        case 2: colour = dragon.secondaryColour;break;
-        case 3: colour = dragon.tertiaryColour;break;
+        case 1: colour = dragon->primaryColour;break;
+        case 2: colour = dragon->secondaryColour;break;
+        case 3: colour = dragon->tertiaryColour;break;
         default:throw std::invalid_argument("geneColour must be 1-3");
         }
 
@@ -161,11 +161,11 @@ void ColourDistributionTool::populateDragons(QWidget *scrollAreaWidgetContents, 
 
             if (child->text() == "")
             {
-                child->setText(dragon.name.c_str());
+                child->setText(dragon->name.c_str());
                 continue;
             }
 
-            child->setText((child->text().toStdString() + ", " + dragon.name).c_str());
+            child->setText((child->text().toStdString() + ", " + dragon->name).c_str());
         }
     }
 }

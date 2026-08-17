@@ -16,7 +16,7 @@
 SaveFormat::SaveFormat(const Dragon& dragon, bool primaryToggle, bool secondaryToggle, bool tertiaryToggle,
            bool breedToggle, int primaryColourRange, int primaryColourOffset, int secondaryColourRange,
            int secondaryColourOffset, int tertiaryColourRange, int tertiaryColourOffset,
-           const std::vector<Dragon>& pairingDragons) :
+                       const std::vector<std::shared_ptr<Dragon>>& pairingDragons) :
     dragon(dragon),
     primaryToggle(primaryToggle),
     secondaryToggle(secondaryToggle),
@@ -87,7 +87,14 @@ SaveFormat::SaveFormat(const std::string& fileLocation)
 
     for (const auto& dragon : document["pairings"]["dragons"].GetArray())
     {
-        pairingDragons.push_back(readDragon(dragon));
+        pairingDragons.push_back(std::make_shared<Dragon>(readDragon(dragon)));
+    }
+
+    int i = 0;
+    for (const auto& dragon : document["pairings"]["dragons"].GetArray())
+    {
+        readDragonLineage(dragon, *pairingDragons.at(i));
+        i++;
     }
 }
 
@@ -164,7 +171,7 @@ void SaveFormat::write(const std::string& fileLocation)
 
         for(const auto& dragon : pairingDragons)
         {
-            auto dragonJson = writeDragon(dragon, allocator);
+            auto dragonJson = writeDragon(*dragon, allocator);
 
             dragonList.PushBack(dragonJson, allocator);
         }
@@ -192,7 +199,6 @@ rapidjson::Value SaveFormat::writeDragon(const Dragon &dragon, rapidjson::Memory
     jsonString.SetString(dragon.name.c_str(), allocator);
     dragonValue.AddMember("name", jsonString, allocator);
 
-    dragonValue.AddMember("family", -1, allocator);
     dragonValue.AddMember("breed", VectorHelpers::getIndex(information.getBreeds(), dragon.breed), allocator);
     dragonValue.AddMember("male", dragon.male, allocator);
     dragonValue.AddMember("eye", VectorHelpers::getIndex(information.getEyes(), dragon.eye), allocator);
@@ -227,6 +233,27 @@ rapidjson::Value SaveFormat::writeDragon(const Dragon &dragon, rapidjson::Memory
     jsonString.SetString(dragon.imageLocation.c_str(), allocator);
     dragonValue.AddMember("image", jsonString, allocator);
 
+    {
+        rapidjson::Value lineage(rapidjson::kArrayType);
+
+        for (const auto& lineageValue : dragon.lineage)
+        {
+            if (lineageValue.second.expired())
+            {
+                continue;
+            }
+
+            rapidjson::Value lineageItem(rapidjson::kObjectType);
+
+            lineageItem.AddMember("generation", lineageValue.first, allocator);
+            lineageItem.AddMember("index", VectorHelpers::getIndex(pairingDragons, lineageValue.second.lock()), allocator);
+
+            lineage.PushBack(lineageItem, allocator);
+        }
+
+        dragonValue.AddMember("lineage", lineage, allocator);
+    }
+
     return std::move(dragonValue);
 }
 
@@ -238,7 +265,6 @@ Dragon SaveFormat::readDragon(const rapidjson::GenericValue<rapidjson::UTF8<>>& 
 
     dragon.name = dragonRoot["name"].GetString();
 
-    dragon.family = dragonRoot["family"].GetInt64();
     dragon.breed = information.getBreeds().at(dragonRoot["breed"].GetInt());
     dragon.male = dragonRoot["male"].GetBool();
     dragon.eye = information.getEyes().at(dragonRoot["eye"].GetInt());
@@ -254,4 +280,12 @@ Dragon SaveFormat::readDragon(const rapidjson::GenericValue<rapidjson::UTF8<>>& 
     dragon.imageLocation = dragonRoot["image"].GetString();
 
     return dragon;
+}
+
+void SaveFormat::readDragonLineage(const rapidjson::GenericValue<rapidjson::UTF8<>> &dragonRoot, Dragon &dragon)
+{
+    for (const auto& lineageValue : dragonRoot["lineage"].GetArray())
+    {
+        dragon.lineage.emplace_back(lineageValue["generation"].GetInt(), pairingDragons.at(lineageValue["index"].GetInt()));
+    }
 }

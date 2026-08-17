@@ -18,7 +18,7 @@ std::shared_ptr<DragonPossibility> DragonPossibilityFactory::constructPossiblilt
         return it->second;
     }
 
-    return dragonToPossibilityMap.emplace(base, std::shared_ptr<DragonPossibility>(new DragonPossibility(*base))).first->second;
+    return dragonToPossibilityMap.emplace(base, std::shared_ptr<DragonPossibility>(new DragonPossibility(base))).first->second;
 }
 
 std::shared_ptr<DragonPossibility> DragonPossibilityFactory::constructPossiblilty(std::shared_ptr<DragonPossibility> parent1, std::shared_ptr<DragonPossibility> parent2)
