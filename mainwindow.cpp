@@ -29,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->breedgraphicsview->setScene(&dragonScene);
     loadImage();
 
+    lineageViewDialog = new LineageViewDialog(this);
     colourToolDialog = new ColourDistributionTool(this);
     pairingResultsDialog = new PairingResultsDialog(this);
 
@@ -730,6 +731,12 @@ void MainWindow::on_actionOpen_triggered()
     possibleParentDragons = save->pairingDragons;
 
     updatePossibleParentDragons();
+
+    if (!lineageViewDialog->isHidden())
+    {
+        lineageViewDialog->setGraph(possibleParentDragons);
+    }
+
     DragonPossibilityFactory::getInstance().clear();
 }
 
@@ -851,6 +858,11 @@ void MainWindow::on_pastedragonpushbutton_clicked()
 
 void MainWindow::on_childlistwidget_currentRowChanged(int currentRow)
 {
+    if (currentRow == -1)
+    {
+        return;
+    }
+
     updateLineages(possibleParentDragons.at(ui->childlistwidget->currentRow()));
     ui->parentlistwidget->setCurrentRow(currentRow);
 }
@@ -881,6 +893,12 @@ void MainWindow::on_removeRelationPushButton_clicked()
     targetDragon->removeLineage(targetRelation);
 
     updateLineages(targetDragon);
+
+    if (!lineageViewDialog->isHidden())
+    {
+        lineageViewDialog->setGraph(possibleParentDragons);
+    }
+
     DragonPossibilityFactory::getInstance().clear();
 }
 
@@ -914,6 +932,23 @@ void MainWindow::on_addRelationPushButton_clicked()
     }
 
     updateLineages(targetDragon);
+
+    if (!lineageViewDialog->isHidden())
+    {
+        lineageViewDialog->setGraph(possibleParentDragons);
+    }
+
     DragonPossibilityFactory::getInstance().clear();
+}
+
+
+void MainWindow::on_viewAllRelationsButton_clicked()
+{
+    if (lineageViewDialog->isHidden())
+    {
+        lineageViewDialog->show();
+    }
+
+    lineageViewDialog->setGraph(possibleParentDragons);
 }
 

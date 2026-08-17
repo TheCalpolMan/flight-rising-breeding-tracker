@@ -15,6 +15,7 @@
 #include <QListWidgetItem>
 
 #include "saveformat.h"
+#include "lineageviewdialog.h"
 #include "pairingresultsdialog.h"
 #include "colourdistributiontool.h"
 
@@ -91,6 +92,8 @@ private slots:
 
     void on_addRelationPushButton_clicked();
 
+    void on_viewAllRelationsButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     std::string loadedFile = "";
@@ -121,6 +124,8 @@ private:
     });
 
     // pairings
+
+    QPointer<LineageViewDialog> lineageViewDialog;
 
     QPointer<PairingResultsDialog> pairingResultsDialog;
 

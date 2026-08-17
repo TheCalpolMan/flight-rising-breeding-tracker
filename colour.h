@@ -3,9 +3,16 @@
 
 #include <string>
 
-struct Colour
+class Colour
 {
 public:
+    struct HSL
+    {
+        float hue;
+        float saturation;
+        float lightness;
+    };
+
     int wheelIndex;
 
     std::string name;
@@ -24,6 +31,10 @@ public:
 
         return false;
     }
+
+    HSL toHsl();
+private:
+    static int convertHexadecimal(std::string hex);
 };
 
 #endif // COLOUR_H
