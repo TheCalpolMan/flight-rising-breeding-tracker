@@ -20,9 +20,11 @@ public:
 
     void write(const std::string& fileLocation);
 
-    static rapidjson::Value writeDragon(const Dragon& dragon, rapidjson::MemoryPoolAllocator<>& allocator);
+    rapidjson::Value writeDragon(const Dragon& dragon, rapidjson::MemoryPoolAllocator<>& allocator);
 
     static Dragon readDragon(const rapidjson::GenericValue<rapidjson::UTF8<>>& dragonRoot);
+
+    void readDragonLineage(const rapidjson::GenericValue<rapidjson::UTF8<>>& dragonRoot, Dragon& dragon);
 
     Dragon dragon;
 
