@@ -40,6 +40,8 @@ public:
 
     bool removeLineage(std::shared_ptr<Dragon> progenitor);
 
+    bool doesLineageContainCycles(std::shared_ptr<Dragon> sharedPtrToSelf = std::shared_ptr<Dragon>());
+
     std::pair<int, std::weak_ptr<Dragon>> isDragonRelated(const std::shared_ptr<Dragon> potentialRelative);
 
     std::pair<int, std::weak_ptr<Dragon>> isDragonTransitivelyRelated(const std::shared_ptr<Dragon> potentialRelative);

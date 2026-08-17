@@ -887,8 +887,6 @@ void MainWindow::on_removeRelationPushButton_clicked()
 
 void MainWindow::on_addRelationPushButton_clicked()
 {
-    // TODO add cycle checking
-
     if (ui->childlistwidget->currentRow() < 0 || ui->parentlistwidget->currentRow() < 0)
     {
         return;
@@ -897,8 +895,23 @@ void MainWindow::on_addRelationPushButton_clicked()
     auto targetDragon = possibleParentDragons.at(ui->childlistwidget->currentRow());
     auto targetRelation = possibleParentDragons.at(ui->parentlistwidget->currentRow());
 
+    auto lineage = targetDragon->lineage;
+
     targetDragon->removeLineage(targetRelation);
     targetDragon->lineage.emplace_back(ui->relationComboBox->currentIndex(), targetRelation);
+
+    if (targetDragon->doesLineageContainCycles(targetDragon))
+    {
+        targetDragon->lineage = lineage;
+
+        QMessageBox msgBox(this);
+
+        msgBox.setText("You've attempted to add an impossible relationship! A dragon cannot be part of their own lineage (without time travel)");
+        msgBox.setStandardButtons(QMessageBox::Close);
+        msgBox.exec();
+
+        return;
+    }
 
     updateLineages(targetDragon);
     DragonPossibilityFactory::getInstance().clear();

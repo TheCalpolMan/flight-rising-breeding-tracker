@@ -1,5 +1,8 @@
 #include "dragon.h"
 
+#include <list>
+#include <algorithm>
+
 Dragon::Dragon(const std::string& name, bool male, const EyeAllele& eye, const Allele& breed,
     const Colour& primaryColour, const Colour& secondaryColour, const Colour& tertiaryColour,
     const Allele& primaryGene, const Allele& secondaryGene, const Allele& tertiaryGene) :
@@ -37,6 +40,44 @@ bool Dragon::removeLineage(std::shared_ptr<Dragon> progenitor)
         {
             lineage.erase(lineage.cbegin() + i);
             return true;
+        }
+    }
+
+    return false;
+}
+
+bool Dragon::doesLineageContainCycles(std::shared_ptr<Dragon> sharedPtrToSelf)
+{
+    if (&*sharedPtrToSelf != this)
+    {
+        sharedPtrToSelf = std::shared_ptr<Dragon>(this);
+    }
+
+    std::vector<std::shared_ptr<Dragon>> visited = decltype(visited)();
+    std::list<std::shared_ptr<Dragon>> toCheck = decltype(toCheck)();
+
+    toCheck.push_front(sharedPtrToSelf);
+
+    while (toCheck.size() > 0)
+    {
+        std::shared_ptr<Dragon> currentDragon = toCheck.front();
+        toCheck.pop_front();
+
+        visited.push_back(currentDragon);
+
+        for (const auto& relation : currentDragon->lineage)
+        {
+            if (relation.second.expired())
+            {
+                continue;
+            }
+
+            if (std::find(visited.cbegin(), visited.cend(), relation.second.lock()) != visited.cend())
+            {
+                return true;
+            }
+
+            toCheck.push_back(relation.second.lock());
         }
     }
 
