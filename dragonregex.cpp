@@ -9,6 +9,8 @@
 bool DragonRegex::ConstructDragon(const std::string &paste, Dragon &dragon)
 {
     auto& information = Information::getInstance();
+    dragon.eye = information.getEyes().front();
+
     boost::xpressive::smatch match;
 
     if(!regex_search(paste, match, nameRegex))

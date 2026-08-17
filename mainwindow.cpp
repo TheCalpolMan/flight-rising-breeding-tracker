@@ -742,11 +742,11 @@ void MainWindow::on_actionSave_As_triggered()
     }
 
     loadedFile = QFileDialog::getSaveFileName(this,
-                                                 tr("Save File"),
-                                                 ".",
-                                                 tr("JSON Files (*.json)")).toStdString();
+        "Save File",
+        ".",
+        "JSON Files (*.json)").toStdString();
 
-    if (imageLocation.isEmpty())
+    if (loadedFile.empty())
     {
         return;
     }
