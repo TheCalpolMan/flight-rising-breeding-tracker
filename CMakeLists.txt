@@ -66,10 +66,8 @@ find_package(Qt6 REQUIRED COMPONENTS Core)
         dragonindexes.h dragonindexes.cpp
         colourdistributiontool.h colourdistributiontool.cpp colourdistributiontool.ui
         dragonregex.h dragonregex.cpp
-
-
-
-
+        lineageedge.cpp lineageedge.h lineagegraphwidget.cpp lineagegraphwidget.h lineagenode.cpp lineagenode.h
+        lineageviewdialog.h lineageviewdialog.cpp lineageviewdialog.ui
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET flight-rising-breeding-tracker APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
