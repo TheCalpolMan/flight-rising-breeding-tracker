@@ -15,7 +15,7 @@ class LineageGraphWidget;
 class LineageNode : public QGraphicsItem
 {
 public:
-    LineageNode(LineageGraphWidget *graphWidget, std::string label, Colour colour);
+    LineageNode(LineageGraphWidget *graphWidget, const std::string& label, const Colour& colour);
 
     void addEdge(LineageEdge *edge);
     QList<LineageEdge *> edges() const;

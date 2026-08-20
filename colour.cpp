@@ -38,7 +38,7 @@ int Colour::convertHexadecimal(std::string hex)
     return value;
 }
 
-Colour::HSL Colour::toHsl()
+Colour::HSL Colour::toHsl() const
 {
     HSL hsl;
 

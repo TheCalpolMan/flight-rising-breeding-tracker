@@ -32,7 +32,7 @@ public:
         return false;
     }
 
-    HSL toHsl();
+    HSL toHsl() const;
 private:
     static int convertHexadecimal(std::string hex);
 };

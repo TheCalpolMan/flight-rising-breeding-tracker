@@ -10,8 +10,7 @@
 #include <QPainter>
 #include <QStyleOption>
 
-//! [0]
-LineageNode::LineageNode(LineageGraphWidget *graphWidget, std::string label, Colour colour) :
+LineageNode::LineageNode(LineageGraphWidget *graphWidget, const std::string &label, const Colour &colour) :
     graph(graphWidget),
     label(label)
 {
@@ -35,9 +34,6 @@ LineageNode::LineageNode(LineageGraphWidget *graphWidget, std::string label, Col
         outerColour = QColor(colour.hexCode.c_str()).lighter(120);
     }
 }
-//! [0]
-
-//! [1]
 
 void LineageNode::addEdge(LineageEdge *edge)
 {
