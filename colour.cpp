@@ -14,8 +14,10 @@ int Colour::convertHexadecimal(std::string hex)
     int value = 0;
 
     int power = 0;
-    for (char character : hex)
+    for (auto it = hex.rbegin(); it != hex.rend(); it++)
     {
+        char character = *it;
+
         if (character <= '9')
         {
             character = character - '0';
