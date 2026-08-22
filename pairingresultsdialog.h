@@ -28,6 +28,9 @@ public slots:
 
     void enterResults(const std::multiset<BreedingTreeConfig>& results, const Dragon& dragon);
 
+private slots:
+    void on_sortingComboBox_currentIndexChanged(int index);
+
 private:
     struct DragonIndexes
     {
@@ -46,7 +49,15 @@ private:
         int tertiaryGene;
     };
 
+    static std::string getChanceAsString(double chance);
+
     static bool probabilityCmp(const std::pair<int, double>& kvPair1, const std::pair<int, double>& kvPair2);
+
+    static bool percentageCmp(const BreedingTreeConfig& config1, const BreedingTreeConfig& config2);
+
+    static bool branchPercentageCmp(const BreedingTreeConfig& config1, const BreedingTreeConfig& config2);
+
+    static bool generationPercentageCmp(const BreedingTreeConfig& config1, const BreedingTreeConfig& config2);
 
     static std::multiset<std::pair<int, double>, std::function<bool(const std::pair<int, double>&, const std::pair<int, double>&)>>
         getSortedProbabilities(const std::unordered_map<int, double>& target);
@@ -58,20 +69,19 @@ private:
 
     void addColourColumn(QTreeWidgetItem& targetItem, int columnIndex, const double values[], int targetColourIndex);
 
-    static std::string getChanceAsString(double chance);
-
     void addResult(const BreedingTreeConfig& result);
 
     void addChildResult(QTreeWidgetItem* parent, std::shared_ptr<BinaryTreePossibilityNode> childResult, std::string title = "");
 
+    void populateTree(const std::vector<BreedingTreeConfig>& resultSubset);
+
     Ui::PairingResultsDialog *ui;
 
     Dragon dragon;
-
     DragonIndexes dragonIndexes;
+    std::vector<BreedingTreeConfig> results = decltype(results)();
 
     QFont boldFont;
-
     QList<QTreeWidgetItem*> treeItems = decltype(treeItems)();
 };
 

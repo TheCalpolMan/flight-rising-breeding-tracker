@@ -26,21 +26,17 @@ PairingResultsDialog::~PairingResultsDialog()
 
 void PairingResultsDialog::enterResults(const std::multiset<BreedingTreeConfig> &results, const Dragon &dragon)
 {
-    ui->treeWidget->clear();
-    treeItems.clear();
-
     this->dragon = dragon;
     dragonIndexes = DragonIndexes(dragon);
 
-    int i = 0;
-    for (auto it = results.rbegin(); it != results.rend() && i < 100; it++)
+    this->results = decltype(this->results)();
+
+    for (const auto& result : results)
     {
-        addResult(*it);
-        i++;
+        this->results.emplace_back(result);
     }
 
-    ui->treeWidget->insertTopLevelItems(0, treeItems);
-    ui->treeWidget->update();
+    on_sortingComboBox_currentIndexChanged(ui->sortingComboBox->currentIndex());
 }
 
 void PairingResultsDialog::updatePercentage(int value)
@@ -51,6 +47,24 @@ void PairingResultsDialog::updatePercentage(int value)
 bool PairingResultsDialog::probabilityCmp(const std::pair<int, double> &kvPair1, const std::pair<int, double> &kvPair2)
 {
     return kvPair1.second > kvPair2.second;
+}
+
+bool PairingResultsDialog::percentageCmp(const BreedingTreeConfig& config1, const BreedingTreeConfig& config2)
+{
+    return config1.getCalculatedChance() >
+           config2.getCalculatedChance();
+}
+
+bool PairingResultsDialog::branchPercentageCmp(const BreedingTreeConfig& config1, const BreedingTreeConfig& config2)
+{
+    return (config1.getCalculatedChance() * (config1.treeRoot->getBranchCount() + 1)) >
+           (config2.getCalculatedChance() * (config2.treeRoot->getBranchCount() + 1));
+}
+
+bool PairingResultsDialog::generationPercentageCmp(const BreedingTreeConfig& config1, const BreedingTreeConfig& config2)
+{
+    return (config1.getCalculatedChance() / config1.treeRoot->getMaxDepth()) >
+           (config2.getCalculatedChance() / config2.treeRoot->getMaxDepth());
 }
 
 std::multiset<std::pair<int, double>, std::function<bool (const std::pair<int, double> &, const std::pair<int, double> &)>>
@@ -227,6 +241,22 @@ void PairingResultsDialog::addChildResult(QTreeWidgetItem *parent, std::shared_p
     addChildResult(resultRow, childResult->castRight(), childResult->castRight()->possibility->name);
 }
 
+void PairingResultsDialog::populateTree(const std::vector<BreedingTreeConfig> &resultSubset)
+{
+    ui->treeWidget->clear();
+    treeItems.clear();
+
+    int i = 0;
+    for (auto it = results.cbegin(); it != results.cend() && i < 100; it++)
+    {
+        addResult(*it);
+        i++;
+    }
+
+    ui->treeWidget->insertTopLevelItems(0, treeItems);
+    ui->treeWidget->update();
+}
+
 PairingResultsDialog::DragonIndexes::DragonIndexes(const Dragon &dragon)
 {
     const auto& information = Information::getInstance();
@@ -241,3 +271,25 @@ PairingResultsDialog::DragonIndexes::DragonIndexes(const Dragon &dragon)
     secondaryGene = VectorHelpers::getIndex(information.getSecondaryGenes(), dragon.secondaryGene);
     tertiaryGene = VectorHelpers::getIndex(information.getTertiaryGenes(), dragon.tertiaryGene);
 }
+
+void PairingResultsDialog::on_sortingComboBox_currentIndexChanged(int index)
+{
+    if (index == -1)
+    {
+        return;
+    }
+
+    auto sortFunction = percentageCmp;
+
+    switch(index)
+    {
+    case 0: sortFunction = percentageCmp; break;
+    case 1: sortFunction = branchPercentageCmp; break;
+    case 2: sortFunction = generationPercentageCmp; break;
+    default: throw std::invalid_argument("Index invalid");
+    }
+
+    std::sort(results.begin(), results.end(), sortFunction);
+    populateTree(results);
+}
+

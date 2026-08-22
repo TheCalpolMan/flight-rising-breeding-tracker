@@ -17,7 +17,8 @@ public:
 
     double getCalculatedChance() const;
 
-    const std::vector<std::shared_ptr<Dragon>> dragons;
+    const std::vector<std::shared_ptr<Dragon>>& getDragons() const;
+
     std::shared_ptr<BinaryTreePossibilityNode> treeRoot;
 
     bool operator<(const BreedingTreeConfig& other) const
@@ -28,9 +29,10 @@ public:
 private:
     double getIndividualChance(const std::unordered_map<int, double>& target, int key);
 
-    std::shared_ptr<Dragon> aim;
-    DragonIndexes dragonIndexes;
     double chance = -1;
+    DragonIndexes dragonIndexes;
+    std::shared_ptr<Dragon> aim;
+    std::vector<std::shared_ptr<Dragon>> dragons;
 };
 
 #endif // BREEDINGTREECONFIG_H

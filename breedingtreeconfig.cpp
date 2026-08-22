@@ -43,6 +43,11 @@ double BreedingTreeConfig::getCalculatedChance() const
     return chance;
 }
 
+const std::vector<std::shared_ptr<Dragon> > &BreedingTreeConfig::getDragons() const
+{
+    return dragons;
+}
+
 double BreedingTreeConfig::getIndividualChance(const std::unordered_map<int, double> &target, int key)
 {
     auto it = target.find(key);

@@ -12,7 +12,11 @@ public:
 
     std::string toString() const;
 
-    bool isLeaf();
+    bool isLeaf() const;
+
+    int getMaxDepth() const;
+
+    int getBranchCount() const;
 
     std::shared_ptr<BinaryTreeNode> leftChild;
     std::shared_ptr<BinaryTreeNode> rightChild;

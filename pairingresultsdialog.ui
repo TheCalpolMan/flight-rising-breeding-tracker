@@ -14,6 +14,63 @@
    <string>Results</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QFrame" name="frame">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>28</height>
+      </size>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::Shape::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Shadow::Raised</enum>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="2">
+       <widget class="QProgressBar" name="progressBar">
+        <property name="value">
+         <number>100</number>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="sortingComboBox">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <item>
+         <property name="text">
+          <string>Percentage</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Percentage * Branch Count</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Percentage ÷ Generation Count</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Sort by:</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
    <item row="1" column="0">
     <widget class="QTreeWidget" name="treeWidget">
      <attribute name="headerCascadingSectionResizes">
@@ -62,13 +119,6 @@
        <string>Tertiary Gene</string>
       </property>
      </column>
-    </widget>
-   </item>
-   <item row="0" column="0">
-    <widget class="QProgressBar" name="progressBar">
-     <property name="value">
-      <number>100</number>
-     </property>
     </widget>
    </item>
   </layout>
