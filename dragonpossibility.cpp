@@ -28,14 +28,10 @@ unsigned long long DragonPossibility::getCombinedLineage(int generations) const
     return combined;
 }
 
-DragonPossibility::DragonPossibility()
-{
-    setupColourMembers();
-}
-
-DragonPossibility::DragonPossibility(std::shared_ptr<Dragon> base) :
+DragonPossibility::DragonPossibility(std::shared_ptr<Dragon> base, const unsigned long long id) :
     name(base->name),
-    gender(base->male ? Gender::Male : Gender::Female)
+    gender(base->male ? Gender::Male : Gender::Female),
+    id(id)
 {
     Information& information = Information::getInstance();
     setupColourMembers();
@@ -54,7 +50,8 @@ DragonPossibility::DragonPossibility(std::shared_ptr<Dragon> base) :
     calculateInbred();
 }
 
-DragonPossibility::DragonPossibility(const DragonPossibility& parent1, const DragonPossibility& parent2)
+DragonPossibility::DragonPossibility(const DragonPossibility& parent1, const DragonPossibility& parent2, const unsigned long long id) :
+    id(id)
 {
     ZoneScoped;
     Information& information = Information::getInstance();

@@ -18,6 +18,8 @@ public:
 
     void propogate();
 
+    const std::shared_ptr<BinaryTreeNode> basedOn;
+
     std::shared_ptr<DragonPossibility> possibility;
 private:
     BinaryTreePossibilityNode() = default;

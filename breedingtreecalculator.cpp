@@ -93,6 +93,11 @@ const std::multiset<BreedingTreeConfig> &BreedingTreeCalculator::getConfigs()
                         continue;
                     }
 
+                    if (doesConfigHaveGreaterSymmetry(config))
+                    {
+                        continue;
+                    }
+
                     validTreeConfigs.insert(std::move(config));
                 }
             }
@@ -231,6 +236,43 @@ bool BreedingTreeCalculator::doesConfigHaveValidPairings(const BreedingTreeConfi
     }
 
     return true;
+}
+
+bool BreedingTreeCalculator::doesConfigHaveGreaterSymmetry(const BreedingTreeConfig &config)
+{
+    ZoneScoped;
+
+    std::list<std::shared_ptr<BinaryTreePossibilityNode>> nodesToCheck = decltype(nodesToCheck)();
+    nodesToCheck.push_back(config.treeRoot);
+
+    while(!nodesToCheck.empty())
+    {
+        std::shared_ptr<BinaryTreePossibilityNode> currentNode = nodesToCheck.front();
+        nodesToCheck.pop_front();
+
+        // when both child nodes have the same structure (and aren't leaves),
+        // make sure that the node on the left's id is less than the right node's id
+        // Just does this so that ordering is enforced on trees with symmetric segments,
+        // and uses this ordering to make sure that there aren't any equivalent trees
+        if (!currentNode->leftChild->isLeaf() && !currentNode->rightChild->isLeaf() &&
+            currentNode->castLeft()->basedOn == currentNode->castRight()->basedOn &&
+            currentNode->castLeft()->possibility->id < currentNode->castRight()->possibility->id)
+        {
+            return true;
+        }
+
+        if (!currentNode->rightChild->isLeaf())
+        {
+            nodesToCheck.push_front(currentNode->castRight());
+        }
+
+        if (!currentNode->leftChild->isLeaf())
+        {
+            nodesToCheck.push_front(currentNode->castLeft());
+        }
+    }
+
+    return false;
 }
 
 std::vector<unsigned long long> BreedingTreeCalculator::getDragonSetVector(const Dragon& aim, const std::vector<std::shared_ptr<Dragon> > &possibleParents)

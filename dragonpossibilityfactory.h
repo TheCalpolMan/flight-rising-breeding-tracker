@@ -46,6 +46,7 @@ private:
 
     DragonPossibilityFactory() = default;
 
+    unsigned long long id = 0;
     std::unordered_map<std::shared_ptr<Dragon>, std::shared_ptr<DragonPossibility>> dragonToPossibilityMap = decltype(dragonToPossibilityMap)();
     std::unordered_map<std::pair<std::shared_ptr<DragonPossibility>, std::shared_ptr<DragonPossibility>>, std::shared_ptr<DragonPossibility>, DragonPossibilityPairHasher> parentsToPossibilityMap =
         decltype(parentsToPossibilityMap)();

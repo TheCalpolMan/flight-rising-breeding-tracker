@@ -4,6 +4,7 @@
 
 void DragonPossibilityFactory::clear()
 {
+    id = 0;
     dragonToPossibilityMap = decltype(dragonToPossibilityMap)();
     parentsToPossibilityMap = decltype(parentsToPossibilityMap)();
 }
@@ -18,7 +19,8 @@ std::shared_ptr<DragonPossibility> DragonPossibilityFactory::constructPossiblilt
         return it->second;
     }
 
-    return dragonToPossibilityMap.emplace(base, std::shared_ptr<DragonPossibility>(new DragonPossibility(base))).first->second;
+    id++;
+    return dragonToPossibilityMap.emplace(base, std::shared_ptr<DragonPossibility>(new DragonPossibility(base, id - 1))).first->second;
 }
 
 std::shared_ptr<DragonPossibility> DragonPossibilityFactory::constructPossiblilty(std::shared_ptr<DragonPossibility> parent1, std::shared_ptr<DragonPossibility> parent2)
@@ -39,5 +41,6 @@ std::shared_ptr<DragonPossibility> DragonPossibilityFactory::constructPossiblilt
         return it->second;
     }
 
-    return parentsToPossibilityMap.emplace(parentPair, std::shared_ptr<DragonPossibility>(new DragonPossibility(*parent1, *parent2))).first->second;
+    id++;
+    return parentsToPossibilityMap.emplace(parentPair, std::shared_ptr<DragonPossibility>(new DragonPossibility(*parent1, *parent2, id - 1))).first->second;
 }

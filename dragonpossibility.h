@@ -16,6 +16,7 @@ public:
 
     const std::string name = "";
     const Gender gender = Gender::Any;
+    const unsigned long long id = 0;
 
     std::unordered_map<int, double> breed = decltype(breed)();
 
@@ -37,11 +38,9 @@ public:
 
     unsigned long long getCombinedLineage(int generations = 5) const;
 private:
-    DragonPossibility();
+    DragonPossibility(std::shared_ptr<Dragon> base, const unsigned long long id);
 
-    DragonPossibility(std::shared_ptr<Dragon> base);
-
-    DragonPossibility(const DragonPossibility& parent1, const DragonPossibility& parent2);
+    DragonPossibility(const DragonPossibility& parent1, const DragonPossibility& parent2, const unsigned long long id);
 
     void setLineage(std::shared_ptr<Dragon> base);
 

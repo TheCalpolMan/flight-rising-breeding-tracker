@@ -75,7 +75,8 @@ void BinaryTreePossibilityNode::propogate()
     propogated = true;
 }
 
-BinaryTreePossibilityNode::BinaryTreePossibilityNode(std::shared_ptr<BinaryTreeNode> baseNode)
+BinaryTreePossibilityNode::BinaryTreePossibilityNode(std::shared_ptr<BinaryTreeNode> baseNode) :
+    basedOn(baseNode)
 {
     ZoneScoped;
     if (baseNode->leftChild != nullptr)

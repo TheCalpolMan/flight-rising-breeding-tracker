@@ -20,6 +20,7 @@ private:
     const std::shared_ptr<Dragon> aim;
     const std::vector<unsigned long long> possibleParentSets;
     const std::vector<std::shared_ptr<Dragon>> possibleParents;
+
     std::multiset<BreedingTreeConfig> validTreeConfigs = decltype(validTreeConfigs)();
 
     static int factorial(int n);
@@ -35,6 +36,8 @@ private:
     static bool doesConfigHaveInbreeding(const BreedingTreeConfig& config);
 
     static bool doesConfigHaveValidPairings(const BreedingTreeConfig& config);
+
+    static bool doesConfigHaveGreaterSymmetry(const BreedingTreeConfig& config);
 
     static std::vector<unsigned long long> getDragonSetVector(const Dragon &aim, const std::vector<std::shared_ptr<Dragon>>& possibleParents);
 
